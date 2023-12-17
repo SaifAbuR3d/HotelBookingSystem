@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace HotelBookingSystem.Infrastructure;
+namespace HotelBookingSystem.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext
 {
@@ -42,8 +42,8 @@ public class ApplicationDbContext : DbContext
             new City { Id = newYorkId, Name = "New York", Country = "USA", PostOffice = "10001", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
             new City { Id = londonId, Name = "London", Country = "UK", PostOffice = "SW1A 1AA", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
             new City { Id = parisId, Name = "Paris", Country = "France", PostOffice = "75001", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new City {Id = tokyoId, Name = "Tokyo", Country = "Japan", PostOffice = "100-0001", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new City {Id = berlinId, Name = "Berlin", Country = "Germany", PostOffice = "10115", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
+            new City { Id = tokyoId, Name = "Tokyo", Country = "Japan", PostOffice = "100-0001", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
+            new City { Id = berlinId, Name = "Berlin", Country = "Germany", PostOffice = "10115", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
         );
 
         var grandHyattId = new Guid("1683b59c-f7f8-4b21-b1df-5149fb57984e");
