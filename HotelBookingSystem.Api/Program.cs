@@ -1,4 +1,6 @@
-using HotelBookingSystem.Infrastructure;
+using HotelBookingSystem.Application;
+using HotelBookingSystem.Domain.Abstractions.Repositories;
+using HotelBookingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(
-                                   opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
