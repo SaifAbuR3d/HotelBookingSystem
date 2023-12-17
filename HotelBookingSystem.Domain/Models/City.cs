@@ -7,5 +7,5 @@ public class City : Entity
     public string PostOffice { get; set; }
 
     public ICollection<Hotel> Hotels { get; set; }
-
+    
 }
