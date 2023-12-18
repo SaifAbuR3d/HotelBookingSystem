@@ -50,9 +50,9 @@ public class CitiesController(ICityService cityService) : ControllerBase
     /// <response code="201">Returns the newly created city</response>
     /// <response code="400">If the request data is invalid</response>
     [HttpPost]
-    public ActionResult<CityOutputModel> CreateCity(CreateCityCommand request)
+    public async Task<ActionResult<CityOutputModel>> CreateCity(CreateCityCommand request)
     {
-        var city = cityService.CreateCity(request);
+        var city = await cityService.CreateCityAsync(request);
 
         return CreatedAtAction(nameof(GetCity), new { id = city.Id }, city);
     }
