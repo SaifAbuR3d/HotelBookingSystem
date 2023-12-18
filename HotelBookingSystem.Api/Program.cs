@@ -1,7 +1,5 @@
 using HotelBookingSystem.Application;
-using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

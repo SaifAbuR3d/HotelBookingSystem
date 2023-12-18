@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{3D83BE34-F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{B326B699-644C-45D1-86CD-85F5AEF443E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBookingSystem.Api", "HotelBookingSystem.Api\HotelBookingSystem.Api.csproj", "{6E6D7B89-2042-4B80-BBF1-58BCBC27CE1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingSystem.Api", "HotelBookingSystem.Api\HotelBookingSystem.Api.csproj", "{6E6D7B89-2042-4B80-BBF1-58BCBC27CE1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
