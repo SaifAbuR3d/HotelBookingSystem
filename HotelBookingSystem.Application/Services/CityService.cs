@@ -14,7 +14,7 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
     public async Task<IEnumerable<CityOutputModel>> GetAllCitiesAsync()
     {
         var cities = await _cityRepository.GetAllCitiesAsync();
-        var mapped = _mapper.Map<IEnumerable<CityOutputModel>>(cities); //use eager loading in repo, or add NumberOfHotels to Domain entity
+        var mapped = _mapper.Map<IEnumerable<CityOutputModel>>(cities);
 
         return mapped;
     }
@@ -28,7 +28,7 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
     }
     public async Task<bool> DeleteCityAsync(Guid id)
     {
-        var deleted = await _cityRepository.DeleteCity(id);
+        var deleted = await _cityRepository.DeleteCityAsync(id);
         if (deleted)
         {
             await _cityRepository.SaveChangesAsync();
@@ -36,7 +36,7 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
         return deleted;
     }
 
-    public CityOutputModel CreateCity(CreateCityCommand request)
+    public async Task<CityOutputModel> CreateCityAsync(CreateCityCommand request)
     {
         var city = _mapper.Map<City>(request);
 
@@ -44,10 +44,10 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
         city.CreationDate = DateTime.UtcNow;
         city.LastModified = DateTime.UtcNow;
 
-        var cityEntity = _cityRepository.CreateCity(city);
-        _cityRepository.SaveChangesAsync();
+        var createdCity = await _cityRepository.AddCityAsync(city);
+        await _cityRepository.SaveChangesAsync();
 
-        return _mapper.Map<CityOutputModel>(cityEntity);
+        return _mapper.Map<CityOutputModel>(createdCity);
     }
 
     public async Task<bool> UpdateCityAsync(Guid id, UpdateCityCommand request)
