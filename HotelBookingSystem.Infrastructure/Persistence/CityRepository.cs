@@ -13,12 +13,12 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
         return await _context.Cities.AnyAsync(c => c.Id == id);
     }
 
-    public City CreateCity(City city)
+    public async Task<City> AddCityAsync(City city)
     {
-        _context.Cities.Add(city);
+        await _context.Cities.AddAsync(city);
         return city; 
     }
-    public async Task<bool> DeleteCity(Guid id)
+    public async Task<bool> DeleteCityAsync(Guid id)
     {
         var city = await GetCityAsync(id); 
         if (city is null)
@@ -39,6 +39,11 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
     public async Task<City?> GetCityAsync(Guid id)
     {
          return await _context.Cities.FindAsync(id);
+    }
+
+    public async Task<City?> GetCityByNameAsync(string name)
+    {
+        return await _context.Cities.FirstOrDefaultAsync(c => c.Name == name);
     }
 
     public async Task<bool> SaveChangesAsync()
