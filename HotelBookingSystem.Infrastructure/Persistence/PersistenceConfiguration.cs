@@ -22,5 +22,6 @@ public static class PersistenceConfiguration
         this IServiceCollection services)
         => services
             .AddScoped<ICityRepository, CityRepository>()
-            .AddScoped<IHotelRepository, HotelRepository>();
+            .AddScoped<IHotelRepository, HotelRepository>()
+            .AddScoped<IRoomRepository, RoomRepository>();
 }
