@@ -1,0 +1,28 @@
+﻿using FluentValidation;
+using HotelBookingSystem.Application.DTOs.Hotel;
+
+namespace HotelBookingSystem.Application.Validation.Hotel;
+
+using static Domain.Models.Constants.Common;
+using static Domain.Models.Constants.Hotel;
+
+public class UpdateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
+{
+    public UpdateHotelCommandValidator()
+    {
+        RuleFor(h => h.Name)
+            .ValidName(MinNameLength, MaxNameLength);
+
+        RuleFor(h => h.Owner)
+            .ValidName(MinNameLength, MaxNameLength);
+
+        RuleFor(h => h.CityName)
+            .ValidName(MinNameLength, MaxNameLength);
+
+        RuleFor(h => h.StarRate)
+            .InclusiveBetween(MinHotelStars, MaxHotelStars);
+
+        RuleFor(h => h.Location) ////
+            .NotEmpty();
+    }
+}
