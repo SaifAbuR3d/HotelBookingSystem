@@ -33,11 +33,6 @@ public class HotelsController(IHotelService hotelService) : ControllerBase
     {
         var hotel = await hotelService.GetHotelAsync(id);
 
-        if (hotel is null)
-        {
-            return NotFound();
-        }
-
         return Ok(hotel);
     }
 
@@ -52,11 +47,6 @@ public class HotelsController(IHotelService hotelService) : ControllerBase
     public async Task<ActionResult<HotelOutputModel>> CreateHotel(CreateHotelCommand request)
     {
         var hotel = await hotelService.CreateHotelAsync(request);
-
-        if(hotel is null) ////
-        {
-            return BadRequest(); 
-        }
 
         return CreatedAtAction(nameof(GetHotel), new { id = hotel.Id }, hotel);
     }

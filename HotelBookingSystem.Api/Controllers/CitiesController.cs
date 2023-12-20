@@ -34,11 +34,6 @@ public class CitiesController(ICityService cityService) : ControllerBase
     {
         var city = await cityService.GetCityAsync(id);
 
-        if (city is null)
-        {
-            return NotFound();
-        }
-
         return Ok(city);
     }
 

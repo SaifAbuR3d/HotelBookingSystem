@@ -31,6 +31,7 @@ public class RoomsController(IRoomService roomService) : ControllerBase
     public async Task<ActionResult<RoomOutputModel>> GetRoom(Guid id)
     {
         var room = await roomService.GetRoomAsync(id);
+
         return Ok(room);
     }
 
@@ -45,11 +46,6 @@ public class RoomsController(IRoomService roomService) : ControllerBase
     public async Task<ActionResult<RoomOutputModel>> CreateRoom(CreateRoomCommand request)
     {
         var room = await roomService.CreateRoomAsync(request);
-
-        if (room is null)
-        {
-            return BadRequest();
-        }
 
         return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, room);
     }

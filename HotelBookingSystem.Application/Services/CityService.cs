@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using HotelBookingSystem.Application.DTOs.City;
+using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
 
 namespace HotelBookingSystem.Application.Services;
 
-public class CityService(ICityRepository cityRepository, IMapper mapper) : ICityService // see save changes, consider UoW
+public class CityService(ICityRepository cityRepository, IMapper mapper) : ICityService
 {
     private readonly ICityRepository _cityRepository = cityRepository;
     private readonly IMapper _mapper = mapper;
@@ -21,7 +22,8 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
 
     public async Task<CityOutputModel?> GetCityAsync(Guid id)
     {
-        var city = await _cityRepository.GetCityAsync(id);
+        var city = await _cityRepository.GetCityAsync(id) ?? throw new NotFoundException(nameof(City), id);
+
         var mapped = _mapper.Map<CityOutputModel>(city);
 
         return mapped;
@@ -52,11 +54,7 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
 
     public async Task<bool> UpdateCityAsync(Guid id, UpdateCityCommand request)
     {
-        var city = await _cityRepository.GetCityAsync(id);
-        if (city is null)
-        {
-            return false;
-        }
+        var city = await _cityRepository.GetCityAsync(id) ?? throw new NotFoundException(nameof(City), id);
 
         _mapper.Map(request, city);
 

@@ -32,7 +32,9 @@ public class RoomService : IRoomService
     public async Task<RoomOutputModel?> GetRoomAsync(Guid id)
     {
         var room = await _roomRepository.GetRoomAsync(id) ?? throw new NotFoundException(nameof(Room), id);
+
         var mapped = _mapper.Map<RoomOutputModel>(room);
+
         return mapped;
     }
 
@@ -48,11 +50,8 @@ public class RoomService : IRoomService
 
     public async Task<RoomOutputModel> CreateRoomAsync(CreateRoomCommand request)
     {
-        var hotel = await _hotelRepository.GetHotelByNameAsync(request.HotelName);
-        if (hotel is null)
-        {
-            throw new NotFoundException(nameof(hotel), request.HotelName); 
-        }
+        var hotel = await _hotelRepository.GetHotelByNameAsync(request.HotelName) ?? throw new NotFoundException(nameof(Hotel), request.HotelName);
+
 
         var room = _mapper.Map<Room>(request);
 

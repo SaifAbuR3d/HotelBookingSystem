@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HotelBookingSystem.Application.DTOs.Hotel;
+using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
@@ -24,7 +25,8 @@ public class HotelService(IHotelRepository hotelRepository,
 
     public async Task<HotelOutputModel?> GetHotelAsync(Guid id)
     {
-        var hotel = await _hotelRepository.GetHotelAsync(id);
+        var hotel = await _hotelRepository.GetHotelAsync(id) ?? throw new NotFoundException(nameof(Hotel), id);
+
         var mapped = _mapper.Map<HotelOutputModel>(hotel);
 
         return mapped;
@@ -42,11 +44,7 @@ public class HotelService(IHotelRepository hotelRepository,
 
     public async Task<HotelOutputModel> CreateHotelAsync(CreateHotelCommand request)
     {
-        var city = await _cityRepository.GetCityByNameAsync(request.CityName);
-        if (city is null)
-        {
-            return null; ////
-        }
+        var city = await _cityRepository.GetCityByNameAsync(request.CityName) ?? throw new NotFoundException(nameof(City), request.CityName);
 
         var hotel = _mapper.Map<Hotel>(request);
 
@@ -63,17 +61,9 @@ public class HotelService(IHotelRepository hotelRepository,
 
     public async Task<bool> UpdateHotelAsync(Guid id, UpdateHotelCommand request)
     {
-        var city = await _cityRepository.GetCityByNameAsync(request.CityName);
-        if (city is null)
-        {
-            return false;
-        }
+        var city = await _cityRepository.GetCityByNameAsync(request.CityName) ?? throw new NotFoundException(nameof(City), request.CityName);
 
-        var hotel = await _hotelRepository.GetHotelAsync(id);
-        if (hotel is null)
-        {
-            return false;
-        }
+        var hotel = await _hotelRepository.GetHotelAsync(id) ?? throw new NotFoundException(nameof(Hotel), id);
 
         _mapper.Map(request, hotel);
 
