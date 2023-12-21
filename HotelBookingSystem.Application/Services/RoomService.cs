@@ -69,9 +69,11 @@ public class RoomService : IRoomService
     public async Task<bool> UpdateRoomAsync(Guid id, UpdateRoomCommand request)
     {
         var room = await _roomRepository.GetRoomAsync(id) ?? throw new NotFoundException(nameof(Room), id);
+
         _mapper.Map(request, room);
 
-        var updated = await _roomRepository.SaveChangesAsync();
-        return updated;
+        await _roomRepository.SaveChangesAsync();
+
+        return true;
     }
 }
