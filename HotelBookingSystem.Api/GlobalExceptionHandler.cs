@@ -4,8 +4,19 @@ using System.Diagnostics;
 
 namespace HotelBookingSystem.Api;
 
+/// <summary>
+/// Exception Handling Middleware
+/// </summary>
+/// <param name="logger"></param>
 public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
+    /// <summary>
+    /// Handles the exception
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <param name="exception"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>true if the exception was properly handled</returns>
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
@@ -36,6 +47,8 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         return exception switch
         {
             NotFoundException => (StatusCodes.Status404NotFound, "Not Found", exception.Message),
+            UnavailableRoomException => (StatusCodes.Status400BadRequest, "Unavailable Room", exception.Message),
+            InvalidNumberOfGuestsException => (StatusCodes.Status400BadRequest, "Invalid Number Of Guests", exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Something went wrong", "We made a mistake but we are working on it")
         };
     }

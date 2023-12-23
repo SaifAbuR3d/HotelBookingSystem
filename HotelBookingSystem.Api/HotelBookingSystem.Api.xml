@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HotelBookingSystem.Api</name>
+    </assembly>
+    <members>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.GetBooking(System.Guid)">
+            <summary>
+            Get a booking by its id
+            </summary>
+            <param name="id">The id of the booking</param>
+            <returns>The booking with the given id</returns>
+            <response code="200">Returns the booking with the given id</response>
+            <response code="404">If the booking is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.CreateBooking(HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand)">
+            <summary>
+            Create a new booking
+            </summary>
+            <param name="request">The data for the new booking</param>
+            <returns>The newly created booking</returns>
+            <response code="201">Returns the newly created booking</response>
+            <response code = "404">If the hotel/room or guest is not found</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.DeleteBooking(System.Guid)">
+            <summary>
+            Delete a booking
+            </summary>
+            <param name="id">The id of the booking to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the booking is deleted</response>
+            <response code="404">If the booking is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetAllCities">
+            <summary>
+            Get all cities
+            </summary>
+            <returns>All cities</returns>
+            <response code="200">Returns all cities</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetCity(System.Guid)">
+            <summary>
+            Get a city by its id
+            </summary>
+            <param name="id">The id of the city</param>
+            <returns>The city with the given id</returns>
+            <response code="200">Returns the city with the given id</response>
+            <response code="404">If the city is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.CreateCity(HotelBookingSystem.Application.DTOs.City.CreateCityCommand)">
+            <summary>
+            Create a new city
+            </summary>
+            <param name="request">The data for the new city</param>
+            <returns>The newly created city</returns>
+            <response code="201">Returns the newly created city</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.DeleteCity(System.Guid)">
+            <summary>
+            Delete a city
+            </summary>
+            <param name="id">The id of the city to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the city is deleted</response>
+            <response code="404">If the city is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.UpdateCity(System.Guid,HotelBookingSystem.Application.DTOs.City.UpdateCityCommand)">
+            <summary>
+            Update a city
+            </summary>
+            <param name="id">The id of the city to update</param>
+            <param name="request">The data for the updated city</param>
+            <returns>No content</returns>
+            <response code="204">If the city is updated</response>
+            <response code="400">If the request data is invalid</response>
+            <response code="404">If the city is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetAllHotels">
+            <summary>
+            Get all hotels
+            </summary>
+            <returns>All hotels</returns>
+            <response code="200">Returns all hotels</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetHotel(System.Guid)">
+            <summary>
+            Get a hotel by its id
+            </summary>
+            <param name="id">The id of the hotel</param>
+            <returns>The hotel with the given id</returns>
+            <response code="200">Returns the hotel with the given id</response>
+            <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.CreateHotel(HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand)">
+            <summary>
+            Create a new hotel
+            </summary>
+            <param name="request">The data for the new hotel</param>
+            <returns>The newly created hotel</returns>
+            <response code="201">Returns the newly created hotel</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.DeleteHotel(System.Guid)">
+            <summary>
+            Delete a hotel
+            </summary>
+            <param name="id">The id of the hotel to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the hotel is successfully deleted</response>
+            <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UpdateHotel(System.Guid,HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand)">
+            <summary>
+            Update a hotel
+            </summary>
+            <param name="id">The id of the hotel to update</param>
+            <param name="request">The data for the updated hotel</param>
+            <returns>No content</returns>
+            <response code="204">If the hotel is successfully updated</response>
+            <response code="404">If the hotel is not found</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetAllRooms">
+            <summary>
+            Get all rooms
+            </summary>
+            <returns>All rooms</returns>
+            <response code="200">Returns all rooms</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetRoom(System.Guid)">
+            <summary>
+            Get a room by its id
+            </summary>
+            <param name="id">The id of the room</param>
+            <returns>The room with the given id</returns>
+            <response code="200">Returns the room with the given id</response>
+            <response code="404">If the room is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.CreateRoom(HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand)">
+            <summary>
+            Create a new room
+            </summary>
+            <param name="request">The data for the new room</param>
+            <returns>The newly created room</returns>
+            <response code="201">Returns the newly created room</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.DeleteRoom(System.Guid)">
+            <summary>
+            Delete a room
+            </summary>
+            <param name="id">The id of the room to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the room is successfully deleted</response>
+            <response code="404">If the room is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UpdateRoom(System.Guid,HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand)">
+            <summary>
+            Update a room
+            </summary>
+            <param name="id">The id of the room to update</param>
+            <param name="request">The new data for the room</param>
+            <returns>No content</returns>
+            <response code="204">If the room is successfully updated</response>
+            <response code="404">If the room is not found</response>
+            <response code="400">If the request data is invalid</response>
+        </member>
+    </members>
+</doc>
