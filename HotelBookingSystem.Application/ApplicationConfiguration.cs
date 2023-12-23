@@ -17,5 +17,6 @@ public static class ApplicationConfiguration
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
             .AddScoped<ICityService, CityService>()
             .AddScoped<IHotelService, HotelService>()
-            .AddScoped<IRoomService, RoomService>();
+            .AddScoped<IRoomService, RoomService>()
+            .AddScoped<IBookingService, BookingService>();
 }
