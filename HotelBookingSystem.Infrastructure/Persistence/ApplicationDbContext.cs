@@ -9,6 +9,14 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
+    public DbSet<Hotel> Hotels { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<City> Cities { get; set; }
+    public DbSet<Guest> Guests { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<RoomImage> RoomImages { get; set; }
+    public DbSet<HotelImage> HotelImages { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -110,16 +118,5 @@ public class ApplicationDbContext : DbContext
             new Booking { Id = booking4Id, CheckInDate = new DateOnly(2023, 6, 20), CheckOutDate = new DateOnly(2023, 6, 25), Price = 800, RoomId = room1TheRitzId, GuestId = bobSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
         );
     }
-
-
-
-    public DbSet<Hotel> Hotels { get; set; }
-    public DbSet<Room> Rooms { get; set; }
-    public DbSet<City> Cities { get; set; }
-    public DbSet<Guest> Guests { get; set; }
-    public DbSet<Review> Reviews { get; set; }
-    public DbSet<RoomImage> RoomImages { get; set; }
-    public DbSet<HotelImage> HotelImages { get; set; }
-    public DbSet<Booking> Bookings { get; set; }
 
 }

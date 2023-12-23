@@ -3,5 +3,5 @@
 public class Guest : Entity
 {
     public string Username { get; set; }
-    public ICollection<Booking> Reservations { get; set; }
+    public ICollection<Booking> Bookings { get; set; }
 }

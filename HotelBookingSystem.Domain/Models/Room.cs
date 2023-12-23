@@ -8,7 +8,7 @@ public class Room : Entity
     public string? Description { get; set; }
     public decimal Price { get; set; }
     public ICollection<RoomImage> Images { get; set; }
-    public bool IsAvailable { get; set; } // computed
+    public bool IsAvailable { get; set; }
     public RoomType RoomType { get; set; }
 
     public Hotel Hotel { get; set; }

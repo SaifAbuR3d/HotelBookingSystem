@@ -4,6 +4,7 @@ using HotelBookingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231223023836_AddNumberOfGuestsToBookingEntity")]
+    partial class AddNumberOfGuestsToBookingEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,8 +75,8 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             GuestId = new Guid("2783b59c-f7f8-4b21-b1df-5149fb57984e"),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NumberOfAdults = 1,
-                            NumberOfChildren = 1,
+                            NumberOfAdults = 0,
+                            NumberOfChildren = 0,
                             Price = 600m,
                             RoomId = new Guid("2683b59c-f7f8-4b21-b1df-5149fb57984e")
                         },
@@ -85,8 +88,8 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             GuestId = new Guid("2883b59c-f7f8-4b21-b1df-5149fb57984e"),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NumberOfAdults = 1,
-                            NumberOfChildren = 1,
+                            NumberOfAdults = 0,
+                            NumberOfChildren = 0,
                             Price = 700m,
                             RoomId = new Guid("2283b59c-f7f8-4b21-b1df-5149fb57984e")
                         },
@@ -98,8 +101,8 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             GuestId = new Guid("2983b59c-f7f8-4b21-b1df-5149fb57984e"),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NumberOfAdults = 1,
-                            NumberOfChildren = 1,
+                            NumberOfAdults = 0,
+                            NumberOfChildren = 0,
                             Price = 550m,
                             RoomId = new Guid("2483b59c-f7f8-4b21-b1df-5149fb57984e")
                         },
@@ -111,8 +114,8 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             GuestId = new Guid("3183b59c-f7f8-4b21-b1df-5149fb57984e"),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            NumberOfAdults = 1,
-                            NumberOfChildren = 1,
+                            NumberOfAdults = 0,
+                            NumberOfChildren = 0,
                             Price = 800m,
                             RoomId = new Guid("2383b59c-f7f8-4b21-b1df-5149fb57984e")
                         });
