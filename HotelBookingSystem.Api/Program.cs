@@ -1,6 +1,7 @@
 using HotelBookingSystem.Api;
 using HotelBookingSystem.Application;
 using HotelBookingSystem.Infrastructure.Persistence;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,17 @@ builder.Services.AddProblemDetails()
                 .AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setup =>
+{
+    var actionMethodsXmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var actionMethodsXmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, actionMethodsXmlCommentsFile);
+
+    var DTOsXmlCommentsFile = $"{Assembly.GetAssembly(typeof(ApplicationConfiguration))!.GetName().Name}.xml";
+    var DTOsXmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, DTOsXmlCommentsFile);
+
+    setup.IncludeXmlComments(actionMethodsXmlCommentsFullPath);
+    setup.IncludeXmlComments(DTOsXmlCommentsFullPath);
+});
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();

@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HotelBookingSystem.Application</name>
+    </assembly>
+    <members>
+        <member name="T:HotelBookingSystem.Application.DTOs.Booking.BookingConfirmationOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Booking"/> entity.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand">
+            <summary>
+            DTO for creating a Booking
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.RoomId">
+            <summary>
+            The Id of the desired Room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.GuestId">
+            <summary>
+            The Id of the Guest who is making the booking
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.NumberOfAdults">
+            <summary>
+            Number of adults staying in the room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.NumberOfChildren">
+            <summary>
+            Number of children staying in the room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.CheckInDate">
+            <summary>
+            Check-in date
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.CheckOutDate">
+            <summary>
+            Check-out date
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.UserRemarks">
+            <summary>
+            User special requests or remarks
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand.PaymentMethod">
+            <summary>
+            Payment method (Cash, Credit Card, Bank Transfer)
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.City.CityOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.City.CreateCityCommand">
+            <summary>
+            DTO for Creating a City 
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.City.CreateCityCommand.Name">
+            <summary>
+            Name of the City
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.City.CreateCityCommand.Country">
+            <summary>
+            Country of the City
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.City.CreateCityCommand.PostOffice">
+            <summary>
+            Post Office of the City
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand">
+            <summary>
+            DTO for Updating a City 
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand.Name">
+            <summary>
+            Name of the City
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand.Country">
+            <summary>
+            Country of the City
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand.PostOffice">
+            <summary>
+            Post Office of the City
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand">
+            <summary>
+            DTO for creating a hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.Name">
+            <summary>
+            Name of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.Owner">
+            <summary>
+            Owner of the hotel
+            </summary>>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.StarRate">
+            <summary>
+            Star Rate of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.Location">
+            <summary>
+            Location of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.CityName">
+            <summary>
+            City name where the hotel is located
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.HotelOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand">
+            <summary>
+            DTO for creating a hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.Name">
+            <summary>
+            Name of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.Owner">
+            <summary>
+            Owner of the hotel
+            </summary>>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.Location">
+            <summary>
+            Location of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.CityName">
+            <summary>
+            City name where the hotel is located
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand">
+            <summary>
+            /// DTO for creating a Room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.HotelName">
+            <summary>
+            Name of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.RoomNumber">
+            <summary>
+            Number of the room in the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.AdultsCapacity">
+            <summary>
+            Adults capacity of the room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.ChildrenCapacity">
+            <summary>
+            Children capacity of the room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.RoomType">
+            <summary>
+            Type of the room (Standard, Luxury, Budget, Boutique)
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.Price">
+            <summary>
+            Current price of the room
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.RoomOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand">
+            <summary>
+            /// DTO for updating a Room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand.RoomNumber">
+            <summary>
+            Number of the room in the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand.AdultsCapacity">
+            <summary>
+            Adults capacity of the room
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand.ChildrenCapacity">
+            <summary>
+            Children capacity of the room
+            </summary>
+        </member>
+    </members>
+</doc>

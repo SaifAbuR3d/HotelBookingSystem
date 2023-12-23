@@ -4,8 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
 
+/// <summary>
+/// API endpoints for managing cities
+/// </summary>>
+
 [Route("api/[controller]")]
 [ApiController]
+
 public class CitiesController(ICityService cityService) : ControllerBase
 {
 
@@ -42,6 +47,17 @@ public class CitiesController(ICityService cityService) : ControllerBase
     /// </summary>
     /// <param name="request">The data for the new city</param>
     /// <returns>The newly created city</returns>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /cities
+    ///     {
+    ///        "name": "Budapest",
+    ///        "country": "Hungary",
+    ///        "postOffice": "1054"
+    ///     }
+    ///
+    /// </remarks>
     /// <response code="201">Returns the newly created city</response>
     /// <response code="400">If the request data is invalid</response>
     [HttpPost]

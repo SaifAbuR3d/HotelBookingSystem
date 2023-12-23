@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
 
+/// <summary>
+/// API endpoints for managing rooms
+/// </summary>>
+
 [Route("api/[controller]")]
 [ApiController]
 public class RoomsController(IRoomService roomService) : ControllerBase
@@ -40,6 +44,20 @@ public class RoomsController(IRoomService roomService) : ControllerBase
     /// </summary>
     /// <param name="request">The data for the new room</param>
     /// <returns>The newly created room</returns>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /rooms
+    ///     {
+    ///        "hotelName": "Hotel Budapest",
+    ///        "roomNumber": "101",
+    ///        "adultsCapacity": 2,
+    ///        "childrenCapacity": 1,
+    ///        "price": 100,
+    ///        "roomType": "Standard"
+    ///     }
+    ///
+    /// </remarks>
     /// <response code="201">Returns the newly created room</response>
     /// <response code="400">If the request data is invalid</response>
     [HttpPost]
