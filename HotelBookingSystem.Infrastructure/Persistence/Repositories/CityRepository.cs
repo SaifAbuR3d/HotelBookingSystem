@@ -2,7 +2,7 @@
 using HotelBookingSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HotelBookingSystem.Infrastructure.Persistence;
+namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
 
 public class CityRepository(ApplicationDbContext context) : ICityRepository
 {
@@ -16,11 +16,11 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
     public async Task<City> AddCityAsync(City city)
     {
         await _context.Cities.AddAsync(city);
-        return city; 
+        return city;
     }
     public async Task<bool> DeleteCityAsync(Guid id)
     {
-        var city = await GetCityAsync(id); 
+        var city = await _context.Cities.FindAsync(id);
         if (city is null)
         {
             return false;
@@ -28,7 +28,7 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
         _context.Cities.Remove(city);
 
-        return true; 
+        return true;
     }
 
     public async Task<IEnumerable<City>> GetAllCitiesAsync()
@@ -38,7 +38,7 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
     public async Task<City?> GetCityAsync(Guid id)
     {
-         return await _context.Cities.FindAsync(id);
+        return await _context.Cities.FindAsync(id);
     }
 
     public async Task<City?> GetCityByNameAsync(string name)
@@ -48,6 +48,6 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
     public async Task<bool> SaveChangesAsync()
     {
-        return (await _context.SaveChangesAsync() >= 1); 
+        return await _context.SaveChangesAsync() >= 1;
     }
 }

@@ -2,7 +2,7 @@
 using HotelBookingSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace HotelBookingSystem.Infrastructure.Persistence;
+namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
 
 public class HotelRepository(ApplicationDbContext context) : IHotelRepository
 {
@@ -19,7 +19,7 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
     }
     public async Task<bool> DeleteHotelAsync(Guid id)
     {
-        var hotel = await GetHotelAsync(id);
+        var hotel = await _context.Hotels.FindAsync(id);
         if (hotel is null)
         {
             return false;
@@ -42,6 +42,6 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
     }
     public async Task<bool> SaveChangesAsync()
     {
-        return (await _context.SaveChangesAsync() >= 1);
+        return await _context.SaveChangesAsync() >= 1;
     }
 }

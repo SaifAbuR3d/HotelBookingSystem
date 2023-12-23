@@ -1,4 +1,5 @@
 ﻿using HotelBookingSystem.Domain.Abstractions.Repositories;
+using HotelBookingSystem.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,5 +24,7 @@ public static class PersistenceConfiguration
         => services
             .AddScoped<ICityRepository, CityRepository>()
             .AddScoped<IHotelRepository, HotelRepository>()
-            .AddScoped<IRoomRepository, RoomRepository>();
+            .AddScoped<IRoomRepository, RoomRepository>()
+            .AddScoped<IGuestRepository, GuestRepository>()
+            .AddScoped<IBookingRepository, BookingRepository>();
 }
