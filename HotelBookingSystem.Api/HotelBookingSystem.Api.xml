@@ -4,6 +4,18 @@
         <name>HotelBookingSystem.Api</name>
     </assembly>
     <members>
+        <member name="T:HotelBookingSystem.Api.Controllers.BookingController">
+            <summary>
+            API endpoints for managing bookings
+            </summary>>
+            
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IBookingService)">
+            <summary>
+            API endpoints for managing bookings
+            </summary>>
+            
+        </member>
         <member name="M:HotelBookingSystem.Api.Controllers.BookingController.GetBooking(System.Guid)">
             <summary>
             Get a booking by its id
@@ -14,14 +26,30 @@
             <response code="404">If the booking is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.BookingController.CreateBooking(HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand)">
-            <summary>
-            Create a new booking
-            </summary>
-            <param name="request">The data for the new booking</param>
-            <returns>The newly created booking</returns>
-            <response code="201">Returns the newly created booking</response>
-            <response code = "404">If the hotel/room or guest is not found</response>
-            <response code="400">If the request data is invalid</response>
+             <summary>
+             Create a new booking
+             </summary>
+             <param name="request">The data for the new booking</param>
+             <returns>The newly created booking</returns>
+             <remarks>
+             Sample request:
+            
+                 POST /booking
+                 {
+                    "guestId": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+                    "roomId": "31d26773-2eb9-4695-bc61-0b717bd97e0b",
+                    "checkInDate": "2024-01-10",
+                    "checkOutDate": "2024-01-15",
+                    "numberOfAdults": 1,
+                    "numberOfChildren": 1,
+                    "userRemarks": "I need a baby cot."
+                    "paymentMethod": "CreditCard"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created booking</response>
+             <response code = "404">If the hotel/room or guest is not found</response>
+             <response code="400">If the request data is invalid</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.BookingController.DeleteBooking(System.Guid)">
             <summary>
@@ -31,6 +59,16 @@
             <returns>No content</returns>
             <response code="204">If the booking is deleted</response>
             <response code="404">If the booking is not found</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.CitiesController">
+            <summary>
+            API endpoints for managing cities
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.ICityService)">
+            <summary>
+            API endpoints for managing cities
+            </summary>>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetAllCities">
             <summary>
@@ -49,13 +87,24 @@
             <response code="404">If the city is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.CreateCity(HotelBookingSystem.Application.DTOs.City.CreateCityCommand)">
-            <summary>
-            Create a new city
-            </summary>
-            <param name="request">The data for the new city</param>
-            <returns>The newly created city</returns>
-            <response code="201">Returns the newly created city</response>
-            <response code="400">If the request data is invalid</response>
+             <summary>
+             Create a new city
+             </summary>
+             <param name="request">The data for the new city</param>
+             <returns>The newly created city</returns>
+             <remarks>
+             Sample request:
+            
+                 POST /cities
+                 {
+                    "name": "Budapest",
+                    "country": "Hungary",
+                    "postOffice": "1054"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created city</response>
+             <response code="400">If the request data is invalid</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.DeleteCity(System.Guid)">
             <summary>
@@ -77,6 +126,36 @@
             <response code="400">If the request data is invalid</response>
             <response code="404">If the city is not found</response>
         </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.GuestsController">
+            <summary>
+            Controller for managing guests
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IGuestService)">
+            <summary>
+            Controller for managing guests
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.GetRecentlyVisitedHotels(System.Guid,System.Int32)">
+            <summary>
+            Gets recently booked rooms for a guest
+            </summary>
+            <param name="guestId"></param>
+            <param name="count"></param>
+            <returns></returns>
+            <response code="200">Returns the city with the given id</response>
+            <response code="404">If the guest is not found</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.HotelsController">
+            <summary>
+            API endpoints for managing hotels
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IHotelService)">
+            <summary>
+            API endpoints for managing hotels
+            </summary>>
+        </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetAllHotels">
             <summary>
             Get all hotels
@@ -94,13 +173,26 @@
             <response code="404">If the hotel is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.CreateHotel(HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand)">
-            <summary>
-            Create a new hotel
-            </summary>
-            <param name="request">The data for the new hotel</param>
-            <returns>The newly created hotel</returns>
-            <response code="201">Returns the newly created hotel</response>
-            <response code="400">If the request data is invalid</response>
+             <summary>
+             Create a new hotel
+             </summary>
+             <param name="request">The data for the new hotel</param>
+             <returns>The newly created hotel</returns>
+             <remarks> 
+                 /// Sample request:
+            
+                 POST /hotels
+                 {
+                    "name": "Hotel Budapest",
+                    "owner": "Hungarian Hotels Ltd.",
+                    "location": "Budapest, 1054 Szabadság tér 9-10.",
+                    "cityName": "Budapest"
+                    "starRate" : "4"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created hotel</response>
+             <response code="400">If the request data is invalid</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.DeleteHotel(System.Guid)">
             <summary>
@@ -122,6 +214,16 @@
             <response code="404">If the hotel is not found</response>
             <response code="400">If the request data is invalid</response>
         </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.RoomsController">
+            <summary>
+            API endpoints for managing rooms
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IRoomService)">
+            <summary>
+            API endpoints for managing rooms
+            </summary>>
+        </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetAllRooms">
             <summary>
             Get all rooms
@@ -139,13 +241,27 @@
             <response code="404">If the room is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.CreateRoom(HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand)">
-            <summary>
-            Create a new room
-            </summary>
-            <param name="request">The data for the new room</param>
-            <returns>The newly created room</returns>
-            <response code="201">Returns the newly created room</response>
-            <response code="400">If the request data is invalid</response>
+             <summary>
+             Create a new room
+             </summary>
+             <param name="request">The data for the new room</param>
+             <returns>The newly created room</returns>
+             <remarks>
+             Sample request:
+            
+                 POST /rooms
+                 {
+                    "hotelName": "Hotel Budapest",
+                    "roomNumber": "101",
+                    "adultsCapacity": 2,
+                    "childrenCapacity": 1,
+                    "price": 100,
+                    "roomType": "Standard"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created room</response>
+             <response code="400">If the request data is invalid</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.DeleteRoom(System.Guid)">
             <summary>
@@ -166,6 +282,27 @@
             <response code="204">If the room is successfully updated</response>
             <response code="404">If the room is not found</response>
             <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.GlobalExceptionHandler">
+            <summary>
+            Exception Handling Middleware
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.GlobalExceptionHandler.#ctor(Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.GlobalExceptionHandler})">
+            <summary>
+            Exception Handling Middleware
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.GlobalExceptionHandler.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
+            <summary>
+            Handles the exception
+            </summary>
+            <param name="httpContext"></param>
+            <param name="exception"></param>
+            <param name="cancellationToken"></param>
+            <returns>true if the exception was properly handled</returns>
         </member>
     </members>
 </doc>

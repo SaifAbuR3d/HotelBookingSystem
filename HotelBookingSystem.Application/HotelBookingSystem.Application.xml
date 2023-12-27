@@ -219,5 +219,6 @@
             Children capacity of the room
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:HotelBookingSystem.Application.Services.GuestService.GetRecentlyVisitedHotelsAsync(System.Guid,System.Int32)" -->
     </members>
 </doc>

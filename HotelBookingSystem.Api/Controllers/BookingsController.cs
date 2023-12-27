@@ -10,7 +10,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// 
 [Route("api/[controller]")]
 [ApiController]
-public class BookingController(IBookingService bookingService) : ControllerBase
+public class BookingsController(IBookingService bookingService) : ControllerBase
 {
 
 
@@ -58,7 +58,7 @@ public class BookingController(IBookingService bookingService) : ControllerBase
     ///        "checkOutDate": "2024-01-15",
     ///        "numberOfAdults": 1,
     ///        "numberOfChildren": 1,
-    ///        "userRemarks": "I need a baby cot."
+    ///        "userRemarks": "I need a baby cot.",
     ///        "paymentMethod": "CreditCard"
     ///     }
     ///
