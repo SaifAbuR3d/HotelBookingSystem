@@ -65,10 +65,18 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
         return true;
     }
 
+    public async Task<IEnumerable<CityAsTrendingDestinationOutputModel>> MostVisitedCitiesAsync(int count = 5)
+    {
+        var cities = await _cityRepository.MostVisitedCitiesAsync(count);
+        return _mapper.Map<IEnumerable<CityAsTrendingDestinationOutputModel>>(cities);
+    }
+
     public async Task<bool> CityExistsAsync(Guid id)
     {
         return await _cityRepository.CityExistsAsync(id);
     }
+
+
 
     
 }

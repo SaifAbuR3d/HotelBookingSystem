@@ -46,6 +46,17 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
         return await _context.Cities.FirstOrDefaultAsync(c => c.Name == name);
     }
 
+    public async Task<IEnumerable<City>> MostVisitedCitiesAsync(int count = 5)
+    {
+        return await
+            _context.Bookings
+                .GroupBy(b => b.Room.Hotel.City)
+                .OrderByDescending(g => g.Count())
+                .Take(count)
+                .Select(g => g.Key)
+                .ToListAsync();
+    }
+
     public async Task<bool> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync() >= 1;

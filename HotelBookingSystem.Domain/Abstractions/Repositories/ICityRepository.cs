@@ -11,4 +11,5 @@ public interface ICityRepository
     Task<bool> SaveChangesAsync();
     Task<bool> DeleteCityAsync(Guid id);
     Task<City?> GetCityByNameAsync(string name);
+    Task<IEnumerable<City>> MostVisitedCitiesAsync(int count = 5);
 }

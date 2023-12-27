@@ -14,5 +14,7 @@ public class CityProfile : Profile
             .ForMember(dest => dest.NumberOfHotels, opt => opt.MapFrom(src => src.Hotels.Count)); 
         
         CreateMap<UpdateCityCommand, City>();
+
+        CreateMap<City, CityAsTrendingDestinationOutputModel>(); 
     }
 }

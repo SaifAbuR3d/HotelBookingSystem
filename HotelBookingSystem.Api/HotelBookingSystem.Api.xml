@@ -4,19 +4,19 @@
         <name>HotelBookingSystem.Api</name>
     </assembly>
     <members>
-        <member name="T:HotelBookingSystem.Api.Controllers.BookingController">
+        <member name="T:HotelBookingSystem.Api.Controllers.BookingsController">
             <summary>
             API endpoints for managing bookings
             </summary>>
             
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IBookingService)">
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IBookingService)">
             <summary>
             API endpoints for managing bookings
             </summary>>
             
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.GetBooking(System.Guid)">
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.GetBooking(System.Guid)">
             <summary>
             Get a booking by its id
             </summary>
@@ -25,7 +25,7 @@
             <response code="200">Returns the booking with the given id</response>
             <response code="404">If the booking is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.CreateBooking(HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.CreateBooking(HotelBookingSystem.Application.DTOs.Booking.CreateBookingCommand)">
              <summary>
              Create a new booking
              </summary>
@@ -42,7 +42,7 @@
                     "checkOutDate": "2024-01-15",
                     "numberOfAdults": 1,
                     "numberOfChildren": 1,
-                    "userRemarks": "I need a baby cot."
+                    "userRemarks": "I need a baby cot.",
                     "paymentMethod": "CreditCard"
                  }
             
@@ -51,7 +51,7 @@
              <response code = "404">If the hotel/room or guest is not found</response>
              <response code="400">If the request data is invalid</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.BookingController.DeleteBooking(System.Guid)">
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.DeleteBooking(System.Guid)">
             <summary>
             Delete a booking
             </summary>
@@ -126,6 +126,35 @@
             <response code="400">If the request data is invalid</response>
             <response code="404">If the city is not found</response>
         </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.MostVisitedCities(System.Int32)">
+            <summary>
+            Retrieves a curated list of trending destinations, showcasing the topmost visited cities.
+            </summary>
+            <param name="count">The number of trending destinations to retrieve. Default is 5.</param>
+            <returns>
+            An asynchronous task representing the operation, returning an <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> containing a collection
+            of <see cref="T:HotelBookingSystem.Application.DTOs.City.CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
+            </returns>
+            <remarks>
+            <para>
+            This endpoint allows clients to retrieve a curated list of trending destinations, specifically the topmost visited cities.
+            The response includes essential details for each city, such as its unique identifier, name, and a visually appealing thumbnail.
+            </para>
+            <para>
+            The number of trending destinations to be retrieved can be specified using the <paramref name="count"/> parameter.
+            If no count is provided, the default is set to 5.
+            </para>
+            </remarks>
+            <example>
+            <code>
+            // Retrieves the top 3 trending destinations
+            var trendingDestinations = await MostVisitedCities(3);
+            // Process the trendingDestinations ActionResult as needed.
+            </code>
+            </example>
+            <response code="200">Returns TOP N most visited cities, N is 5 by default</response>
+            <seealso cref="T:HotelBookingSystem.Application.DTOs.City.CityAsTrendingDestinationOutputModel"/>
+        </member>
         <member name="T:HotelBookingSystem.Api.Controllers.GuestsController">
             <summary>
             Controller for managing guests
@@ -142,8 +171,8 @@
             </summary>
             <param name="guestId"></param>
             <param name="count"></param>
-            <returns></returns>
-            <response code="200">Returns the city with the given id</response>
+            <returns>the last 5 different hotels the guest visited</returns>
+            <response code = "200">Returns the last 5 different hotels the guest visited</response>>
             <response code="404">If the guest is not found</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.HotelsController">

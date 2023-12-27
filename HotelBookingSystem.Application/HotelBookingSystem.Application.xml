@@ -54,6 +54,11 @@
             Payment method (Cash, Credit Card, Bank Transfer)
             </summary>
         </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.City.CityAsTrendingDestinationOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity.
+            </summary>
+        </member>
         <member name="T:HotelBookingSystem.Application.DTOs.City.CityOutputModel">
             <summary>
             This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity.
