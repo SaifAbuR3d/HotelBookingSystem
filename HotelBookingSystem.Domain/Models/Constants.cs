@@ -31,4 +31,10 @@ public class Constants
         public const short PostOfficeLength = 5;
     }
 
+    public class Image
+    {
+        public const int MaxImageUrlLength = 2048;
+        public const int MaxAlternativeTextLength = 100;
+    }
+
 }

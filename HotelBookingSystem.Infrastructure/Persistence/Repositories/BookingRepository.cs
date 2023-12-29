@@ -11,6 +11,7 @@ public class BookingRepository : IBookingRepository
     {
         _context = context;
     }
+
     public async Task<Booking?> GetBookingAsync(Guid bookingId)
     {
         return await _context.Bookings
@@ -18,6 +19,7 @@ public class BookingRepository : IBookingRepository
             .Include(b => b.Room).ThenInclude(r => r.Hotel)
             .FirstOrDefaultAsync(b => b.Id == bookingId);
     }
+
     public async Task<Booking?> GetBookingAsync(Guid guestId, Guid bookingId)
     {
         return await _context.Bookings
@@ -25,11 +27,13 @@ public class BookingRepository : IBookingRepository
             .Include(b => b.Room).ThenInclude(r => r.Hotel)
             .FirstOrDefaultAsync(b => b.Id == bookingId && b.GuestId == guestId);
     }
+
     public async Task<Booking> AddBookingAsync(Booking booking)
     {
         var entry = await _context.Bookings.AddAsync(booking);
         return entry.Entity;
     }
+
     public async Task<bool> DeleteBookingAsync(Guid id)
     {
         var booking = await _context.Bookings.FindAsync(id);
@@ -41,6 +45,7 @@ public class BookingRepository : IBookingRepository
         _context.Bookings.Remove(booking);
         return true;
     }
+
     public async Task<bool> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync() > 0;

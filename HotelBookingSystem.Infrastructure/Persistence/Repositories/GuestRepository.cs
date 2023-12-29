@@ -55,6 +55,7 @@ public class GuestRepository : IGuestRepository
         var guestSortedBookings = await _context.Bookings
             .Where(b => b.GuestId == guestId)
             .Include(b => b.Room).ThenInclude(r => r.Hotel).ThenInclude(h => h.City)
+            .Include(b => b.Room.Hotel.Images)
             .OrderByDescending(b => b.CheckInDate)
             .ToListAsync();
 

@@ -17,6 +17,14 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
         await _context.Hotels.AddAsync(hotel);
         return hotel;
     }
+
+    public async Task<HotelImage> AddHotelImageAsync(Hotel hotel, HotelImage hotelImage)
+    {
+        await _context.HotelImages.AddAsync(hotelImage);
+        hotel.Images.Add(hotelImage);
+        return hotelImage;
+    }
+
     public async Task<bool> DeleteHotelAsync(Guid id)
     {
         var hotel = await _context.Hotels.FindAsync(id);
@@ -28,18 +36,22 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
         _context.Hotels.Remove(hotel);
         return true;
     }
+
     public async Task<IEnumerable<Hotel>> GetAllHotelsAsync()
     {
         return await _context.Hotels.Include(h => h.City).Include(h => h.Rooms).ToListAsync();
     }
+
     public async Task<Hotel?> GetHotelAsync(Guid id)
     {
-        return await _context.Hotels.FindAsync(id);
+        return await _context.Hotels.Include(h => h.Images).FirstOrDefaultAsync(h => h.Id == id);
     }
+
     public async Task<Hotel?> GetHotelByNameAsync(string Name)
     {
         return await _context.Hotels.FirstOrDefaultAsync(h => h.Name == Name);
     }
+
     public async Task<bool> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync() >= 1;

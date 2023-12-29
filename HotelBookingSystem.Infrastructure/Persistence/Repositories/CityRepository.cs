@@ -18,6 +18,14 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
         await _context.Cities.AddAsync(city);
         return city;
     }
+
+    public async Task<CityImage> AddCityImageAsync(City city, CityImage cityImage)
+    {
+        await _context.AddAsync(cityImage);
+        city.Images.Add(cityImage);
+        return cityImage;
+    }
+
     public async Task<bool> DeleteCityAsync(Guid id)
     {
         var city = await _context.Cities.FindAsync(id);
@@ -48,13 +56,20 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
     public async Task<IEnumerable<City>> MostVisitedCitiesAsync(int count = 5)
     {
-        return await
-            _context.Bookings
-                .GroupBy(b => b.Room.Hotel.City)
-                .OrderByDescending(g => g.Count())
-                .Take(count)
-                .Select(g => g.Key)
-                .ToListAsync();
+        var cityIds = await _context.Bookings
+            .GroupBy(b => b.Room.Hotel.CityId)
+            .OrderByDescending(g => g.Count())
+            .Take(count)
+            .Select(g => g.Key)
+            .ToListAsync();
+
+        var cities = await _context.Cities
+            .Where(c => cityIds.Contains(c.Id))
+            .Include(c => c.Images)
+            .ToListAsync();
+
+        return cities;
+
     }
 
     public async Task<bool> SaveChangesAsync()

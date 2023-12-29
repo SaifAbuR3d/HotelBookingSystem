@@ -11,4 +11,5 @@ public interface IHotelRepository
     Task<Hotel?> GetHotelAsync(Guid id);
     Task<bool> SaveChangesAsync();
     Task<Hotel?> GetHotelByNameAsync(string Name);
+    Task<HotelImage> AddHotelImageAsync(Hotel hotel, HotelImage hotelImage);
 }

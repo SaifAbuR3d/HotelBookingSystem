@@ -12,11 +12,20 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
     {
         return await _context.Rooms.AnyAsync(h => h.Id == id);
     }
+
     public async Task<Room> AddRoomAsync(Room room)
     {
         await _context.Rooms.AddAsync(room);
         return room;
     }
+
+    public async Task<RoomImage> AddRoomImageAsync(Room room, RoomImage roomImage)
+    {
+        await _context.RoomImages.AddAsync(roomImage);
+        room.Images.Add(roomImage);
+        return roomImage;
+    }
+
     public async Task<bool> DeleteRoomAsync(Guid id)
     {
         var room = await _context.Rooms.FindAsync(id);
@@ -28,14 +37,17 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
         _context.Rooms.Remove(room);
         return true;
     }
+
     public async Task<IEnumerable<Room>> GetAllRoomsAsync()
     {
         return await _context.Rooms.Include(r => r.Hotel).ToListAsync();
     }
+
     public async Task<Room?> GetRoomAsync(Guid id)
     {
         return await _context.Rooms.Include(r => r.Hotel).FirstOrDefaultAsync(r => r.Id == id);
     }
+
     public async Task<bool> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync() >= 1;
@@ -48,29 +60,11 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
 
     public async Task<bool> IsAvailableAsync(Guid roomId, DateOnly startDate, DateOnly endDate)
     {
-        //loads all booking to the memory at the runtime and then checks if there is any overlap
-
-        //var bookings = await GetBookingsForRoomAsync(roomId);
-
-        //foreach (var booking in bookings)
-        //{
-        //    if (startDate >= booking.CheckInDate && startDate <= booking.CheckOutDate)
-        //    {
-        //        return false;
-        //    }
-        //    if (endDate >= booking.CheckInDate && endDate <= booking.CheckOutDate)
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //return true;
-
-
 
         //bool isAvailable = await _context.Bookings
         //    .Where(b => b.RoomId == roomId)
         //    .AllAsync(b => startDate > b.CheckOutDate || endDate < b.CheckInDate);
+        // return isAvailable;
 
 
 
