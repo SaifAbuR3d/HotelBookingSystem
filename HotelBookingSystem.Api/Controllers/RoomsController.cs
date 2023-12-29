@@ -1,6 +1,8 @@
 ﻿using HotelBookingSystem.Application.DTOs.Room;
 using HotelBookingSystem.Application.ServiceInterfaces;
+using HotelBookingSystem.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace HotelBookingSystem.Api.Controllers;
 
@@ -10,7 +12,7 @@ namespace HotelBookingSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RoomsController(IRoomService roomService) : ControllerBase
+public class RoomsController(IRoomService roomService, IWebHostEnvironment environment) : ControllerBase
 {
     /// <summary>
     /// Get all rooms
@@ -103,6 +105,31 @@ public class RoomsController(IRoomService roomService) : ControllerBase
         var updated = await roomService.UpdateRoomAsync(id, request);
 
         if (!updated)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Upload an image to a room
+    /// </summary>
+    /// <param name="id">The id of the room to upload image</param>
+    /// <param name="file">Image data</param>
+    /// <param name="alternativeText">Alternative Text(Alt)</param>
+    /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
+    /// <returns></returns>
+    /// <response code="204">If the image is successfully uploaded</response>
+    /// <response code="404">If the room is not found</response>
+    /// <response code="400">If the request data is invalid</response>
+
+    [HttpPost("{id}/images")]
+    public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
+    {
+        var uploaded = await roomService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
+
+        if (!uploaded)
         {
             return NotFound();
         }

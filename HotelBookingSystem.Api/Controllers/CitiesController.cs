@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.DTOs.City;
 using HotelBookingSystem.Application.ServiceInterfaces;
+using HotelBookingSystem.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -11,7 +12,7 @@ namespace HotelBookingSystem.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
-public class CitiesController(ICityService cityService) : ControllerBase
+public class CitiesController(ICityService cityService, IWebHostEnvironment environment) : ControllerBase
 {
 
     /// <summary>
@@ -143,6 +144,31 @@ public class CitiesController(ICityService cityService) : ControllerBase
         var cities = await cityService.MostVisitedCitiesAsync(count);
 
         return Ok(cities);
+    }
+
+    /// <summary>
+    /// Upload an image to a city
+    /// </summary>
+    /// <param name="id">The id of the city to upload image</param>
+    /// <param name="file">Image data</param>
+    /// <param name="alternativeText">Alternative Text(Alt)</param>
+    /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
+    /// <returns></returns>
+    /// <response code="204">If the image is successfully uploaded</response>
+    /// <response code="404">If the city is not found</response>
+    /// <response code="400">If the request data is invalid</response>
+    /// 
+    [HttpPost("{id}/images")]
+    public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
+    {
+        var uploaded = await cityService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
+
+        if (!uploaded)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 
 }

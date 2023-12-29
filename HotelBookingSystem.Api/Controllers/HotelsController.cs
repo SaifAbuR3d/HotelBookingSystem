@@ -10,7 +10,7 @@ namespace HotelBookingSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HotelsController(IHotelService hotelService) : ControllerBase
+public class HotelsController(IHotelService hotelService, IWebHostEnvironment environment) : ControllerBase
 {
     /// <summary>
     /// Get all hotels
@@ -91,9 +91,9 @@ public class HotelsController(IHotelService hotelService) : ControllerBase
     /// Update a hotel
     /// </summary>
     /// <param name="id">The id of the hotel to update</param>
-    /// <param name="request">The data for the updated hotel</param>
+    /// <param name="request">The data for the uploaded hotel</param>
     /// <returns>No content</returns>
-    /// <response code="204">If the hotel is successfully updated</response>
+    /// <response code="204">If the hotel is successfully uploaded</response>
     /// <response code="404">If the hotel is not found</response>
     /// <response code="400">If the request data is invalid</response>
     [HttpPut("{id}")]
@@ -109,4 +109,29 @@ public class HotelsController(IHotelService hotelService) : ControllerBase
         return NoContent();
     }
 
+
+    /// <summary>
+    /// Upload an image to a hotel
+    /// </summary>
+    /// <param name="id">The id of the hotel to upload image</param>
+    /// <param name="file">Image data</param>
+    /// <param name="alternativeText">Alternative Text(Alt)</param>
+    /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
+    /// <returns></returns>
+    /// <response code="204">If the image is successfully uploaded</response>
+    /// <response code="404">If the hotel is not found</response>
+    /// <response code="400">If the request data is invalid</response>
+
+    [HttpPost("{id}/images")]
+    public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
+    {
+        var uploaded = await hotelService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
+
+        if (!uploaded)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }

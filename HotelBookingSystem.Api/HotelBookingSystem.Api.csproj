@@ -27,4 +27,11 @@
     <ProjectReference Include="..\HotelBookingSystem.Infrastructure\HotelBookingSystem.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\hotels\" />
+    <Folder Include="wwwroot\images\cities\" />
+    <Folder Include="wwwroot\images\common\" />
+    <Folder Include="wwwroot\images\rooms\" />
+  </ItemGroup>
+
 </Project>
