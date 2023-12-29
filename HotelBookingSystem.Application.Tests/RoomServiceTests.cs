@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.DTOs.City;
 using HotelBookingSystem.Application.DTOs.Room;
+using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;
@@ -18,7 +19,12 @@ public class RoomServiceTests
         hotelRepositoryMock = new Mock<IHotelRepository>();
         roomRepositoryMock = new Mock<IRoomRepository>();
         mapper = AutoMapperSingleton.Mapper;
-        sut = new RoomService(hotelRepositoryMock.Object, roomRepositoryMock.Object, mapper);
+        var imageHandler = new Mock<IImageHandler>();
+
+        sut = new RoomService(hotelRepositoryMock.Object,
+                              roomRepositoryMock.Object,
+                              mapper,
+                              imageHandler.Object);
     }
 
     [Fact]

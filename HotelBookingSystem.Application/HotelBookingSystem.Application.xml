@@ -56,12 +56,12 @@
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.City.CityAsTrendingDestinationOutputModel">
             <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity.
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity. Mainly for Trending Destinations Feature.
             </summary>
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.City.CityOutputModel">
             <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity.
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity. Mainly for Admin Pages.
             </summary>
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.City.CreateCityCommand">
@@ -136,7 +136,17 @@
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.Hotel.HotelOutputModel">
             <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity.
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Admin Page.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.HotelWithRoomsAndImagesOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Hotel Page.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.RecentlyVisitedHotelOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Recently Visited Hotels feature.
             </summary>
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand">
@@ -201,7 +211,12 @@
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.Room.RoomOutputModel">
             <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity.
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity. Mainly for Admin Page.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.RoomWithImageOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity. Mainly for Hotel Page.
             </summary>
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand">

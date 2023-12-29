@@ -4,16 +4,20 @@ using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace HotelBookingSystem.Application.Services;
 
 public class HotelService(IHotelRepository hotelRepository,
                           ICityRepository cityRepository,
-                          IMapper mapper) : IHotelService 
+                          IMapper mapper,
+                          IImageHandler imageHandler) : IHotelService 
 {
     private readonly IHotelRepository _hotelRepository = hotelRepository;
     private readonly ICityRepository _cityRepository = cityRepository;
     private readonly IMapper _mapper = mapper;
+    private readonly IImageHandler _imageHandler = imageHandler;
+
 
     public async Task<IEnumerable<HotelOutputModel>> GetAllHotelsAsync()
     {
@@ -70,6 +74,35 @@ public class HotelService(IHotelRepository hotelRepository,
         hotel.City = city;
         hotel.LastModified = DateTime.UtcNow;
 
+        await _hotelRepository.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> UploadImageAsync(Guid hotelId, IFormFile file, string basePath, string? alternativeText, bool? thumbnail = false)
+    { 
+        if (string.IsNullOrWhiteSpace(basePath))
+        {
+            throw new BadFileException("an error occurred");
+        }
+
+        var hotel = await _hotelRepository.GetHotelAsync(hotelId) ?? throw new NotFoundException(nameof(Hotel), hotelId);
+ 
+        var hotelDirectory = Path.Combine(basePath, "images", "hotels", hotelId.ToString());
+
+        var uploadedImageUrl = await _imageHandler.UploadImage(file, hotelDirectory, thumbnail.GetValueOrDefault(false));
+
+        var image = new HotelImage
+        {
+            Id = Guid.NewGuid(),
+            CreationDate = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow,
+            ImageUrl = uploadedImageUrl,
+            AlternativeText = alternativeText,
+            HotelId = hotel.Id
+        };
+
+        await _hotelRepository.AddHotelImageAsync(hotel, image);
         await _hotelRepository.SaveChangesAsync();
 
         return true;

@@ -13,7 +13,7 @@ public class BookingProfile : Profile
             .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Room.Hotel.Name))
             .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Room.RoomType))
             .ForMember(dest => dest.RoomNumber, opt => opt.MapFrom(src => src.Room.RoomNumber))
-            .ForMember(dest => dest.HotelLocation, opt => opt.MapFrom(src => src.Room.Hotel.Location));
+            .ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Room.Hotel.Street));
 
     }
 

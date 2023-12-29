@@ -1,4 +1,5 @@
 using HotelBookingSystem.Application.DTOs.City;
+using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;
@@ -15,7 +16,11 @@ public class CityServiceTests
         fixture = FixtureFactory.CreateFixture();
         cityRepositoryMock = new Mock<ICityRepository>();
         mapper = AutoMapperSingleton.Mapper;
-        sut = new CityService(cityRepositoryMock.Object, mapper);
+        var imageHandler = new Mock<IImageHandler>();
+
+        sut = new CityService(cityRepositoryMock.Object,
+                              mapper,
+                              imageHandler.Object);
     }
 
     [Fact]

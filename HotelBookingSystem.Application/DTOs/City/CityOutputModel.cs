@@ -1,7 +1,7 @@
 ﻿namespace HotelBookingSystem.Application.DTOs.City;
 
 /// <summary>
-/// This class is a data transfer object (DTO) for the <see cref="Domain.Models.City"/> entity.
+/// This class is a data transfer object (DTO) for the <see cref="Domain.Models.City"/> entity. Mainly for Admin Pages.
 /// </summary>
 
 public class CityOutputModel

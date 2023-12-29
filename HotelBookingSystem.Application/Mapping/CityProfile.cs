@@ -15,6 +15,20 @@ public class CityProfile : Profile
         
         CreateMap<UpdateCityCommand, City>();
 
-        CreateMap<City, CityAsTrendingDestinationOutputModel>(); 
+        CreateMap<CityImage, CityImageOutputModel>();
+
+        var defaultCityImage = new CityImage
+        {
+            ImageUrl = "C:\\Users\\user\\source\\repos\\HotelBookingSystem\\HotelBookingSystem.Api\\wwwroot\\images\\common\\defaultCity.jpg",
+            AlternativeText = "Default city image"
+        };
+
+        CreateMap<City, CityAsTrendingDestinationOutputModel>()
+            .ForMember(dest => dest.CityImage, opt => opt.MapFrom(src =>
+                                src.Images.FirstOrDefault(i => i.ImageUrl.Contains("thumbnail"))
+                                ?? src.Images.FirstOrDefault()
+                                ?? defaultCityImage
+                                )
+                      );
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.DTOs.City;
 using HotelBookingSystem.Application.DTOs.Hotel;
+using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;
@@ -18,7 +19,12 @@ public class HotelServiceTests
         cityRepositoryMock = new Mock<ICityRepository>();
         hotelRepositoryMock = new Mock<IHotelRepository>();
         mapper = AutoMapperSingleton.Mapper;
-        sut = new HotelService(hotelRepositoryMock.Object,cityRepositoryMock.Object, mapper);
+        var imageHandlerMock = new Mock<IImageHandler>();
+
+        sut = new HotelService(hotelRepositoryMock.Object,
+                               cityRepositoryMock.Object,
+                               mapper,
+                               imageHandlerMock.Object);
     }
     [Fact]
     public async Task GetAllHotelsAsync_ShouldReturnAllHotels()

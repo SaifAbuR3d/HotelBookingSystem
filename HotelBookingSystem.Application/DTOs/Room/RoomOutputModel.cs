@@ -1,7 +1,7 @@
 ﻿namespace HotelBookingSystem.Application.DTOs.Room;
 
 /// <summary>
-/// This class is a data transfer object (DTO) for the <see cref="Domain.Models.Room"/> entity.
+/// This class is a data transfer object (DTO) for the <see cref="Domain.Models.Room"/> entity. Mainly for Admin Page.
 /// </summary>
 public class RoomOutputModel
 {
@@ -11,6 +11,5 @@ public class RoomOutputModel
     public int RoomNumber { get; set; }
     public int AdultsCapacity { get; set; }
     public int ChildrenCapacity { get; set; }
-    public bool IsAvailable { get; set; }
     public string HotelName { get; set; } = default!;
 }

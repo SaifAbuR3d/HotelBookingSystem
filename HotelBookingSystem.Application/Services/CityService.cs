@@ -4,13 +4,17 @@ using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace HotelBookingSystem.Application.Services;
 
-public class CityService(ICityRepository cityRepository, IMapper mapper) : ICityService
+public class CityService(ICityRepository cityRepository,
+                         IMapper mapper,
+                         IImageHandler imageHandler) : ICityService
 {
     private readonly ICityRepository _cityRepository = cityRepository;
     private readonly IMapper _mapper = mapper;
+    private readonly IImageHandler _imageHandler = imageHandler;
 
     public async Task<IEnumerable<CityOutputModel>> GetAllCitiesAsync()
     {
@@ -71,10 +75,41 @@ public class CityService(ICityRepository cityRepository, IMapper mapper) : ICity
         return _mapper.Map<IEnumerable<CityAsTrendingDestinationOutputModel>>(cities);
     }
 
+    public async Task<bool> UploadImageAsync(Guid cityId, IFormFile file, string basePath, string? alternativeText, bool? thumbnail = false)
+    {
+        if (string.IsNullOrWhiteSpace(basePath))
+        {
+            throw new BadFileException("an error occurred");
+        }
+
+        var city = await _cityRepository.GetCityAsync(cityId) ?? throw new NotFoundException(nameof(City), cityId);
+
+        var cityDirectory = Path.Combine(basePath, "images", "cities", cityId.ToString());
+
+        var uploadedImageUrl = await _imageHandler.UploadImage(file, cityDirectory, thumbnail.GetValueOrDefault(false));
+
+        var image = new CityImage
+        {
+            Id = Guid.NewGuid(),
+            CreationDate = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow,
+            ImageUrl = uploadedImageUrl,
+            AlternativeText = alternativeText,
+            CityId = city.Id
+        };
+
+        await _cityRepository.AddCityImageAsync(city, image);
+        await _cityRepository.SaveChangesAsync();
+
+        return true;
+    }
+
+
     public async Task<bool> CityExistsAsync(Guid id)
     {
         return await _cityRepository.CityExistsAsync(id);
     }
+
 
 
 

@@ -1,4 +1,5 @@
-﻿using HotelBookingSystem.Application.DTOs.Hotel;
+﻿using AutoMapper;
+using HotelBookingSystem.Application.DTOs.Hotel;
 using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Domain.Abstractions.Repositories;
 
@@ -9,12 +10,18 @@ public class GuestService : IGuestService
     private readonly IGuestRepository _guestRepository;
     private readonly IBookingRepository _bookingRepository;
     private readonly IHotelRepository _hotelRepository;
+    private readonly IMapper _mapper;
 
-    public GuestService(IGuestRepository guestRepository, IBookingRepository bookingRepository, IHotelRepository hotelRepository)
+
+    public GuestService(IGuestRepository guestRepository,     
+      IBookingRepository bookingRepository,
+      IHotelRepository hotelRepository, 
+      IMapper mapper)
     {
         _guestRepository = guestRepository;
         _bookingRepository = bookingRepository;
         _hotelRepository = hotelRepository;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -26,7 +33,7 @@ public class GuestService : IGuestService
     /// <remarks>
     /// <para>
     /// This method asynchronously retrieves recent bookings associated with the specified guest, including information about the booked rooms and their respective hotels.
-    /// It then maps the relevant details to a simplified output model, <see cref="RecentlyVisitedHotelOutputModel"/>, for a cleaner representation of the data.
+    /// It then maps the relevant details to a simplified hotels model, <see cref="RecentlyVisitedHotelOutputModel"/>, for a cleaner representation of the data.
     /// The resulting collection provides essential information about the unique recently visited hotels, such as hotel name, city name, star rating, and price.
     /// </para>
     /// </remarks>
@@ -45,14 +52,6 @@ public class GuestService : IGuestService
     {
         var recentBookings = await _guestRepository.GetRecentBookingsInDifferentHotelsAsync(guestId, count);
 
-        var output = recentBookings.Select(b => new RecentlyVisitedHotelOutputModel
-        {
-            HotelName = b.Room.Hotel.Name,
-            CityName = b.Room.Hotel.City.Name,
-            StarRating = b.Room.Hotel.StarRate,
-            Price = b.Price
-        });
-
-        return output;
+        return _mapper.Map<IEnumerable<RecentlyVisitedHotelOutputModel>>(recentBookings);
     }
 }

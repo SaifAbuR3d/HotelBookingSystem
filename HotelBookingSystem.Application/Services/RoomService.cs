@@ -4,22 +4,21 @@ using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace HotelBookingSystem.Application.Services;
 
-public class RoomService : IRoomService
+public class RoomService(IHotelRepository hotelRepository,
+                         IRoomRepository roomRepository,
+                         IMapper mapper,
+                         IImageHandler imageHandler) : IRoomService
 {
-    private readonly IHotelRepository _hotelRepository;
-    private readonly IRoomRepository _roomRepository;
-    private readonly IMapper _mapper;
-    public RoomService(IHotelRepository hotelRepository,
-                       IRoomRepository roomRepository,
-                       IMapper mapper)
-    {
-        _hotelRepository = hotelRepository;
-        _roomRepository = roomRepository;
-        _mapper = mapper;
-    }
+    private readonly IHotelRepository _hotelRepository = hotelRepository;
+    private readonly IRoomRepository _roomRepository = roomRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IImageHandler _imageHandler = imageHandler;
 
     public async Task<IEnumerable<RoomOutputModel>> GetAllRoomsAsync()
     {
@@ -76,4 +75,35 @@ public class RoomService : IRoomService
 
         return true;
     }
+
+    public async Task<bool> UploadImageAsync(Guid roomId, IFormFile file, string basePath, string? alternativeText, bool? thumbnail = false)
+    {
+        if (string.IsNullOrWhiteSpace(basePath))
+        {
+            throw new BadFileException("an error occurred");
+        }
+
+        var room = await _roomRepository.GetRoomAsync(roomId) ?? throw new NotFoundException(nameof(Room), roomId);
+
+        var roomDirectory = Path.Combine(basePath, "images", "rooms", roomId.ToString());
+
+        var uploadedImageUrl = await _imageHandler.UploadImage(file, roomDirectory, thumbnail.GetValueOrDefault(false));
+
+        var image = new RoomImage
+        {
+            Id = Guid.NewGuid(),
+            CreationDate = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow,
+            ImageUrl = uploadedImageUrl,
+            AlternativeText = alternativeText,
+            RoomId = room.Id
+        };
+
+        await _roomRepository.AddRoomImageAsync(room, image);
+        await _roomRepository.SaveChangesAsync();
+
+        return true;
+    }
+
+
 }
