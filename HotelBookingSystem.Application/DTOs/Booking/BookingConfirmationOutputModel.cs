@@ -18,7 +18,6 @@ public class BookingConfirmationOutputModel
     public string HotelName { get; set; } = default!;
     public RoomType RoomType { get; set; }
     public int RoomNumber { get; set; }
-    public string HotelLocation { get; set; } = default!;
+    public string? Street { get; set; } = default!;
     public decimal Price { get; set; }
-
 }

@@ -4,6 +4,7 @@ using HotelBookingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228032412_FixCityImagesName")]
+    partial class FixCityImagesName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,13 +301,9 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Latitude")
-                        .HasPrecision(8, 6)
-                        .HasColumnType("float(8)");
-
-                    b.Property<double>("Longitude")
-                        .HasPrecision(9, 6)
-                        .HasColumnType("float(9)");
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -316,9 +315,6 @@ namespace HotelBookingSystem.Infrastructure.Migrations
 
                     b.Property<short>("StarRate")
                         .HasColumnType("smallint");
-
-                    b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -335,12 +331,10 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CityId = new Guid("1183b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Latitude = 12.345677999999999,
-                            Longitude = 153.45678899999999,
+                            Location = "Times Square, New York",
                             Name = "Grand Hyatt",
                             Owner = "Hyatt Group",
-                            StarRate = (short)5,
-                            Street = "Times Square, New York"
+                            StarRate = (short)5
                         },
                         new
                         {
@@ -350,12 +344,10 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CityId = new Guid("1283b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Latitude = 13.345677999999999,
-                            Longitude = 143.45678899999999,
+                            Location = "Piccadilly, London",
                             Name = "The Ritz",
                             Owner = "Ritz-Carlton",
-                            StarRate = (short)5,
-                            Street = "Piccadilly, London"
+                            StarRate = (short)5
                         },
                         new
                         {
@@ -365,12 +357,10 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CityId = new Guid("1383b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Latitude = 14.345677999999999,
-                            Longitude = 133.45678899999999,
+                            Location = "Champs-Élysées, Paris",
                             Name = "Le Méridien",
                             Owner = "Marriott Group",
-                            StarRate = (short)4,
-                            Street = "Champs-Élysées, Paris"
+                            StarRate = (short)4
                         },
                         new
                         {
@@ -380,12 +370,10 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CityId = new Guid("1483b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Latitude = 15.345677999999999,
-                            Longitude = 123.456789,
+                            Location = "Chiyoda, Tokyo",
                             Name = "Tokyo Palace",
                             Owner = "Palace Hotels",
-                            StarRate = (short)4,
-                            Street = "Chiyoda, Tokyo"
+                            StarRate = (short)4
                         },
                         new
                         {
@@ -395,12 +383,10 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                             CityId = new Guid("1583b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Latitude = 16.345677999999999,
-                            Longitude = 113.456789,
+                            Location = "Mitte, Berlin",
                             Name = "Berlin Grand",
                             Owner = "Grand Hotels",
-                            StarRate = (short)4,
-                            Street = "Mitte, Berlin"
+                            StarRate = (short)4
                         });
                 });
 
@@ -541,7 +527,6 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomNumber")

@@ -16,12 +16,12 @@ public class ApplicationDbContext : DbContext
     public DbSet<Review> Reviews { get; set; }
     public DbSet<RoomImage> RoomImages { get; set; }
     public DbSet<HotelImage> HotelImages { get; set; }
+    public DbSet<CityImage> CityImages { get; set; }
     public DbSet<Booking> Bookings { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder
-            .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
             .EnableSensitiveDataLogging();
     }
 
@@ -32,8 +32,19 @@ public class ApplicationDbContext : DbContext
         // Computed properties are not persisted 
         modelBuilder.Entity<Hotel>()
                     .Ignore(h => h.RoomsNumber);
+
+        // set precision for decimal properties
         modelBuilder.Entity<Room>()
-                    .Ignore(r => r.IsAvailable);
+                    .Property(r => r.Price)
+                    .HasPrecision(18, 2);
+
+        // set precision for double properties
+        modelBuilder.Entity<Hotel>()
+                    .Property(h => h.Latitude)
+                    .HasPrecision(8, 6);
+        modelBuilder.Entity<Hotel>()
+                    .Property(h => h.Longitude)
+                    .HasPrecision(9, 6);
 
         SeedData(modelBuilder);
     }
@@ -61,11 +72,11 @@ public class ApplicationDbContext : DbContext
         var berlinGrandId = new Guid("2183b59c-f7f8-4b21-b1df-5149fb57984e");
 
         modelBuilder.Entity<Hotel>().HasData(
-            new Hotel { Id = grandHyattId, Name = "Grand Hyatt", Owner = "Hyatt Group", StarRate = 5, Location = "Times Square, New York", CityId = newYorkId, CheckInTime = new TimeOnly(14, 0), CheckOutTime = new TimeOnly(12, 0), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Hotel { Id = theRitzId, Name = "The Ritz", Owner = "Ritz-Carlton", StarRate = 5, Location = "Piccadilly, London", CityId = londonId, CheckInTime = new TimeOnly(15, 0), CheckOutTime = new TimeOnly(11, 30), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Hotel { Id = leMeridienId, Name = "Le Méridien", Owner = "Marriott Group", StarRate = 4, Location = "Champs-Élysées, Paris", CityId = parisId, CheckInTime = new TimeOnly(14, 30), CheckOutTime = new TimeOnly(12, 30), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Hotel { Id = tokyoPalaceId, Name = "Tokyo Palace", Owner = "Palace Hotels", StarRate = 4, Location = "Chiyoda, Tokyo", CityId = tokyoId, CheckInTime = new TimeOnly(14, 0), CheckOutTime = new TimeOnly(12, 0), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Hotel { Id = berlinGrandId, Name = "Berlin Grand", Owner = "Grand Hotels", StarRate = 4, Location = "Mitte, Berlin", CityId = berlinId, CheckInTime = new TimeOnly(15, 0), CheckOutTime = new TimeOnly(11, 30), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
+            new Hotel { Id = grandHyattId, Name = "Grand Hyatt", Owner = "Hyatt Group", StarRate = 5, Street = "Times Square, New York", CityId = newYorkId, CheckInTime = new TimeOnly(14, 0), CheckOutTime = new TimeOnly(12, 0), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), Latitude =12.345678, Longitude = 153.456789  },
+            new Hotel { Id = theRitzId, Name = "The Ritz", Owner = "Ritz-Carlton", StarRate = 5, Street = "Piccadilly, London", CityId = londonId, CheckInTime = new TimeOnly(15, 0), CheckOutTime = new TimeOnly(11, 30), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), Latitude = 13.345678, Longitude = 143.456789 },
+            new Hotel { Id = leMeridienId, Name = "Le Méridien", Owner = "Marriott Group", StarRate = 4, Street = "Champs-Élysées, Paris", CityId = parisId, CheckInTime = new TimeOnly(14, 30), CheckOutTime = new TimeOnly(12, 30), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), Latitude = 14.345678, Longitude = 133.456789 },
+            new Hotel { Id = tokyoPalaceId, Name = "Tokyo Palace", Owner = "Palace Hotels", StarRate = 4, Street = "Chiyoda, Tokyo", CityId = tokyoId, CheckInTime = new TimeOnly(14, 0), CheckOutTime = new TimeOnly(12, 0), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), Latitude = 15.345678, Longitude = 123.456789 },
+            new Hotel { Id = berlinGrandId, Name = "Berlin Grand", Owner = "Grand Hotels", StarRate = 4, Street = "Mitte, Berlin", CityId = berlinId, CheckInTime = new TimeOnly(15, 0), CheckOutTime = new TimeOnly(11, 30), CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), Latitude = 16.345678, Longitude = 113.456789 }
         );
 
         var room1GrandHyattId = new Guid("2283b59c-f7f8-4b21-b1df-5149fb57984e");

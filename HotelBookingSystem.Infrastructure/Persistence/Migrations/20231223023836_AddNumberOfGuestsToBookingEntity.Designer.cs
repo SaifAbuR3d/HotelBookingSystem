@@ -377,7 +377,7 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                     b.Property<Guid>("HotelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte[]>("ImageData")
+                    b.Property<byte[]>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
@@ -589,7 +589,7 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("ImageData")
+                    b.Property<byte[]>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 

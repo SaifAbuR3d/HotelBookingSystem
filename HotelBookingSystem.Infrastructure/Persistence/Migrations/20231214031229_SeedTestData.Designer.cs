@@ -363,7 +363,7 @@ partial class SeedTestData
                 b.Property<Guid>("HotelId")
                     .HasColumnType("uniqueidentifier");
 
-                b.Property<byte[]>("ImageData")
+                b.Property<byte[]>("ImageUrl")
                     .IsRequired()
                     .HasColumnType("varbinary(max)");
 
@@ -575,7 +575,7 @@ partial class SeedTestData
                     .IsRequired()
                     .HasColumnType("nvarchar(max)");
 
-                b.Property<byte[]>("ImageData")
+                b.Property<byte[]>("ImageUrl")
                     .IsRequired()
                     .HasColumnType("varbinary(max)");
 

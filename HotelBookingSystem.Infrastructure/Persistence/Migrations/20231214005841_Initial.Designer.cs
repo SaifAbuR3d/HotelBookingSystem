@@ -173,7 +173,7 @@ partial class Initial
                 b.Property<Guid>("HotelId")
                     .HasColumnType("uniqueidentifier");
 
-                b.Property<byte[]>("ImageData")
+                b.Property<byte[]>("ImageUrl")
                     .IsRequired()
                     .HasColumnType("varbinary(max)");
 
@@ -277,7 +277,7 @@ partial class Initial
                     .IsRequired()
                     .HasColumnType("nvarchar(max)");
 
-                b.Property<byte[]>("ImageData")
+                b.Property<byte[]>("ImageUrl")
                     .IsRequired()
                     .HasColumnType("varbinary(max)");
 
