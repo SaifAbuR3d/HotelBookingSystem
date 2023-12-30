@@ -9,6 +9,5 @@ public class Review : Entity
     public Guid HotelId { get; set; }
     public string? Title { get; set; }
     public string Description { get; set; } = default!;
-
-    public short Rating { get; set; } 
+    public int Rating { get; set; } 
 }
