@@ -35,20 +35,27 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             detail: detail,
             extensions: new Dictionary<string, object?>
             {
+                //["errors"] = new Dictionary<string, string[]>
+                //{
+                //    [exception.GetType().Name] = [exception.Message]
+                //},
                 ["traceId"] = traceId
             }
+            
             ).ExecuteAsync(httpContext);
 
         return true;
     }
 
-    private static (int statusCode, string title, string details) MapException(Exception exception)
+    private static (int statusCode, string title, string details/*, Type t (to simulate FluentValidation error response) */) MapException(Exception exception)
     {
         return exception switch
         {
             NotFoundException => (StatusCodes.Status404NotFound, "Not Found", exception.Message),
             UnavailableRoomException => (StatusCodes.Status400BadRequest, "Unavailable Room", exception.Message),
             InvalidNumberOfGuestsException => (StatusCodes.Status400BadRequest, "Invalid Number Of Guests", exception.Message),
+            BadFileException => (StatusCodes.Status400BadRequest, "Bad File", exception.Message),
+            BadRequestException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Something went wrong", "We made a mistake but we are working on it")
         };
     }
