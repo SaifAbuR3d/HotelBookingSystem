@@ -68,4 +68,16 @@ public class GuestRepository : IGuestRepository
 
         return  guestRecentBookingsInDifferentHotels;
     }
+
+    public async Task<bool> HasGuestBookedHotelAsync(Hotel hotel, Guest guest)
+    {
+        return await _context.Bookings
+            .AnyAsync(b => b.GuestId == guest.Id && b.Room.HotelId == hotel.Id);
+    }
+
+    public Task<bool> HasGuestReviewedHotelAsync(Hotel hotel, Guest guest)
+    {
+        return _context.Reviews
+            .AnyAsync(r => r.GuestId == guest.Id && r.HotelId == hotel.Id);
+    }
 }
