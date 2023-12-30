@@ -45,7 +45,6 @@ public class GuestService : IGuestService
     /// </code>
     /// </example>
     /// <seealso cref="RecentlyVisitedHotelOutputModel"/>
-    /// </summary>
     /// <returns>An asynchronous task representing the operation, returning a collection of unique recently visited hotels.</returns>
 
     public async Task<IEnumerable<RecentlyVisitedHotelOutputModel>> GetRecentlyVisitedHotelsAsync(Guid guestId, int count = 5)

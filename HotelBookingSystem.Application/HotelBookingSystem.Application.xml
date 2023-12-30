@@ -239,6 +239,29 @@
             Children capacity of the room
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:HotelBookingSystem.Application.Services.GuestService.GetRecentlyVisitedHotelsAsync(System.Guid,System.Int32)" -->
+        <member name="M:HotelBookingSystem.Application.Services.GuestService.GetRecentlyVisitedHotelsAsync(System.Guid,System.Int32)">
+            <summary>
+            Retrieves a collection of unique recently visited hotels for a guest, presenting essential details.
+            </summary>
+            <param name="guestId">The unique identifier of the guest for whom recently visited hotels are to be retrieved.</param>
+            <param name="count">The maximum number of unique recently visited hotels to retrieve. Default is 5.</param>
+            <returns>An asynchronous task representing the operation, returning a collection of unique recently visited hotels.</returns>
+            <remarks>
+            <para>
+            This method asynchronously retrieves recent bookings associated with the specified guest, including information about the booked rooms and their respective hotels.
+            It then maps the relevant details to a simplified hotels model, <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.RecentlyVisitedHotelOutputModel"/>, for a cleaner representation of the data.
+            The resulting collection provides essential information about the unique recently visited hotels, such as hotel name, city name, star rating, and price.
+            </para>
+            </remarks>
+            <example>
+            <code>
+            var guestId = Guid.Parse("your_guest_id_here");
+            var recentHotels = await service.GetRecentlyVisitedHotels(guestId, 5);
+            // Process the recentHotels collection as needed.
+            </code>
+            </example>
+            <seealso cref="T:HotelBookingSystem.Application.DTOs.Hotel.RecentlyVisitedHotelOutputModel"/>
+            <returns>An asynchronous task representing the operation, returning a collection of unique recently visited hotels.</returns>
+        </member>
     </members>
 </doc>

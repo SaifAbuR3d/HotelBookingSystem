@@ -9,6 +9,7 @@ public class HotelServiceTests
 {
     private readonly Mock<ICityRepository> cityRepositoryMock;
     private readonly Mock<IHotelRepository> hotelRepositoryMock;
+    private readonly Mock<IGuestRepository> guestRepositoryMock; 
     private readonly IFixture fixture;
     private readonly IMapper mapper;
     private readonly HotelService sut;
@@ -18,11 +19,13 @@ public class HotelServiceTests
         fixture = FixtureFactory.CreateFixture();
         cityRepositoryMock = new Mock<ICityRepository>();
         hotelRepositoryMock = new Mock<IHotelRepository>();
+        guestRepositoryMock = new Mock<IGuestRepository>();
         mapper = AutoMapperSingleton.Mapper;
         var imageHandlerMock = new Mock<IImageHandler>();
 
         sut = new HotelService(hotelRepositoryMock.Object,
                                cityRepositoryMock.Object,
+                               guestRepositoryMock.Object,
                                mapper,
                                imageHandlerMock.Object);
     }
