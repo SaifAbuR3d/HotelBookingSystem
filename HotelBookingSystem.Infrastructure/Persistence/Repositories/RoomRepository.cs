@@ -89,7 +89,9 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
 
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
 
-        return (query, paginationMetadata);
+        var result = await query.ToListAsync();
+
+        return (result, paginationMetadata);
     }
 
     private static void SearchInHotelName(ref IQueryable<Room> query, string? searchTerm)

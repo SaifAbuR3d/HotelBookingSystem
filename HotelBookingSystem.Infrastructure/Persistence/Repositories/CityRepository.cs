@@ -3,6 +3,7 @@ using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Domain.Models;
 using HotelBookingSystem.Infrastructure.Persistence.Helpers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
@@ -89,7 +90,9 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
 
-        return (query, paginationMetadata);
+        var result = await query.ToListAsync();
+
+        return (result, paginationMetadata);
     }
 
     private static void SearchInCityNameOrCountryName(ref IQueryable<City> query, string? searchTerm)

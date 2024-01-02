@@ -133,7 +133,9 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
 
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
 
-        return (query, paginationMetadata);
+        var result = await query.ToListAsync(); 
+
+        return (result, paginationMetadata);
     }
 
     private static Expression<Func<Hotel, object>> GetSearchResultsSortingCriterion(HotelSearchAndFilterParameters request)
