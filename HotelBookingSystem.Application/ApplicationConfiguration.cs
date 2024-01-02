@@ -19,5 +19,6 @@ public static class ApplicationConfiguration
             .AddScoped<IHotelService, HotelService>()
             .AddScoped<IRoomService, RoomService>()
             .AddScoped<IBookingService, BookingService>()
-            .AddScoped<IGuestService, GuestService>();
+            .AddScoped<IGuestService, GuestService>()
+            .AddScoped<IReviewService, ReviewService>();
 }

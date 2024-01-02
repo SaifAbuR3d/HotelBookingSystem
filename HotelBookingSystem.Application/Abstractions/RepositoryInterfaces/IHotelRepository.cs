@@ -13,10 +13,5 @@ public interface IHotelRepository
     Task<bool> SaveChangesAsync();
     Task<Hotel?> GetHotelByNameAsync(string Name);
     Task<HotelImage> AddHotelImageAsync(Hotel hotel, HotelImage hotelImage);
-    Task<Review> AddReviewAsync(Hotel hotel, Review review);
-    Task<Review?> GetReviewAsync(Hotel hotel, Guid reviewId);
-    Task<bool> DeleteReviewAsync(Guid id, Guid reviewId);
-    Task<IEnumerable<Review>> GetHotelReviewsAsync(Hotel hotel);
-    Task<double> GetHotelAverageRatingAsync(Hotel hotel);
     Task<(IEnumerable<Hotel>, PaginationMetadata)> SearchAndFilterHotelsAsync(HotelSearchAndFilterParameters request);
 }

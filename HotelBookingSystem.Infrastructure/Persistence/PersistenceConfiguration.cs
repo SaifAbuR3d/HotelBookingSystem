@@ -29,5 +29,6 @@ public static class PersistenceConfiguration
             .AddScoped<IGuestRepository, GuestRepository>()
             .AddScoped<IBookingRepository, BookingRepository>()
             .AddScoped<IGuestRepository, GuestRepository>()
-            .AddScoped<IImageHandler, ImageHandler>();
+            .AddScoped<IImageHandler, ImageHandler>()
+            .AddScoped<IReviewRepository, ReviewRepository>();
 }
