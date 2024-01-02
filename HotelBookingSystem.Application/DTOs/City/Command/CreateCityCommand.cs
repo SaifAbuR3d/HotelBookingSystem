@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.City;
+﻿namespace HotelBookingSystem.Application.DTOs.City.Command;
 
 /// <summary>
 /// DTO for Creating a City 
@@ -14,7 +14,7 @@ public class CreateCityCommand
     /// Country of the City
     /// </summary>
     public string Country { get; set; } = default!;
-    
+
     /// <summary>
     /// Post Office of the City
     /// </summary>

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using HotelBookingSystem.Application.DTOs.City;
+using HotelBookingSystem.Application.DTOs.City.Command;
 
 namespace HotelBookingSystem.Application.Validation.City;
 

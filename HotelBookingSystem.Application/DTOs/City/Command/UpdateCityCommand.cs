@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.City;
+﻿namespace HotelBookingSystem.Application.DTOs.City.Command;
 
 /// <summary>
 /// DTO for Updating a City 

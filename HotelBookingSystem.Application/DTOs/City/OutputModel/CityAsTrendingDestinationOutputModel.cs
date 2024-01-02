@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.City;
+﻿namespace HotelBookingSystem.Application.DTOs.City.OutputModel;
 
 /// <summary>
 /// This class is a data transfer object (DTO) for the <see cref="Domain.Models.City"/> entity. Mainly for Trending Destinations Feature.

@@ -1,5 +1,9 @@
-﻿using HotelBookingSystem.Domain.Abstractions.Repositories;
+﻿using Azure.Core;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.DTOs.City.Query;
+using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Domain.Models;
+using HotelBookingSystem.Infrastructure.Persistence.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
@@ -39,11 +43,6 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
         return true;
     }
 
-    public async Task<IEnumerable<City>> GetAllCitiesAsync()
-    {
-        return await _context.Cities.Include(c => c.Hotels).ToListAsync();
-    }
-
     public async Task<City?> GetCityAsync(Guid id)
     {
         return await _context.Cities.FindAsync(id);
@@ -75,5 +74,33 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
     public async Task<bool> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync() >= 1;
+    }
+
+    public async Task<(IEnumerable<City>, PaginationMetadata)> GetAllCitiesAsync(GetCitiesQueryParameters request)
+    {
+        var query = _context.Cities
+                    .Include(c => c.Hotels)
+                    .AsQueryable();
+
+        SearchInCityNameOrCountryName(ref query, request.SearchTerm);
+
+        SortingHelper.ApplySorting(ref query, request.SortOrder, SortingHelper.GetCitySortingCriterion(request));
+
+        var paginationMetadata = await PaginationHelper.GetPaginationMetadataAsync(query, request.PageNumber, request.PageSize);
+
+        PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
+
+
+        var result = await query.ToListAsync();
+
+        return (query, paginationMetadata);
+    }
+
+    private static void SearchInCityNameOrCountryName(ref IQueryable<City> query, string? searchTerm)
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(c => c.Name.Contains(searchTerm) || c.Country.Contains(searchTerm));
+        }
     }
 }

@@ -1,10 +1,7 @@
-﻿using Azure.Core;
-using HotelBookingSystem.Application.DTOs.Common;
+﻿using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Domain.Models;
-using Microsoft.AspNetCore.Http;
 using System.Linq.Expressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HotelBookingSystem.Infrastructure.Persistence.Helpers;
 
@@ -37,7 +34,7 @@ public static class SortingHelper
         };
     }
 
-    public static Expression<Func<City, object>> GetCitySortingCriterion(ResourceQueryParameters request)
+    public static Expression<Func<City, object>> GetCitySortingCriterion(GetCitiesQueryParameters request)
     {
         return request.SortColumn?.ToLower() switch
         {

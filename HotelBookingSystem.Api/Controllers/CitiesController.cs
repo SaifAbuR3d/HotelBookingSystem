@@ -1,7 +1,13 @@
-﻿using HotelBookingSystem.Application.DTOs.City;
-using HotelBookingSystem.Application.ServiceInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.City.Command;
+using HotelBookingSystem.Application.DTOs.City.OutputModel;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using System;
+using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;
 
@@ -14,20 +20,6 @@ namespace HotelBookingSystem.Api.Controllers;
 
 public class CitiesController(ICityService cityService, IWebHostEnvironment environment) : ControllerBase
 {
-
-    /// <summary>
-    /// Get all cities
-    /// </summary>
-    /// <returns>All cities</returns>
-    /// <response code="200">Returns all cities</response>
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetAllCities()
-    {
-        var cities = await cityService.GetAllCitiesAsync();
-
-        return Ok(cities);
-    }
-
     /// <summary>
     /// Get a city by its id
     /// </summary>
@@ -150,7 +142,7 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     /// Upload an image to a city
     /// </summary>
     /// <param name="id">The id of the city to upload image</param>
-    /// <param name="file">Image data</param>
+    /// <param name="file">HotelImage data</param>
     /// <param name="alternativeText">Alternative Text(Alt)</param>
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
     /// <returns></returns>
@@ -169,6 +161,43 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
         }
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Get all cities
+    /// </summary>
+    /// <returns>All cities</returns>
+    /// <response code="200">Returns all cities</response>
+    [HttpGet(Name = "GetCities")]
+    public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetAllCities([FromQuery] ResourceQueryParameters request)
+    {
+        var (cities, paginationMetadata) = await cityService.GetAllCitiesAsync(request);
+
+        AddPageLinks(paginationMetadata, request); 
+
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+        return Ok(cities);
+    }
+
+    private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
+    {
+        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
+        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+    }
+
+    private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
+    {
+        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
+        return
+            Url.Link("GetCities", new
+            {
+                sortOrder = parameters.SortOrder,
+                sortColumn = parameters.SortColumn,
+                pageNumber = newPageNumber,
+                pageSize = paginationMetadata.PageSize,
+                searchQuery = parameters.SearchTerm,
+            });
     }
 
 }

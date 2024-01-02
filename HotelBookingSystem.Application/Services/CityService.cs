@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
-using HotelBookingSystem.Application.DTOs.City;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.City.Command;
+using HotelBookingSystem.Application.DTOs.City.OutputModel;
+using HotelBookingSystem.Application.DTOs.City.Query;
+using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.Exceptions;
-using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -16,12 +19,12 @@ public class CityService(ICityRepository cityRepository,
     private readonly IMapper _mapper = mapper;
     private readonly IImageHandler _imageHandler = imageHandler;
 
-    public async Task<IEnumerable<CityOutputModel>> GetAllCitiesAsync()
+    public async Task<(IEnumerable<CityOutputModel>, PaginationMetadata)> GetAllCitiesAsync(GetCitiesQueryParameters request)
     {
-        var cities = await _cityRepository.GetAllCitiesAsync();
+        var (cities, paginationMetadata) = await _cityRepository.GetAllCitiesAsync(request);
         var mapped = _mapper.Map<IEnumerable<CityOutputModel>>(cities);
 
-        return mapped;
+        return (mapped, paginationMetadata);
     }
 
     public async Task<CityOutputModel?> GetCityAsync(Guid id)

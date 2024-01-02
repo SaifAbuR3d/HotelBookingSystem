@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.City;
+﻿namespace HotelBookingSystem.Application.DTOs.City.OutputModel;
 
 public class CityImageOutputModel
 {

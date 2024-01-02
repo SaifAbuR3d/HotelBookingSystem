@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using HotelBookingSystem.Application.DTOs.City;
+using HotelBookingSystem.Application.DTOs.City.Command;
+using HotelBookingSystem.Application.DTOs.City.OutputModel;
 using HotelBookingSystem.Domain.Models;
 
 namespace HotelBookingSystem.Application.Mapping;
