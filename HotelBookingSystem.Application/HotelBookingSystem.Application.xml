@@ -174,69 +174,69 @@
             This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Recently Visited Hotels feature.
             </summary>
         </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand">
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand">
             <summary>
             /// DTO for creating a Room
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.HotelName">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand.HotelName">
             <summary>
             Name of the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.RoomNumber">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand.RoomNumber">
             <summary>
             Number of the room in the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.AdultsCapacity">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand.AdultsCapacity">
             <summary>
             Adults capacity of the room
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.ChildrenCapacity">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand.ChildrenCapacity">
             <summary>
             Children capacity of the room
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.RoomType">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand.RoomType">
             <summary>
             Type of the room (Standard, Luxury, Budget, Boutique)
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand.Price">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand.Price">
             <summary>
             Current price of the room
             </summary>
         </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Room.RoomOutputModel">
-            <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity. Mainly for Admin Page.
-            </summary>
-        </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Room.RoomWithImageOutputModel">
-            <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity. Mainly for Hotel Page.
-            </summary>
-        </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand">
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand">
             <summary>
             /// DTO for updating a Room
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand.RoomNumber">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand.RoomNumber">
             <summary>
             Number of the room in the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand.AdultsCapacity">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand.AdultsCapacity">
             <summary>
             Adults capacity of the room
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand.ChildrenCapacity">
+        <member name="P:HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand.ChildrenCapacity">
             <summary>
             Children capacity of the room
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.OutputModel.RoomOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity. Mainly for Admin Page.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Room.OutputModel.RoomWithImageOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity. Mainly for Hotel Page.
             </summary>
         </member>
         <member name="M:HotelBookingSystem.Application.Services.GuestService.GetRecentlyVisitedHotelsAsync(System.Guid,System.Int32)">

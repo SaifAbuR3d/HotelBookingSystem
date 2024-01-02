@@ -1,6 +1,9 @@
 ﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Room;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Room.Command;
+using HotelBookingSystem.Application.DTOs.Room.OutputModel;
+using HotelBookingSystem.Application.DTOs.Room.Query;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;
@@ -28,20 +31,29 @@ public class RoomServiceTests
     }
 
     [Fact]
-    public async Task GetAllRoomsAsync_ShouldReturnAllRooms()
+    public async Task GetAllRoomsAsync_ShouldReturnAllRoomsWithCorrectPaginationMetadata_IfRoomsCountIsLessThanOrEqualPageSize()
     {
         // Arrange
-        var rooms = fixture.CreateMany<Room>(10);
-        roomRepositoryMock.Setup(x => x.GetAllRoomsAsync()).ReturnsAsync(rooms);
+        var expectedRooms = fixture.CreateMany<Room>(10);
+        var parameters = new GetRoomsQueryParameters();
+        var expectedPaginationMetadata = new PaginationMetadata(1, 10, 10); //page 1, 10 items per page, 10 total items
+
+        roomRepositoryMock.Setup(x => x.GetAllRoomsAsync(parameters)).ReturnsAsync((expectedRooms, expectedPaginationMetadata));
 
         // Act
-        var result = await sut.GetAllRoomsAsync();
+        var (rooms, paginationMetadata) = await sut.GetAllRoomsAsync(parameters);
 
         // Assert
-        roomRepositoryMock.Verify(r => r.GetAllRoomsAsync(), Times.Once);
-        Assert.NotNull(result);
-        Assert.IsAssignableFrom<IEnumerable<RoomOutputModel>>(result);
-        Assert.Equal(rooms.Count(), result.Count());
+        roomRepositoryMock.Verify(c => c.GetAllRoomsAsync(parameters), Times.Once);
+        Assert.IsAssignableFrom<IEnumerable<RoomOutputModel>>(rooms);
+        Assert.Equal(expectedRooms.Count(), rooms.Count());
+
+        Assert.IsType<PaginationMetadata>(paginationMetadata);
+        Assert.Equal(expectedPaginationMetadata.PageNumber, paginationMetadata.PageNumber);
+        Assert.Equal(expectedPaginationMetadata.PageSize, paginationMetadata.PageSize);
+        Assert.Equal(expectedPaginationMetadata.TotalCount, paginationMetadata.TotalCount);
+        Assert.False(paginationMetadata.HasPreviousPage);
+        Assert.False(paginationMetadata.HasNextPage);
     }
 
     [Fact]

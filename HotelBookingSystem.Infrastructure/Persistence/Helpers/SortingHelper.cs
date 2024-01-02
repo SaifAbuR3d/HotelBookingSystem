@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
+using HotelBookingSystem.Application.DTOs.Room.Query;
 using HotelBookingSystem.Domain.Models;
 using System.Linq.Expressions;
 
@@ -34,7 +35,7 @@ public static class SortingHelper
         };
     }
 
-    public static Expression<Func<City, object>> GetCitySortingCriterion(GetCitiesQueryParameters request)
+    public static Expression<Func<City, object>> GetCitiesSortingCriterion(GetCitiesQueryParameters request)
     {
         return request.SortColumn?.ToLower() switch
         {
@@ -45,6 +46,20 @@ public static class SortingHelper
             "postoffice" => c => c.PostOffice,
             "hotels" => c => c.Hotels.Count,
             _ => c => c.Id
+        };
+    }
+
+    public static Expression<Func<Room, object>> GetRoomsSortingCriterion(GetRoomsQueryParameters request)
+    {
+        return request.SortColumn?.ToLower() switch
+        {
+            "creationdate" => r => r.CreationDate,
+            "lastmodified" => r => r.LastModified,
+            "roomnumber" => r => r.RoomNumber,
+            "adultscapacity" => r => r.AdultsCapacity,
+            "childrencapacity" => r => r.ChildrenCapacity,
+            "hotelname" => r => r.Hotel.Name,
+            _ => r => r.Id
         };
     }
 

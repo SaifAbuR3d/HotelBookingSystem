@@ -32,16 +32,16 @@ public class CityServiceTests
     {
         // Arrange
         var expectedCities = fixture.CreateMany<City>(10);
-        var query = new GetCitiesQueryParameters();
+        var parameters = new GetCitiesQueryParameters();
         var expectedPaginationMetadata = new PaginationMetadata(1, 10, 10); //page 1, 10 items per page, 10 total items
 
-        cityRepositoryMock.Setup(x => x.GetAllCitiesAsync(query)).ReturnsAsync((expectedCities, expectedPaginationMetadata));
+        cityRepositoryMock.Setup(x => x.GetAllCitiesAsync(parameters)).ReturnsAsync((expectedCities, expectedPaginationMetadata));
 
         // Act
-        var (cities, paginationMetadata) = await sut.GetAllCitiesAsync(query);
+        var (cities, paginationMetadata) = await sut.GetAllCitiesAsync(parameters);
 
         // Assert
-        cityRepositoryMock.Verify(c => c.GetAllCitiesAsync(query), Times.Once);
+        cityRepositoryMock.Verify(c => c.GetAllCitiesAsync(parameters), Times.Once);
         Assert.IsAssignableFrom<IEnumerable<CityOutputModel>>(cities);
         Assert.Equal(expectedCities.Count(), cities.Count());
 
@@ -49,6 +49,8 @@ public class CityServiceTests
         Assert.Equal(expectedPaginationMetadata.PageNumber, paginationMetadata.PageNumber);
         Assert.Equal(expectedPaginationMetadata.PageSize, paginationMetadata.PageSize);
         Assert.Equal(expectedPaginationMetadata.TotalCount, paginationMetadata.TotalCount);
+        Assert.False(paginationMetadata.HasPreviousPage);
+        Assert.False(paginationMetadata.HasNextPage);
     }
 
     [Fact]

@@ -13,11 +13,12 @@ public class HotelSearchAndFilterParametersValidator : AbstractValidator<HotelSe
         When(x => x.SortColumn != null, () =>
         {
             RuleFor(x => x.SortColumn)
-             .Must(x => x.ToLower() == "name"
+             .Must(x => x.ToLower() == "id"
+                     || x.ToLower() == "name"
                      || x.ToLower() == "rating"
                      || x.ToLower() == "price"
                      || x.ToLower() == "starrate")
-             .WithMessage("Sort column must be empty or 'name' or 'rating' or 'price' or 'starRate'.");
+             .WithMessage("Sort column must be empty or 'id' or 'name' or 'rating' or 'price' or 'starRate'.");
         });
 
         RuleFor(x => x.CheckInDate)

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace HotelBookingSystem.Application.Validation;
+namespace HotelBookingSystem.Application.Validation.Common;
 
 public static class ValidationExtensions
 {
@@ -19,7 +19,7 @@ public static class ValidationExtensions
     {
         return ruleBuilder
          .NotEmpty().WithMessage("'{PropertyName}' is required.")
-         .Matches($"^[0-9]{{{length}}}$").WithMessage("'{PropertyName}' " + $"must be exactly {length}-digits."); 
+         .Matches($"^[0-9]{{{length}}}$").WithMessage("'{PropertyName}' " + $"must be exactly {length}-digits.");
     }
 
 }

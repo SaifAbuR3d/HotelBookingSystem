@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using HotelBookingSystem.Application.DTOs.Room;
+using HotelBookingSystem.Application.DTOs.Room.Command;
 
 namespace HotelBookingSystem.Application.Validation.Room;
 

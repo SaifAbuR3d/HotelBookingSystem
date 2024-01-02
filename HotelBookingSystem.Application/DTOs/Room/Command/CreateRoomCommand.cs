@@ -1,6 +1,6 @@
 ﻿using HotelBookingSystem.Domain.Models;
 
-namespace HotelBookingSystem.Application.DTOs.Room;
+namespace HotelBookingSystem.Application.DTOs.Room.Command;
 
 /// <summary>
 /// /// DTO for creating a Room

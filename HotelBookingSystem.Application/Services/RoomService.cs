@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Room;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Room.Command;
+using HotelBookingSystem.Application.DTOs.Room.OutputModel;
+using HotelBookingSystem.Application.DTOs.Room.Query;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -18,12 +21,13 @@ public class RoomService(IHotelRepository hotelRepository,
     private readonly IMapper _mapper = mapper;
     private readonly IImageHandler _imageHandler = imageHandler;
 
-    public async Task<IEnumerable<RoomOutputModel>> GetAllRoomsAsync()
+    public async Task<(IEnumerable<RoomOutputModel>, PaginationMetadata)> GetAllRoomsAsync(GetRoomsQueryParameters parameters)
     {
-        var rooms = await _roomRepository.GetAllRoomsAsync();
+        var (rooms, paginationMetadata) = await _roomRepository.GetAllRoomsAsync(parameters);
+
         var mapped = _mapper.Map<IEnumerable<RoomOutputModel>>(rooms);
 
-        return mapped;
+        return (mapped, paginationMetadata);
     }
 
     public async Task<RoomOutputModel?> GetRoomAsync(Guid id)

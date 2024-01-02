@@ -83,14 +83,11 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
         SearchInCityNameOrCountryName(ref query, request.SearchTerm);
 
-        SortingHelper.ApplySorting(ref query, request.SortOrder, SortingHelper.GetCitySortingCriterion(request));
+        SortingHelper.ApplySorting(ref query, request.SortOrder, SortingHelper.GetCitiesSortingCriterion(request));
 
         var paginationMetadata = await PaginationHelper.GetPaginationMetadataAsync(query, request.PageNumber, request.PageSize);
 
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
-
-
-        var result = await query.ToListAsync();
 
         return (query, paginationMetadata);
     }

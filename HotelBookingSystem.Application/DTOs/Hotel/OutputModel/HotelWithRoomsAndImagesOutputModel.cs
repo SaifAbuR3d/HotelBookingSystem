@@ -1,4 +1,4 @@
-﻿using HotelBookingSystem.Application.DTOs.Room;
+﻿using HotelBookingSystem.Application.DTOs.Room.OutputModel;
 
 namespace HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 

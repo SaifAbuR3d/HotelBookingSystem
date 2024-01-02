@@ -365,13 +365,6 @@
             API endpoints for managing rooms
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetAllRooms">
-            <summary>
-            Get all rooms
-            </summary>
-            <returns>All rooms</returns>
-            <response code="200">Returns all rooms</response>
-        </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetRoom(System.Guid)">
             <summary>
             Get a room by its id
@@ -381,7 +374,7 @@
             <response code="200">Returns the room with the given id</response>
             <response code="404">If the room is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.CreateRoom(HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.CreateRoom(HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand)">
              <summary>
              Create a new room
              </summary>
@@ -413,7 +406,7 @@
             <response code="204">If the room is successfully deleted</response>
             <response code="404">If the room is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UpdateRoom(System.Guid,HotelBookingSystem.Application.DTOs.Room.UpdateRoomCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UpdateRoom(System.Guid,HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand)">
             <summary>
             Update a room
             </summary>
@@ -436,6 +429,13 @@
             <response code="204">If the image is successfully uploaded</response>
             <response code="404">If the room is not found</response>
             <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetAllRooms(HotelBookingSystem.Application.DTOs.Room.Query.GetRoomsQueryParameters)">
+            <summary>
+            Get all rooms
+            </summary>
+            <returns>All rooms</returns>
+            <response code="200">Returns all rooms</response>
         </member>
         <member name="T:HotelBookingSystem.Api.GlobalExceptionHandler">
             <summary>

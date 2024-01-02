@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.Room;
+﻿namespace HotelBookingSystem.Application.DTOs.Room.OutputModel;
 
 /// <summary>
 /// This class is a data transfer object (DTO) for the <see cref="Domain.Models.Room"/> entity. Mainly for Admin Page.

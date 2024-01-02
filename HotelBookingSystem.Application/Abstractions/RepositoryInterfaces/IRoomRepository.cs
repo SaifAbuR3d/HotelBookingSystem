@@ -1,4 +1,6 @@
-﻿using HotelBookingSystem.Domain.Models;
+﻿using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Room.Query;
+using HotelBookingSystem.Domain.Models;
 
 namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 
@@ -7,7 +9,7 @@ public interface IRoomRepository
     Task<Room> AddRoomAsync(Room room);
     Task<bool> RoomExistsAsync(Guid id);
     Task<bool> DeleteRoomAsync(Guid id);
-    Task<IEnumerable<Room>> GetAllRoomsAsync();
+    Task<(IEnumerable<Room>, PaginationMetadata)> GetAllRoomsAsync(GetRoomsQueryParameters request);
     Task<IEnumerable<Booking>> GetBookingsForRoomAsync(Guid roomId);
     Task<Room?> GetRoomAsync(Guid id);
     Task<bool> SaveChangesAsync();

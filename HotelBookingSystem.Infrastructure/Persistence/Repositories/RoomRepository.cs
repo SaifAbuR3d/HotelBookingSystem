@@ -1,5 +1,10 @@
-﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+﻿using Azure.Core;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.DTOs.City.Query;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Room.Query;
 using HotelBookingSystem.Domain.Models;
+using HotelBookingSystem.Infrastructure.Persistence.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
@@ -38,11 +43,6 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
         return true;
     }
 
-    public async Task<IEnumerable<Room>> GetAllRoomsAsync()
-    {
-        return await _context.Rooms.Include(r => r.Hotel).ToListAsync();
-    }
-
     public async Task<Room?> GetRoomAsync(Guid id)
     {
         return await _context.Rooms.Include(r => r.Hotel).FirstOrDefaultAsync(r => r.Id == id);
@@ -74,4 +74,30 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
 
         return !OverlapsWithSomeBooking;
     }
+
+    public async Task<(IEnumerable<Room>, PaginationMetadata)> GetAllRoomsAsync(GetRoomsQueryParameters request)
+    {
+        var query = _context.Rooms
+            .Include(r => r.Hotel)
+            .AsQueryable();
+
+        SearchInHotelName(ref query, request.SearchTerm);
+
+        SortingHelper.ApplySorting(ref query, request.SortOrder, SortingHelper.GetRoomsSortingCriterion(request));
+
+        var paginationMetadata = await PaginationHelper.GetPaginationMetadataAsync(query, request.PageNumber, request.PageSize);
+
+        PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
+
+        return (query, paginationMetadata);
+    }
+
+    private static void SearchInHotelName(ref IQueryable<Room> query, string? searchTerm)
+    {
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(r => r.Hotel.Name.Contains(searchTerm));
+        }
+    }
+
 }

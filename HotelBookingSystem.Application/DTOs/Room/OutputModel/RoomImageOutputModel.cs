@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.Room;
+﻿namespace HotelBookingSystem.Application.DTOs.Room.OutputModel;
 
 public class RoomImageOutputModel
 {

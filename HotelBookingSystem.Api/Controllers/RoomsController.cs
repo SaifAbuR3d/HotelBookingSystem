@@ -1,6 +1,10 @@
 ﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Room;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Room.Command;
+using HotelBookingSystem.Application.DTOs.Room.OutputModel;
+using HotelBookingSystem.Application.DTOs.Room.Query;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;
 
@@ -12,17 +16,6 @@ namespace HotelBookingSystem.Api.Controllers;
 [ApiController]
 public class RoomsController(IRoomService roomService, IWebHostEnvironment environment) : ControllerBase
 {
-    /// <summary>
-    /// Get all rooms
-    /// </summary>
-    /// <returns>All rooms</returns>
-    /// <response code="200">Returns all rooms</response>
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<RoomOutputModel>>> GetAllRooms()
-    {
-        var rooms = await roomService.GetAllRoomsAsync();
-        return Ok(rooms);
-    }
 
     /// <summary>
     /// Get a room by its id
@@ -133,5 +126,42 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
         }
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Get all rooms
+    /// </summary>
+    /// <returns>All rooms</returns>
+    /// <response code="200">Returns all rooms</response>
+    [HttpGet(Name = "GetRooms")]
+    public async Task<ActionResult<IEnumerable<RoomOutputModel>>> GetAllRooms([FromQuery] GetRoomsQueryParameters request)
+    {
+        var (rooms, paginationMetadata) = await roomService.GetAllRoomsAsync(request);
+
+        AddPageLinks(paginationMetadata, request);
+
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+        return Ok(rooms);
+    }
+
+    private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
+    {
+        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
+        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+    }
+
+    private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
+    {
+        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
+        return
+            Url.Link("GetRooms", new
+            {
+                sortOrder = parameters.SortOrder,
+                sortColumn = parameters.SortColumn,
+                pageNumber = newPageNumber,
+                pageSize = paginationMetadata.PageSize,
+                searchQuery = parameters.SearchTerm,
+            });
     }
 }

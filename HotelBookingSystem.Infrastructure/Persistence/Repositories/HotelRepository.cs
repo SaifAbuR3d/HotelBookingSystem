@@ -133,9 +133,6 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
 
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
 
-
-        var result = await query.ToListAsync();
-
         return (query, paginationMetadata);
     }
 
