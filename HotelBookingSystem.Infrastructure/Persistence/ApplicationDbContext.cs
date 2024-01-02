@@ -1,6 +1,5 @@
 ﻿using HotelBookingSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Infrastructure.Persistence;
 

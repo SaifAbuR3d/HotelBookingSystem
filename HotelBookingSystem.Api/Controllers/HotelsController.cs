@@ -5,7 +5,6 @@ using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.DTOs.Review;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;

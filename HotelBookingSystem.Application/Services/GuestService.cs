@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using HotelBookingSystem.Application.DTOs.Hotel;
-using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Domain.Abstractions.Repositories;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 
 namespace HotelBookingSystem.Application.Services;
 

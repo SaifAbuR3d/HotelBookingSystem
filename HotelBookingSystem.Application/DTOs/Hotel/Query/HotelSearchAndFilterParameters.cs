@@ -1,6 +1,5 @@
 ﻿using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Domain.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace HotelBookingSystem.Application.DTOs.Hotel.Query;

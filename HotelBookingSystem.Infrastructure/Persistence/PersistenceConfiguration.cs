@@ -1,5 +1,5 @@
-﻿using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Domain.Abstractions.Repositories;
+﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

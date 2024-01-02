@@ -1,12 +1,9 @@
 ﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.City.Command;
 using HotelBookingSystem.Application.DTOs.City.OutputModel;
+using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Common;
-using HotelBookingSystem.Application.DTOs.Hotel.Query;
-using HotelBookingSystem.Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using System;
 using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -169,7 +166,7 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     /// <returns>All cities</returns>
     /// <response code="200">Returns all cities</response>
     [HttpGet(Name = "GetCities")]
-    public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetAllCities([FromQuery] ResourceQueryParameters request)
+    public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetAllCities([FromQuery] GetCitiesQueryParameters request)
     {
         var (cities, paginationMetadata) = await cityService.GetAllCitiesAsync(request);
 

@@ -54,124 +54,124 @@
             Payment method (Cash, Credit Card, Bank Transfer)
             </summary>
         </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.City.CityAsTrendingDestinationOutputModel">
-            <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity. Mainly for Trending Destinations Feature.
-            </summary>
-        </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.City.CityOutputModel">
-            <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity. Mainly for Admin Pages.
-            </summary>
-        </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.City.CreateCityCommand">
+        <member name="T:HotelBookingSystem.Application.DTOs.City.Command.CreateCityCommand">
             <summary>
             DTO for Creating a City 
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.City.CreateCityCommand.Name">
+        <member name="P:HotelBookingSystem.Application.DTOs.City.Command.CreateCityCommand.Name">
             <summary>
             Name of the City
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.City.CreateCityCommand.Country">
+        <member name="P:HotelBookingSystem.Application.DTOs.City.Command.CreateCityCommand.Country">
             <summary>
             Country of the City
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.City.CreateCityCommand.PostOffice">
+        <member name="P:HotelBookingSystem.Application.DTOs.City.Command.CreateCityCommand.PostOffice">
             <summary>
             Post Office of the City
             </summary>
         </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand">
+        <member name="T:HotelBookingSystem.Application.DTOs.City.Command.UpdateCityCommand">
             <summary>
             DTO for Updating a City 
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand.Name">
+        <member name="P:HotelBookingSystem.Application.DTOs.City.Command.UpdateCityCommand.Name">
             <summary>
             Name of the City
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand.Country">
+        <member name="P:HotelBookingSystem.Application.DTOs.City.Command.UpdateCityCommand.Country">
             <summary>
             Country of the City
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.City.UpdateCityCommand.PostOffice">
+        <member name="P:HotelBookingSystem.Application.DTOs.City.Command.UpdateCityCommand.PostOffice">
             <summary>
             Post Office of the City
             </summary>
         </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand">
+        <member name="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity. Mainly for Trending Destinations Feature.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.City"/> entity. Mainly for Admin Pages.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand">
             <summary>
             DTO for creating a hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.Name">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.Name">
             <summary>
             Name of the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.Owner">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.Owner">
             <summary>
             Owner of the hotel
             </summary>>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.StarRate">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.StarRate">
             <summary>
             Star Rate of the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.Location">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.Location">
             <summary>
             Location of the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand.CityName">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.CityName">
             <summary>
             City name where the hotel is located
             </summary>
         </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.HotelOutputModel">
-            <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Admin Page.
-            </summary>
-        </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.HotelWithRoomsAndImagesOutputModel">
-            <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Hotel Page.
-            </summary>
-        </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.RecentlyVisitedHotelOutputModel">
-            <summary>
-            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Recently Visited Hotels feature.
-            </summary>
-        </member>
-        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand">
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand">
             <summary>
             DTO for creating a hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.Name">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.Name">
             <summary>
             Name of the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.Owner">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.Owner">
             <summary>
             Owner of the hotel
             </summary>>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.Location">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.Location">
             <summary>
             Location of the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand.CityName">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.CityName">
             <summary>
             City name where the hotel is located
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Admin Page.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelWithRoomsAndImagesOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Hotel Page.
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel">
+            <summary>
+            This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Hotel"/> entity. Mainly for Recently Visited Hotels feature.
             </summary>
         </member>
         <member name="T:HotelBookingSystem.Application.DTOs.Room.CreateRoomCommand">
@@ -249,7 +249,7 @@
             <remarks>
             <para>
             This method asynchronously retrieves recent bookings associated with the specified guest, including information about the booked rooms and their respective hotels.
-            It then maps the relevant details to a simplified hotels model, <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.RecentlyVisitedHotelOutputModel"/>, for a cleaner representation of the data.
+            It then maps the relevant details to a simplified hotels model, <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/>, for a cleaner representation of the data.
             The resulting collection provides essential information about the unique recently visited hotels, such as hotel name, city name, star rating, and price.
             </para>
             </remarks>
@@ -260,7 +260,7 @@
             // Process the recentHotels collection as needed.
             </code>
             </example>
-            <seealso cref="T:HotelBookingSystem.Application.DTOs.Hotel.RecentlyVisitedHotelOutputModel"/>
+            <seealso cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/>
             <returns>An asynchronous task representing the operation, returning a collection of unique recently visited hotels.</returns>
         </member>
     </members>

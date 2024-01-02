@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Room;
 using HotelBookingSystem.Application.Exceptions;
-using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace HotelBookingSystem.Application.Services;
 

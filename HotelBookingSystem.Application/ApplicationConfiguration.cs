@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 
 namespace HotelBookingSystem.Application;
 

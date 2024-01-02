@@ -1,5 +1,5 @@
-﻿using HotelBookingSystem.Application.DTOs.Hotel;
-using HotelBookingSystem.Application.ServiceInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;

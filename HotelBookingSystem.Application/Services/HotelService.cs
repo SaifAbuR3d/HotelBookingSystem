@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using HotelBookingSystem.Application.Abstractions.Helpers;
 using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Common;
@@ -10,7 +9,6 @@ using HotelBookingSystem.Application.DTOs.Review;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
-using System.Xml;
 
 namespace HotelBookingSystem.Application.Services;
 

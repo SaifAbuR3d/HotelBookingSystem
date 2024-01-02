@@ -1,5 +1,7 @@
-using HotelBookingSystem.Application.DTOs.City;
-using HotelBookingSystem.Application.ServiceInterfaces;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.City.Command;
+using HotelBookingSystem.Application.DTOs.City.OutputModel;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;

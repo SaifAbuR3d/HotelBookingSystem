@@ -1,6 +1,4 @@
-﻿using HotelBookingSystem.Domain.Models;
-
-namespace HotelBookingSystem.Application.DTOs.Review;
+﻿namespace HotelBookingSystem.Application.DTOs.Review;
 
 public class CreateOrUpdateReviewCommand
 {

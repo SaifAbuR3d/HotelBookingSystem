@@ -1,5 +1,5 @@
-﻿using HotelBookingSystem.Application.Exceptions;
-using HotelBookingSystem.Application.ServiceInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace HotelBookingSystem.Infrastructure.Persistence;
@@ -11,7 +11,7 @@ public class ImageHandler : IImageHandler
     {
         if (imageData.Length <= 0)
         {
-            throw new BadFileException("Image is empty");
+            throw new BadFileException("HotelImage is empty");
         }
 
         var imageExtension = Path.GetExtension(imageData.FileName);

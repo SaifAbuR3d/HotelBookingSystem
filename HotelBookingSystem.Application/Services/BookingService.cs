@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Booking;
 using HotelBookingSystem.Application.Exceptions;
-using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
 
 namespace HotelBookingSystem.Application.Services

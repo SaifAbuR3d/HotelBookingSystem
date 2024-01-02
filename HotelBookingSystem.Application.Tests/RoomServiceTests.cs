@@ -1,6 +1,6 @@
-﻿using HotelBookingSystem.Application.DTOs.City;
+﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Room;
-using HotelBookingSystem.Application.ServiceInterfaces;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;

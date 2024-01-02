@@ -1,8 +1,6 @@
-﻿using HotelBookingSystem.Application.DTOs.Room;
-using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Application.Services;
+﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.Room;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace HotelBookingSystem.Api.Controllers;
 
@@ -116,7 +114,7 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     /// Upload an image to a room
     /// </summary>
     /// <param name="id">The id of the room to upload image</param>
-    /// <param name="file">Image data</param>
+    /// <param name="file">HotelImage data</param>
     /// <param name="alternativeText">Alternative Text(Alt)</param>
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
     /// <returns></returns>

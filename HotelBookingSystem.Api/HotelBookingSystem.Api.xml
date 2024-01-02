@@ -10,7 +10,7 @@
             </summary>>
             
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IBookingService)">
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IBookingService)">
             <summary>
             API endpoints for managing bookings
             </summary>>
@@ -65,17 +65,10 @@
             API endpoints for managing cities
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.ICityService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.ICityService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             API endpoints for managing cities
             </summary>>
-        </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetAllCities">
-            <summary>
-            Get all cities
-            </summary>
-            <returns>All cities</returns>
-            <response code="200">Returns all cities</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetCity(System.Guid)">
             <summary>
@@ -86,7 +79,7 @@
             <response code="200">Returns the city with the given id</response>
             <response code="404">If the city is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.CreateCity(HotelBookingSystem.Application.DTOs.City.CreateCityCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.CreateCity(HotelBookingSystem.Application.DTOs.City.Command.CreateCityCommand)">
              <summary>
              Create a new city
              </summary>
@@ -115,7 +108,7 @@
             <response code="204">If the city is deleted</response>
             <response code="404">If the city is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.UpdateCity(System.Guid,HotelBookingSystem.Application.DTOs.City.UpdateCityCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.UpdateCity(System.Guid,HotelBookingSystem.Application.DTOs.City.Command.UpdateCityCommand)">
             <summary>
             Update a city
             </summary>
@@ -133,7 +126,7 @@
             <param name="count">The number of trending destinations to retrieve. Default is 5.</param>
             <returns>
             An asynchronous task representing the operation, returning an <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> containing a collection
-            of <see cref="T:HotelBookingSystem.Application.DTOs.City.CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
+            of <see cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
             </returns>
             <remarks>
             <para>
@@ -153,14 +146,14 @@
             </code>
             </example>
             <response code="200">Returns TOP N most visited cities, N is 5 by default</response>
-            <seealso cref="T:HotelBookingSystem.Application.DTOs.City.CityAsTrendingDestinationOutputModel"/>
+            <seealso cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel"/>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
             <summary>
             Upload an image to a city
             </summary>
             <param name="id">The id of the city to upload image</param>
-            <param name="file">Image data</param>
+            <param name="file">HotelImage data</param>
             <param name="alternativeText">Alternative Text(Alt)</param>
             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
             <returns></returns>
@@ -169,12 +162,19 @@
             <response code="400">If the request data is invalid</response>
             
         </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetAllCities(HotelBookingSystem.Application.DTOs.City.Query.GetCitiesQueryParameters)">
+            <summary>
+            Get all cities
+            </summary>
+            <returns>All cities</returns>
+            <response code="200">Returns all cities</response>
+        </member>
         <member name="T:HotelBookingSystem.Api.Controllers.GuestsController">
             <summary>
             Controller for managing guests
             </summary>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IGuestService)">
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IGuestService)">
             <summary>
             Controller for managing guests
             </summary>
@@ -194,7 +194,7 @@
             API endpoints for managing hotels
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IHotelService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IHotelService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             API endpoints for managing hotels
             </summary>>
@@ -215,14 +215,14 @@
             <response code="200">Returns the hotel with the given id</response>
             <response code="404">If the hotel is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.CreateHotel(HotelBookingSystem.Application.DTOs.Hotel.CreateHotelCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.CreateHotel(HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand)">
              <summary>
              Create a new hotel
              </summary>
              <param name="request">The data for the new hotel</param>
              <returns>The newly created hotel</returns>
              <remarks> 
-                 /// Sample request:
+             Sample request:
             
                  POST /hotels
                  {
@@ -246,7 +246,7 @@
             <response code="204">If the hotel is successfully deleted</response>
             <response code="404">If the hotel is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UpdateHotel(System.Guid,HotelBookingSystem.Application.DTOs.Hotel.UpdateHotelCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UpdateHotel(System.Guid,HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand)">
             <summary>
             Update a hotel
             </summary>
@@ -262,7 +262,7 @@
             Upload an image to a hotel
             </summary>
             <param name="id">The id of the hotel to upload image</param>
-            <param name="file">Image data</param>
+            <param name="file">HotelImage data</param>
             <param name="alternativeText">Alternative Text(Alt)</param>
             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
             <returns></returns>
@@ -333,12 +333,34 @@
             <response code="204">If the review is successfully deleted</response>
             <response code="404">If the hotel is not found</response>
         </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.SearchAndFilterHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.HotelSearchAndFilterParameters)">
+             <summary>
+             Searches and filters hotels based on the specified criteria.
+             </summary>
+             <remarks>
+             The search can be performed by providing a query string along with optional parameters
+             such as check-in and check-out dates, number of adults, children, and room count.
+             Additional filters, including minimum star rating, maximum and minimum price,
+             amenities, and room types, can be applied to narrow down the search results.
+             
+             Sample request:
+            
+                 GET /hotels/search?query=Tokyo
+                 
+             </remarks>
+             <param name="request">The query parameters for hotel search and filtering.</param>
+             <returns>
+             a list of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelSearchResultOutputModel"/> representing the search results.
+             </returns>
+             <response code="200">Returns the list of hotels based on the search criteria.</response>
+             <response code="400">If the request parameters are invalid or missing.</response>
+        </member>
         <member name="T:HotelBookingSystem.Api.Controllers.RoomsController">
             <summary>
             API endpoints for managing rooms
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.#ctor(HotelBookingSystem.Application.ServiceInterfaces.IRoomService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IRoomService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             API endpoints for managing rooms
             </summary>>
@@ -407,7 +429,7 @@
             Upload an image to a room
             </summary>
             <param name="id">The id of the room to upload image</param>
-            <param name="file">Image data</param>
+            <param name="file">HotelImage data</param>
             <param name="alternativeText">Alternative Text(Alt)</param>
             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
             <returns></returns>
