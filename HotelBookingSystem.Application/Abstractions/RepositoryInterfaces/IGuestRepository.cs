@@ -1,6 +1,6 @@
 ﻿using HotelBookingSystem.Domain.Models;
 
-namespace HotelBookingSystem.Domain.Abstractions.Repositories;
+namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 
 public interface IGuestRepository
 {

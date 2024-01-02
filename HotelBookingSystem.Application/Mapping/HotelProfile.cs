@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using HotelBookingSystem.Application.DTOs.Hotel;
+using HotelBookingSystem.Application.DTOs.Hotel.Command;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Domain.Models;
 
 namespace HotelBookingSystem.Application.Mapping;
@@ -31,7 +32,7 @@ public class HotelProfile : Profile
             .ForMember(dest => dest.HotelImage, opt => opt.MapFrom(src =>
                                 src.Room.Hotel.Images.FirstOrDefault(i => i.ImageUrl.Contains("thumbnail"))
                                 ?? src.Room.Hotel.Images.FirstOrDefault()
-                                ?? defaultHotelImage                                                                           
+                                ?? defaultHotelImage
                                 )
                       );
 
@@ -40,5 +41,15 @@ public class HotelProfile : Profile
             .ForMember(dest => dest.HotelImages, opt => opt.MapFrom(src => src.Images.Take(5)))
             .ForMember(dest => dest.Rooms, opt => opt.MapFrom(src => src.Rooms.Take(10)));
 
+
+        CreateMap<Hotel, HotelSearchResultOutputModel>()
+            .ForMember(dest => dest.HotelImage, opt => opt.MapFrom(src =>
+                                src.Images.FirstOrDefault(i => i.ImageUrl.Contains("thumbnail"))
+                                ?? src.Images.FirstOrDefault()
+                                ?? defaultHotelImage
+                                ))
+            .ForMember(dest => dest.PriceStartingFrom, opt => opt.MapFrom(src =>
+                                src.Rooms.Count() > 0 ? src.Rooms.Min(r => r.Price) : 0
+                                ));
     }
 }

@@ -1,6 +1,7 @@
-﻿using HotelBookingSystem.Domain.Models;
-
-namespace HotelBookingSystem.Domain.Abstractions.Repositories;
+﻿using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Hotel.Query;
+using HotelBookingSystem.Domain.Models;
+namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 
 public interface IHotelRepository
 {
@@ -17,4 +18,5 @@ public interface IHotelRepository
     Task<bool> DeleteReviewAsync(Guid id, Guid reviewId);
     Task<IEnumerable<Review>> GetHotelReviewsAsync(Hotel hotel);
     Task<double> GetHotelAverageRatingAsync(Hotel hotel);
+    Task<(IEnumerable<Hotel>, PaginationMetadata)> SearchAndFilterHotelsAsync(HotelSearchAndFilterParameters request);
 }

@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.Hotel;
+﻿namespace HotelBookingSystem.Application.DTOs.Hotel.Command;
 /// <summary>
 /// DTO for creating a hotel
 /// </summary>

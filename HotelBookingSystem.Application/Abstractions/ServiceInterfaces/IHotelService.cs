@@ -1,8 +1,11 @@
-﻿using HotelBookingSystem.Application.DTOs.Hotel;
+﻿using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Hotel.Command;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.DTOs.Review;
 using Microsoft.AspNetCore.Http;
 
-namespace HotelBookingSystem.Application.ServiceInterfaces;
+namespace HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 
 public interface IHotelService
 {
@@ -18,6 +21,5 @@ public interface IHotelService
     Task<bool> DeleteReviewAsync(Guid id, Guid reviewId);
     Task<IEnumerable<ReviewOutputModel>> GetHotelReviewsAsync(Guid id);
     Task<double> GetHotelAverageRatingAsync(Guid id);
-
-
+    Task<(IEnumerable<HotelSearchResultOutputModel>, PaginationMetadata)> SearchAndFilterHotelsAsync(HotelSearchAndFilterParameters request);
 }

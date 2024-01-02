@@ -1,12 +1,13 @@
-﻿using HotelBookingSystem.Domain.Models;
+﻿using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Domain.Models;
 
-namespace HotelBookingSystem.Domain.Abstractions.Repositories;
+namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 
 public interface ICityRepository
 {
     Task<City> AddCityAsync(City city); // 
     Task<bool> CityExistsAsync(Guid id);
-    Task<IEnumerable<City>> GetAllCitiesAsync();
+    Task<(IEnumerable<City>, PaginationMetadata)> GetAllCitiesAsync(ResourceQueryParameters request);
     Task<City?> GetCityAsync(Guid id);
     Task<bool> SaveChangesAsync();
     Task<bool> DeleteCityAsync(Guid id);

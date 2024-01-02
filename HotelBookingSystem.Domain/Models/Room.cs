@@ -9,7 +9,7 @@ public class Room : Entity
     public decimal Price { get; set; }
     public ICollection<RoomImage> Images { get; set; }
     public RoomType RoomType { get; set; }
-
+    public ICollection<Booking> Bookings { get; set; }
     public Hotel Hotel { get; set; }
     public Guid HotelId { get; set; }
 }

@@ -1,6 +1,6 @@
-﻿using HotelBookingSystem.Application.DTOs.Hotel;
+﻿using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 
-namespace HotelBookingSystem.Application.ServiceInterfaces;
+namespace HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 
 public interface IGuestService
 {

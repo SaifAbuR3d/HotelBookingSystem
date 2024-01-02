@@ -1,8 +1,12 @@
-﻿using HotelBookingSystem.Application.DTOs.Hotel;
+﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Hotel.Command;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.DTOs.Review;
-using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;
 
@@ -51,7 +55,7 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     /// <param name="request">The data for the new hotel</param>
     /// <returns>The newly created hotel</returns>
     /// <remarks> 
-    ///     /// Sample request:
+    /// Sample request:
     ///
     ///     POST /hotels
     ///     {
@@ -122,7 +126,7 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     /// Upload an image to a hotel
     /// </summary>
     /// <param name="id">The id of the hotel to upload image</param>
-    /// <param name="file">Image data</param>
+    /// <param name="file">HotelImage data</param>
     /// <param name="alternativeText">Alternative Text(Alt)</param>
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
     /// <returns></returns>
@@ -250,5 +254,70 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
         }
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Searches and filters hotels based on the specified criteria.
+    /// </summary>
+    /// <remarks>
+    /// The search can be performed by providing a query string along with optional parameters
+    /// such as check-in and check-out dates, number of adults, children, and room count.
+    /// Additional filters, including minimum star rating, maximum and minimum price,
+    /// amenities, and room types, can be applied to narrow down the search results.
+    /// 
+    /// Sample request:
+    ///
+    ///     GET /hotels/search?query=Tokyo
+    ///     
+    /// </remarks>
+    /// <param name="request">The query parameters for hotel search and filtering.</param>
+    /// <returns>
+    /// a list of <see cref="HotelSearchResultOutputModel"/> representing the search results.
+    /// </returns>
+    /// <response code="200">Returns the list of hotels based on the search criteria.</response>
+    /// <response code="400">If the request parameters are invalid or missing.</response>
+    [HttpGet("search", Name = "SearchHotels")]
+    public async Task<ActionResult<IEnumerable<HotelSearchResultOutputModel>>> SearchAndFilterHotels([FromQuery] HotelSearchAndFilterParameters request)
+    {
+        var (hotels, paginationMetadata) = await hotelService.SearchAndFilterHotelsAsync(request);
+
+        AddPageLinks(paginationMetadata, request); 
+
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+        return Ok(hotels);
+    }
+
+    
+    private void AddPageLinks(PaginationMetadata paginationMetadata, HotelSearchAndFilterParameters parameters)
+    {
+        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
+        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+    }
+     
+    private string? CreatePageLink(PaginationMetadata paginationMetadata, HotelSearchAndFilterParameters parameters, bool next)
+    {
+        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
+        return
+            Url.Link("SearchHotels", new
+            {
+                sortOrder = parameters.SortOrder,
+                sortColumn = parameters.SortColumn,
+                pageNumber = newPageNumber,
+                pageSize = paginationMetadata.PageSize,
+                searchQuery = parameters.SearchTerm,
+
+                checkInDate = parameters.CheckInDate,
+                checkOutDate = parameters.CheckOutDate,
+                adults = parameters.Adults,
+                children = parameters.Children,
+                rooms = parameters.Rooms,
+
+                minStarRating = parameters.MinStarRating,
+                maxPrice = parameters.MaxPrice,
+                minPrice = parameters.MinPrice,
+                amenities = parameters?.Amenities,
+                roomTypes = parameters?.RoomTypes
+            });
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace HotelBookingSystem.Application.ServiceInterfaces
+namespace HotelBookingSystem.Application.Abstractions.ServiceInterfaces
 {
     public interface IImageHandler
     {

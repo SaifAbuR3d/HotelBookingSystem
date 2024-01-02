@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
-using HotelBookingSystem.Application.DTOs.Hotel;
+using HotelBookingSystem.Application.Abstractions.Helpers;
+using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Hotel.Command;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.DTOs.Review;
 using HotelBookingSystem.Application.Exceptions;
-using HotelBookingSystem.Application.ServiceInterfaces;
-using HotelBookingSystem.Domain.Abstractions.Repositories;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
+using System.Xml;
 
 namespace HotelBookingSystem.Application.Services;
 
@@ -199,4 +204,14 @@ public class HotelService(IHotelRepository hotelRepository,
         return double.Round(rating,1);
 
     }
+
+    public async Task<(IEnumerable<HotelSearchResultOutputModel>, PaginationMetadata)> SearchAndFilterHotelsAsync(HotelSearchAndFilterParameters request)
+    {
+        var (hotels, paginationMetadata) = await _hotelRepository.SearchAndFilterHotelsAsync(request);
+
+        var mapped = _mapper.Map<IEnumerable<HotelSearchResultOutputModel>>(hotels);
+
+        return (mapped, paginationMetadata);
+    }
+
 }
