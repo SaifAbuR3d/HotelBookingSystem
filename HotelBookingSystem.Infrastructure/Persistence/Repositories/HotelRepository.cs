@@ -4,7 +4,6 @@ using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Domain.Models;
 using HotelBookingSystem.Infrastructure.Persistence.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
 
@@ -45,11 +44,6 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
 
         _context.Hotels.Remove(hotel);
         return true;
-    }
-
-    public async Task<IEnumerable<Hotel>> GetAllHotelsAsync()
-    {
-        return await _context.Hotels.Include(h => h.City).Include(h => h.Rooms).ToListAsync();
     }
 
     public async Task<Hotel?> GetHotelAsync(Guid id)
@@ -99,6 +93,27 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
             .AverageAsync(r => r.Rating);
     }
 
+    public async Task<(IEnumerable<Hotel>, PaginationMetadata)> GetAllHotelsAsync(GetHotelsQueryParameters request)
+    {
+        var query = _context.Hotels
+            .Include(h => h.City)
+            .Include(h => h.Rooms)
+            .AsQueryable();
+
+        SearchInNameOrDescription(ref query, request.SearchTerm);
+
+        SortingHelper.ApplySorting(ref query, request.SortOrder, SortingHelper.GetHotelsSortingCriterion(request));
+
+        var paginationMetadata = await PaginationHelper.GetPaginationMetadataAsync(query, request.PageNumber, request.PageSize);
+
+        PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
+
+        var result = await query.ToListAsync();
+
+        return (result, paginationMetadata);
+
+    }
+
     public async Task<(IEnumerable<Hotel>, PaginationMetadata)> SearchAndFilterHotelsAsync(HotelSearchAndFilterParameters request)
     {
         var query = _context.Hotels
@@ -138,17 +153,6 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
         return (result, paginationMetadata);
     }
 
-    private static Expression<Func<Hotel, object>> GetSearchResultsSortingCriterion(HotelSearchAndFilterParameters request)
-    {
-        return request.SortColumn?.ToLower() switch
-        {
-            "name" => h => h.Name,
-            "price" => h => h.Rooms.Min(r => r.Price),
-            "rating" => h => h.Reviews.Average(r => r.Rating),
-            "starrate" => h => h.StarRate,
-            _ => h => h.Id
-        };
-    }
 
     private static void SearchInNameOrDescription(ref IQueryable<Hotel> hotels, string? searchQuery)
     {

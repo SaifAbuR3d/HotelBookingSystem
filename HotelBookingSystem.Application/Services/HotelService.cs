@@ -25,12 +25,12 @@ public class HotelService(IHotelRepository hotelRepository,
     private readonly IImageHandler _imageHandler = imageHandler;
 
 
-    public async Task<IEnumerable<HotelOutputModel>> GetAllHotelsAsync()
+    public async Task<(IEnumerable<HotelOutputModel>, PaginationMetadata)> GetAllHotelsAsync(GetHotelsQueryParameters request)
     {
-        var hotels = await _hotelRepository.GetAllHotelsAsync();
+        var (hotels, paginationMetadata) = await _hotelRepository.GetAllHotelsAsync(request);
         var mapped = _mapper.Map<IEnumerable<HotelOutputModel>>(hotels);
 
-        return mapped;
+        return (mapped, paginationMetadata);
     }
 
     public async Task<HotelOutputModel?> GetHotelAsync(Guid id)

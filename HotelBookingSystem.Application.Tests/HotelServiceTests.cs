@@ -1,7 +1,9 @@
 ﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Hotel.Command;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;
@@ -31,20 +33,29 @@ public class HotelServiceTests
                                imageHandlerMock.Object);
     }
     [Fact]
-    public async Task GetAllHotelsAsync_ShouldReturnAllHotels()
+    public async Task GetAllHotelsAsync_ShouldReturnAllHotelsWithCorrectPaginationMetadata_IfHotelsCountIsLessThanOrEqualPageSize()
     {
         // Arrange
-        var hotels = fixture.CreateMany<Hotel>(10);
-        hotelRepositoryMock.Setup(x => x.GetAllHotelsAsync()).ReturnsAsync(hotels);
+        var expectedHotels = fixture.CreateMany<Hotel>(10);
+        var parameters = new GetHotelsQueryParameters();
+        var expectedPaginationMetadata = new PaginationMetadata(1, 10, 10); //page 1, 10 items per page, 10 total items
+
+        hotelRepositoryMock.Setup(x => x.GetAllHotelsAsync(parameters)).ReturnsAsync((expectedHotels, expectedPaginationMetadata));
 
         // Act
-        var result = await sut.GetAllHotelsAsync();
+        var (hotels, paginationMetadata) = await sut.GetAllHotelsAsync(parameters);
 
         // Assert
-        hotelRepositoryMock.Verify(h => h.GetAllHotelsAsync(), Times.Once);
-        Assert.NotNull(result);
-        Assert.IsAssignableFrom<IEnumerable<HotelOutputModel>>(result);
-        Assert.Equal(hotels.Count(), result.Count());
+        hotelRepositoryMock.Verify(h => h.GetAllHotelsAsync(parameters), Times.Once);
+        Assert.IsAssignableFrom<IEnumerable<HotelOutputModel>>(hotels);
+        Assert.Equal(expectedHotels.Count(), hotels.Count());
+
+        Assert.IsType<PaginationMetadata>(paginationMetadata);
+        Assert.Equal(expectedPaginationMetadata.PageNumber, paginationMetadata.PageNumber);
+        Assert.Equal(expectedPaginationMetadata.PageSize, paginationMetadata.PageSize);
+        Assert.Equal(expectedPaginationMetadata.TotalCount, paginationMetadata.TotalCount);
+        Assert.False(paginationMetadata.HasPreviousPage);
+        Assert.False(paginationMetadata.HasNextPage);
     }
     [Fact]
     public async Task GetHotelAsync_ShouldReturnHotel_IfHotelExists()

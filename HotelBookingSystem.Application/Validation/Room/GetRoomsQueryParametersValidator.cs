@@ -20,7 +20,6 @@ public class GetRoomsQueryParametersValidator : AbstractValidator<GetRoomsQueryP
                      || x.ToLower() == "adultscapacity"
                      || x.ToLower() == "childrencapacity"
                      || x.ToLower() == "hotelname")
-
              .WithMessage("Sort column must be empty or 'id' or 'creationDate' or 'lastModified' or 'roomNumber' or 'adultsCapacity' or 'childrenCapacity' or 'hotelName'.");
         });
     }

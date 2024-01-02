@@ -19,20 +19,6 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
 {
 
     /// <summary>
-    /// Get all hotels
-    /// </summary>
-    /// <returns>All hotels</returns>
-    /// <response code="200">Returns all hotels</response>
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<HotelOutputModel>>> GetAllHotels()
-    {
-        var hotels = await hotelService.GetAllHotelsAsync();
-
-        return Ok(hotels);
-    }
-
-
-    /// <summary>
     /// Get a hotel by its id
     /// </summary>
     /// <param name="id">The id of the hotel</param>
@@ -256,6 +242,24 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     }
 
     /// <summary>
+    /// Get all hotels
+    /// </summary>
+    /// <returns>All hotels</returns>
+    /// <response code="200">Returns all hotels</response>
+    [HttpGet(Name = "GetHotels")]
+    public async Task<ActionResult<IEnumerable<HotelOutputModel>>> GetAllHotels([FromQuery] GetHotelsQueryParameters request)
+    {
+        var (hotels, paginationMetadata) = await hotelService.GetAllHotelsAsync(request);
+
+        AddPageLinks(paginationMetadata, request);
+
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+        return Ok(hotels);
+    }
+
+
+    /// <summary>
     /// Searches and filters hotels based on the specified criteria.
     /// </summary>
     /// <remarks>
@@ -319,4 +323,26 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
                 roomTypes = parameters?.RoomTypes
             });
     }
+
+    private void AddPageLinks(PaginationMetadata paginationMetadata, GetHotelsQueryParameters parameters)
+    {
+        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
+        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+    }
+
+    private string? CreatePageLink(PaginationMetadata paginationMetadata, GetHotelsQueryParameters parameters, bool next)
+    {
+        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
+        return
+            Url.Link("GetHotels", new
+            {
+                sortOrder = parameters.SortOrder,
+                sortColumn = parameters.SortColumn,
+                pageNumber = newPageNumber,
+                pageSize = paginationMetadata.PageSize,
+                searchQuery = parameters.SearchTerm,
+            });
+    }
+
+
 }

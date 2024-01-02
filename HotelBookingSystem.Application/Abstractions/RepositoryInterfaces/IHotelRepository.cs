@@ -8,7 +8,7 @@ public interface IHotelRepository
     Task<Hotel> AddHotelAsync(Hotel city); // 
     Task<bool> HotelExistsAsync(Guid id);
     Task<bool> DeleteHotelAsync(Guid id);
-    Task<IEnumerable<Hotel>> GetAllHotelsAsync();
+    Task<(IEnumerable<Hotel>, PaginationMetadata)> GetAllHotelsAsync(GetHotelsQueryParameters request);
     Task<Hotel?> GetHotelAsync(Guid id);
     Task<bool> SaveChangesAsync();
     Task<Hotel?> GetHotelByNameAsync(string Name);

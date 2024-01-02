@@ -199,13 +199,6 @@
             API endpoints for managing hotels
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetAllHotels">
-            <summary>
-            Get all hotels
-            </summary>
-            <returns>All hotels</returns>
-            <response code="200">Returns all hotels</response>
-        </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetHotel(System.Guid)">
             <summary>
             Get a hotel by its id
@@ -332,6 +325,13 @@
             <returns>No content</returns>
             <response code="204">If the review is successfully deleted</response>
             <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetAllHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.GetHotelsQueryParameters)">
+            <summary>
+            Get all hotels
+            </summary>
+            <returns>All hotels</returns>
+            <response code="200">Returns all hotels</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.SearchAndFilterHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.HotelSearchAndFilterParameters)">
              <summary>

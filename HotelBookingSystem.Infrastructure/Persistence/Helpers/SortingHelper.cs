@@ -63,5 +63,18 @@ public static class SortingHelper
         };
     }
 
+    public static Expression<Func<Hotel, object>> GetHotelsSortingCriterion(GetHotelsQueryParameters request)
+    {
+        return request.SortColumn?.ToLower() switch
+        {
+            "creationdate" => h => h.CreationDate,
+            "lastmodified" => h => h.LastModified,
+            "name" => h => h.Name,
+            "owner" => h => h.Owner,
+            "starrate" => h => h.StarRate,
+            "roomsnumber" => h => h.Rooms.Count,
+            _ => h => h.Id
+        };
+    }
 
 }

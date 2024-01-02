@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
-using HotelBookingSystem.Application.DTOs.City.Query;
+﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Room.Query;
 using HotelBookingSystem.Domain.Models;

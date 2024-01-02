@@ -12,7 +12,7 @@ public interface IHotelService
     Task<HotelOutputModel> CreateHotelAsync(CreateHotelCommand command);
     Task<bool> DeleteHotelAsync(Guid id);
     Task<HotelOutputModel?> GetHotelAsync(Guid id);
-    Task<IEnumerable<HotelOutputModel>> GetAllHotelsAsync();
+    Task<(IEnumerable<HotelOutputModel>, PaginationMetadata)> GetAllHotelsAsync(GetHotelsQueryParameters request);
     Task<bool> UpdateHotelAsync(Guid id, UpdateHotelCommand request);
     Task<bool> UploadImageAsync(Guid hotelId, IFormFile file, string basePath, string? alternateText, bool? thumbnail = false);
     Task<ReviewOutputModel> AddReviewAsync(Guid id, CreateOrUpdateReviewCommand request);
