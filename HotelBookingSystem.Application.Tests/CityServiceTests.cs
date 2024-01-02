@@ -2,6 +2,8 @@ using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.City.Command;
 using HotelBookingSystem.Application.DTOs.City.OutputModel;
+using HotelBookingSystem.Application.DTOs.City.Query;
+using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;
@@ -26,20 +28,27 @@ public class CityServiceTests
     }
 
     [Fact]
-    public async Task GetAllCitiesAsync_ShouldReturnAllCities()
+    public async Task GetAllCitiesAsync_ShouldReturnAllCitiesWithCorrectPaginationMetadata_IfCitiesCountIsLessThanOrEqualPageSize()
     {
         // Arrange
-        var cities = fixture.CreateMany<City>(10);
-        cityRepositoryMock.Setup(x => x.GetAllCitiesAsync()).ReturnsAsync(cities);
+        var expectedCities = fixture.CreateMany<City>(10);
+        var query = new GetCitiesQueryParameters();
+        var expectedPaginationMetadata = new PaginationMetadata(1, 10, 10); //page 1, 10 items per page, 10 total items
+
+        cityRepositoryMock.Setup(x => x.GetAllCitiesAsync(query)).ReturnsAsync((expectedCities, expectedPaginationMetadata));
 
         // Act
-        var result = await sut.GetAllCitiesAsync();
+        var (cities, paginationMetadata) = await sut.GetAllCitiesAsync(query);
 
         // Assert
-        cityRepositoryMock.Verify(c => c.GetAllCitiesAsync(), Times.Once);
-        Assert.NotNull(result);
-        Assert.IsAssignableFrom<IEnumerable<CityOutputModel>>(result);
-        Assert.Equal(cities.Count(), result.Count());
+        cityRepositoryMock.Verify(c => c.GetAllCitiesAsync(query), Times.Once);
+        Assert.IsAssignableFrom<IEnumerable<CityOutputModel>>(cities);
+        Assert.Equal(expectedCities.Count(), cities.Count());
+
+        Assert.IsType<PaginationMetadata>(paginationMetadata);
+        Assert.Equal(expectedPaginationMetadata.PageNumber, paginationMetadata.PageNumber);
+        Assert.Equal(expectedPaginationMetadata.PageSize, paginationMetadata.PageSize);
+        Assert.Equal(expectedPaginationMetadata.TotalCount, paginationMetadata.TotalCount);
     }
 
     [Fact]
