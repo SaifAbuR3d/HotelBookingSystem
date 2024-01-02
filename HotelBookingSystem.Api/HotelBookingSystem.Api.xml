@@ -302,7 +302,7 @@
             API endpoints for managing hotels reviews
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.AddReview(System.Guid,HotelBookingSystem.Application.DTOs.Review.CreateOrUpdateReviewCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.AddReview(System.Guid,HotelBookingSystem.Application.DTOs.Review.Command.CreateOrUpdateReviewCommand)">
             <summary>
             Adds a review for a specific hotel.
             </summary>
@@ -325,15 +325,6 @@
             <response code="200">Returns the review with the given id</response>
             <response code="404">If the review is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetHotelReviews(System.Guid)">
-            <summary>
-            Get list of reviews for a hotel
-            </summary>
-            <param name="hotelId">The id of the hotel</param>
-            <returns>List of reviews for the hotel</returns>
-            <response code="200">Returns list of reviews for the hotel</response>
-            <response code="404">If the hotel is not found</response>
-        </member>
         <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetHotelAverageRating(System.Guid)">
             <summary>
             Get hotel average rating
@@ -343,7 +334,7 @@
             <response code="200">Returns hotel average rating</response>
             <response code="404">If the hotel is not found</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.UpdateReview(System.Guid,System.Guid,HotelBookingSystem.Application.DTOs.Review.CreateOrUpdateReviewCommand)">
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.UpdateReview(System.Guid,System.Guid,HotelBookingSystem.Application.DTOs.Review.Command.CreateOrUpdateReviewCommand)">
             <summary>
             Update a review
             </summary>
@@ -363,6 +354,15 @@
             <param name="reviewId">The id of the review to delete</param>
             <returns>No content</returns>
             <response code="204">If the review is successfully deleted</response>
+            <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetHotelReviews(System.Guid,HotelBookingSystem.Application.DTOs.Review.Query.GetHotelReviewsQueryParameters)">
+            <summary>
+            Get list of reviews for a hotel
+            </summary>
+            <param name="hotelId">The id of the hotel</param>
+            <returns>List of reviews for the hotel</returns>
+            <response code="200">Returns list of reviews for the hotel</response>
             <response code="404">If the hotel is not found</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.RoomsController">

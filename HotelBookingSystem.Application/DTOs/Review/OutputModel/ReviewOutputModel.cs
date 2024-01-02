@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Application.DTOs.Review;
+﻿namespace HotelBookingSystem.Application.DTOs.Review.OutputModel;
 
 public class ReviewOutputModel
 {

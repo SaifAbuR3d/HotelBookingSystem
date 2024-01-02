@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Review;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Review.Command;
+using HotelBookingSystem.Application.DTOs.Review.OutputModel;
+using HotelBookingSystem.Application.DTOs.Review.Query;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Domain.Models;
 namespace HotelBookingSystem.Application.Services;
@@ -59,12 +62,15 @@ public class ReviewService(IHotelRepository hotelRepository,
 
     }
 
-    public async Task<IEnumerable<ReviewOutputModel>> GetHotelReviewsAsync(Guid id)
+    public async Task<(IEnumerable<ReviewOutputModel>, PaginationMetadata)> GetHotelReviewsAsync(Guid id, GetHotelReviewsQueryParameters request)
     {
         var hotel = await _hotelRepository.GetHotelAsync(id) ?? throw new NotFoundException(nameof(Hotel), id);
 
-        var reviews = await _reviewRepository.GetHotelReviewsAsync(hotel);
-        return _mapper.Map<IEnumerable<ReviewOutputModel>>(reviews);
+        var (reviews, paginationMetadata) = await _reviewRepository.GetHotelReviewsAsync(hotel, request);
+
+        var mapped = _mapper.Map<IEnumerable<ReviewOutputModel>>(reviews);
+
+        return (mapped, paginationMetadata); 
     }
 
     public async Task<bool> UpdateReviewAsync(Guid id, Guid reviewId, CreateOrUpdateReviewCommand request)

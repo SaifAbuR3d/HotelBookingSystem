@@ -1,10 +1,13 @@
 ﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Review.Query;
 using HotelBookingSystem.Domain.Models;
+using HotelBookingSystem.Infrastructure.Persistence.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
 
-public class ReviewRepository(ApplicationDbContext context ) : IReviewRepository
+public class ReviewRepository(ApplicationDbContext context) : IReviewRepository
 {
     private readonly ApplicationDbContext _context = context;
 
@@ -32,12 +35,33 @@ public class ReviewRepository(ApplicationDbContext context ) : IReviewRepository
         return true;
     }
 
-    public async Task<IEnumerable<Review>> GetHotelReviewsAsync(Hotel hotel)
+    public async Task<(IEnumerable<Review>, PaginationMetadata)> GetHotelReviewsAsync(Hotel hotel, GetHotelReviewsQueryParameters request)
     {
-        return await _context.Reviews
-            .Include(r => r.Hotel).Include(r => r.Guest)
-            .Where(r => r.HotelId == hotel.Id)
-            .ToListAsync();
+        var query = _context.Reviews
+                        .Include(r => r.Hotel).Include(r => r.Guest)
+                        .Where(r => r.HotelId == hotel.Id);
+
+        SearchInTitleOrDescription(ref query, request.SearchTerm);
+
+        SortingHelper.ApplySorting(ref query, request.SortOrder, SortingHelper.GetReviewsSortingCriterion(request));
+
+        var paginationMetadata = await PaginationHelper.GetPaginationMetadataAsync(query, request.PageNumber, request.PageSize);
+
+        PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
+
+        var result = await query.ToListAsync();
+
+        return (result, paginationMetadata);
+
+    }
+
+    private static void SearchInTitleOrDescription(ref IQueryable<Review> query, string? searchTerm)
+    {
+        if(!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(r => !string.IsNullOrEmpty(r.Title) && r.Title.Contains(searchTerm) 
+                             || r.Description.Contains(searchTerm));
+        }
     }
 
     public async Task<double> GetHotelAverageRatingAsync(Hotel hotel)

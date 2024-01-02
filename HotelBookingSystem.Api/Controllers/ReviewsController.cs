@@ -1,6 +1,10 @@
 ﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Review;
+using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Review.Command;
+using HotelBookingSystem.Application.DTOs.Review.OutputModel;
+using HotelBookingSystem.Application.DTOs.Review.Query;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;
 
@@ -28,7 +32,7 @@ public class ReviewsController(IReviewService reviewService) : ControllerBase
     public async Task<ActionResult> AddReview(Guid hotelId, CreateOrUpdateReviewCommand request)
     {
         var review = await reviewService.AddReviewAsync(hotelId, request);
-        return CreatedAtAction(nameof(GetReview), new { id = review.HotelId, reviewId = review.Id }, review);
+        return CreatedAtAction(nameof(GetReview), new { hotelId = review.HotelId, reviewId = review.Id }, review);
     }
 
 
@@ -45,21 +49,6 @@ public class ReviewsController(IReviewService reviewService) : ControllerBase
     {
         var review = await reviewService.GetReviewAsync(hotelId, reviewId);
         return Ok(review);
-    }
-
-
-    /// <summary>
-    /// Get list of reviews for a hotel
-    /// </summary>
-    /// <param name="hotelId">The id of the hotel</param>
-    /// <returns>List of reviews for the hotel</returns>
-    /// <response code="200">Returns list of reviews for the hotel</response>
-    /// <response code="404">If the hotel is not found</response>
-    [HttpGet("{hotelId}/reviews")]
-    public async Task<ActionResult<ReviewOutputModel>> GetHotelReviews(Guid hotelId)
-    {
-        var reviews = await reviewService.GetHotelReviewsAsync(hotelId);
-        return Ok(reviews);
     }
 
     /// <summary>
@@ -120,5 +109,45 @@ public class ReviewsController(IReviewService reviewService) : ControllerBase
         }
 
         return NoContent();
+    }
+
+
+    /// <summary>
+    /// Get list of reviews for a hotel
+    /// </summary>
+    /// <param name="hotelId">The id of the hotel</param>
+    /// <returns>List of reviews for the hotel</returns>
+    /// <response code="200">Returns list of reviews for the hotel</response>
+    /// <response code="404">If the hotel is not found</response>
+    [HttpGet("{hotelId}/reviews", Name = "GetHotelReviews")]
+    public async Task<ActionResult<ReviewOutputModel>> GetHotelReviews(Guid hotelId, [FromQuery] GetHotelReviewsQueryParameters request)
+    {
+        var (reviews, paginationMetadata) = await reviewService.GetHotelReviewsAsync(hotelId, request);
+
+        AddPageLinks(paginationMetadata, request);
+
+        Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
+
+        return Ok(reviews);
+    }
+
+    private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
+    {
+        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
+        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+    }
+
+    private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
+    {
+        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
+        return
+            Url.Link("GetHotelReviews", new
+            {
+                sortOrder = parameters.SortOrder,
+                sortColumn = parameters.SortColumn,
+                pageNumber = newPageNumber,
+                pageSize = paginationMetadata.PageSize,
+                searchQuery = parameters.SearchTerm,
+            });
     }
 }

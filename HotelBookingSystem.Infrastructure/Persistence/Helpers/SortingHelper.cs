@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
+using HotelBookingSystem.Application.DTOs.Review.Query;
 using HotelBookingSystem.Application.DTOs.Room.Query;
 using HotelBookingSystem.Domain.Models;
 using System.Linq.Expressions;
@@ -74,6 +75,17 @@ public static class SortingHelper
             "starrate" => h => h.StarRate,
             "roomsnumber" => h => h.Rooms.Count,
             _ => h => h.Id
+        };
+    }
+
+    public static Expression<Func<Review, object>> GetReviewsSortingCriterion(GetHotelReviewsQueryParameters request)
+    {
+        return request.SortColumn?.ToLower() switch
+        {
+            "creationdate" => r => r.CreationDate,
+            "lastmodified" => r => r.LastModified,
+            "rating" => r => r.Rating,
+            _ => r => r.Id
         };
     }
 
