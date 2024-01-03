@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<HotelImage> HotelImages { get; set; }
     public DbSet<CityImage> CityImages { get; set; }
     public DbSet<Booking> Bookings { get; set; }
+    public DbSet<Discount> Discounts { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -31,6 +32,9 @@ public class ApplicationDbContext : DbContext
         // Computed properties are not persisted 
         modelBuilder.Entity<Hotel>()
                     .Ignore(h => h.RoomsNumber);
+        modelBuilder.Entity<Discount>()
+                    .Ignore(d => d.IsActive);
+
 
         // set precision for decimal properties
         modelBuilder.Entity<Room>()
