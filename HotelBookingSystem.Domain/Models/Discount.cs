@@ -19,6 +19,9 @@ public class Discount : Entity
         StartDate = startDate;
         EndDate = endDate;
 
+        CreationDate = DateTime.UtcNow;
+        LastModified = DateTime.UtcNow;
+
         ValidPercentage(percentage);
         ValidDates(startDate, endDate);
     }
@@ -28,6 +31,11 @@ public class Discount : Entity
     {
         Room = room;
         Percentage = CalculateDiscountPercentage(originalPrice, discountedPrice);
+        StartDate = startDate;
+        EndDate = endDate;
+
+        CreationDate = DateTime.UtcNow;
+        LastModified = DateTime.UtcNow;
 
         ValidDates(startDate, endDate);
         ValidPercentage(Percentage);
@@ -40,22 +48,22 @@ public class Discount : Entity
 
     private static void ValidPercentage(double percentage)
     {
-        if (percentage < 0 || percentage > 100)
+        if (percentage <= 0 || percentage > 100)
         {
-            throw new ArgumentException("Percentage must be between 0 and 100");
+            throw new ArgumentException("Percentage must be between 1 and 100");
         }
     }
 
     private static void ValidDates(DateTime startDate, DateTime endDate)
     {
+        if (startDate < DateTime.UtcNow || endDate < DateTime.UtcNow)
+        {
+            throw new ArgumentException("Start and End dates must be in the future");
+        }
+
         if (startDate > endDate)
         {
             throw new ArgumentException("Start date must be before end date");
-        }
-
-        if (startDate < DateTime.UtcNow || endDate < DateTime.UtcNow)
-        {
-            throw new ArgumentException("End date must be in the future");
         }
     }
 
