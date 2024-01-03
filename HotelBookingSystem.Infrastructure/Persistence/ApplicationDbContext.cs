@@ -34,7 +34,10 @@ public class ApplicationDbContext : DbContext
                     .Ignore(h => h.RoomsNumber);
         modelBuilder.Entity<Discount>()
                     .Ignore(d => d.IsActive);
-
+        modelBuilder.Entity<Discount>()
+                    .Ignore(d => d.OriginalPrice);
+        modelBuilder.Entity<Discount>()
+                    .Ignore(d => d.DiscountedPrice);
 
         // set precision for decimal properties
         modelBuilder.Entity<Room>()

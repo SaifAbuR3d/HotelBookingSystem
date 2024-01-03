@@ -8,6 +8,10 @@ public class DiscountProfile : Profile
 {
     public DiscountProfile()
     {
-        CreateMap<Discount, DiscountOutputModel>(); 
+        CreateMap<Discount, DiscountOutputModel>()
+            // calculated at service
+            .ForMember(dest => dest.OriginalPrice, opt => opt.Ignore())
+            .ForMember(dest => dest.DiscountedPrice, opt => opt.Ignore()); 
+
     }
 }

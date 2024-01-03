@@ -7,9 +7,6 @@ public class CreateDiscountCommandValidator : AbstractValidator<CreateDiscountCo
 {
     public CreateDiscountCommandValidator()
     {
-        RuleFor(x => x.RoomId)
-            .NotEmpty(); 
-
         RuleFor(x => x.StartDate)
             .NotEmpty()
             .GreaterThan(DateTime.UtcNow)

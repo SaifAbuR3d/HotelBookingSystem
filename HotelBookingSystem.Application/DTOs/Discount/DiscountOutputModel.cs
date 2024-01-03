@@ -5,7 +5,7 @@ public class DiscountOutputModel
     public Guid Id { get; set; }
     public Guid RoomId { get; set; }
 
-    public double Percentage { get; set; }
+    public decimal Percentage { get; set; }
     public decimal OriginalPrice { get; set; }
     public decimal DiscountedPrice { get; set; }
 
