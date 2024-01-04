@@ -12,7 +12,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// API endpoints for managing hotels reviews
 /// </summary>>
 
-[Route("api")]
+[Route("api/hotels")]
 [ApiController]
 public class ReviewsController(IReviewService reviewService) : ControllerBase
 {
