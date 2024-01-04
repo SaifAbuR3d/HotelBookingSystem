@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Domain.Models;
 using HotelBookingSystem.Infrastructure.Persistence.Helpers;
@@ -42,7 +43,7 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
 
     public async Task<Hotel?> GetHotelAsync(Guid id)
     {
-        return await _context.Hotels.Include(h => h.Images).FirstOrDefaultAsync(h => h.Id == id);
+        return await _context.Hotels.Include(h => h.Images).Include(h => h.Rooms).FirstOrDefaultAsync(h => h.Id == id);
     }
 
     public async Task<Hotel?> GetHotelByNameAsync(string Name)
@@ -53,6 +54,12 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
     public async Task<bool> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync() >= 1;
+    }
+
+
+    public async Task<IEnumerable<FeaturedDealOutputModel>> GetHotelsHavingRoomsWithHighestDiscountPercentage(int deals = 5)
+    {
+        throw new NotImplementedException();
     }
 
 
@@ -183,6 +190,5 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
             hotels = hotels.Where(h => amenities.All(a => (!string.IsNullOrWhiteSpace(h.Description) && h.Description.Contains(a))));
         }
     }
-
 
 }
