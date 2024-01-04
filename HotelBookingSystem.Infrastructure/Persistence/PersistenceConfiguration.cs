@@ -10,15 +10,18 @@ namespace HotelBookingSystem.Infrastructure.Persistence;
 public static class PersistenceConfiguration
 {
     public static IServiceCollection AddPersistence(
-        this IServiceCollection services, IConfiguration configuration)
+        this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         => services
-            .AddDatabase(configuration.GetConnectionString("SqlServer"))
+            .AddDatabase(configuration.GetConnectionString("SqlServer"), isDevelopment)
             .AddRepositories();
 
     private static IServiceCollection AddDatabase(
-        this IServiceCollection services, string connectionString)
+        this IServiceCollection services, string connectionString, bool isDevelopment)
         => services
-            .AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connectionString));
+            .AddDbContext<ApplicationDbContext>(opt =>
+                opt.UseSqlServer(connectionString)
+                   .EnableSensitiveDataLogging(isDevelopment)
+                   .EnableDetailedErrors(isDevelopment));
 
     public static IServiceCollection AddRepositories(
         this IServiceCollection services)

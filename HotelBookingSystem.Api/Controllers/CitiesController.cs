@@ -15,7 +15,7 @@ namespace HotelBookingSystem.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
-public class CitiesController(ICityService cityService, IWebHostEnvironment environment) : ControllerBase
+public class CitiesController(ICityService cityService, IWebHostEnvironment environment, ILogger<CitiesController> logger) : ControllerBase
 {
     /// <summary>
     /// Get a city by its id
@@ -27,8 +27,11 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     [HttpGet("{id}", Name = "GetCity")]
     public async Task<ActionResult<CityOutputModel>> GetCity(Guid id)
     {
+        logger.LogInformation("GetCity started for city with ID: {CityId}", id);
+
         var city = await cityService.GetCityAsync(id);
 
+        logger.LogInformation("GetCity for city with ID: {CityId} completed successfully", id);
         return Ok(city);
     }
 
@@ -53,7 +56,11 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     [HttpPost]
     public async Task<ActionResult<CityOutputModel>> CreateCity(CreateCityCommand request)
     {
+        logger.LogInformation("CreateCity started for request: {@CreateCity}", request);
+
         var city = await cityService.CreateCityAsync(request);
+
+        logger.LogInformation("CreateCity for request: {@CreateCity} completed successfully", request);
 
         return CreatedAtAction(nameof(GetCity), new { id = city.Id }, city);
     }
@@ -68,13 +75,11 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCity(Guid id)
     {
-        var deleted = await cityService.DeleteCityAsync(id);
+        logger.LogInformation("DeleteCity started for city with ID: {CityId}", id);
 
-        if (!deleted)
-        {
-            return NotFound();
-        }
+        await cityService.DeleteCityAsync(id);
 
+        logger.LogInformation("DeleteCity for city with ID: {CityId} completed successfully", id); 
         return NoContent();
     }
 
@@ -90,13 +95,11 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCity(Guid id, UpdateCityCommand request)
     {
+        logger.LogInformation("UpdateCity started for city with ID: {CityId}, request: {@UpdateCity} ", id, request);
+
         var updated = await cityService.UpdateCityAsync(id, request);
 
-        if (!updated)
-        {
-            return NotFound();
-        }
-
+        logger.LogInformation("UpdateCity completed successfully for city with ID: {CityId}, request: {@UpdateCity} ", id, request);
         return NoContent();
     }
 
@@ -130,8 +133,11 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     [HttpGet("trending-destinations")]
     public async Task<ActionResult<IEnumerable<CityAsTrendingDestinationOutputModel>>> MostVisitedCities(int count = 5)
     {
+        logger.LogInformation("Retrieving top {Count} most visited cities has started", count); 
+
         var cities = await cityService.MostVisitedCitiesAsync(count);
 
+        logger.LogInformation("Retrieving top {Count} most visited cities completed successfully", count);
         return Ok(cities);
     }
 
@@ -150,43 +156,59 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     [HttpPost("{id}/images")]
     public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
     {
-        var uploaded = await cityService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
+        logger.LogInformation("UploadImage started for city with ID: {CityId}", id);
 
-        if (!uploaded)
-        {
-            return NotFound();
-        }
+        await cityService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
+
+        logger.LogInformation("UploadImage completed successfully for city with ID: {CityId}", id);
 
         return NoContent();
     }
 
     /// <summary>
-    /// Get all cities
+    /// Get cities
     /// </summary>
-    /// <returns>All cities</returns>
-    /// <response code="200">Returns all cities</response>
+    /// <returns> cities</returns>
+    /// <response code="200">Returns cities</response>
     [HttpGet(Name = "GetCities")]
-    public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetAllCities([FromQuery] GetCitiesQueryParameters request)
+    public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetCities([FromQuery] GetCitiesQueryParameters request)
     {
+        logger.LogInformation("GetCities started for query: {@GetCitiesQuery}", request); 
+
         var (cities, paginationMetadata) = await cityService.GetAllCitiesAsync(request);
 
         AddPageLinks(paginationMetadata, request); 
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
+        logger.LogInformation("GetCities for query: {@GetCitiesQuery} completed successfully", request);
         return Ok(cities);
     }
 
     private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
     {
+        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+
         paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
         paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+
+        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
+
     }
 
     private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
     {
+        if (next)
+        {
+            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+        else
+        {
+            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+
         var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        return
+        var link = 
             Url.Link("GetCities", new
             {
                 sortOrder = parameters.SortOrder,
@@ -195,6 +217,10 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
                 pageSize = paginationMetadata.PageSize,
                 searchQuery = parameters.SearchTerm,
             });
+
+        logger.LogDebug("CreatePageLinks for next and previous pages has finished for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+
+        return link; 
     }
 
 }

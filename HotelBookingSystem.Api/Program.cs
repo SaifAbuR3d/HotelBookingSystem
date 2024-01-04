@@ -1,6 +1,7 @@
 using HotelBookingSystem.Api;
 using HotelBookingSystem.Application;
 using HotelBookingSystem.Infrastructure.Persistence;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,24 +24,34 @@ builder.Services.AddSwaggerGen(setup =>
     setup.IncludeXmlComments(DTOsXmlCommentsFullPath);
 });
 
-builder.Services.AddPersistence(builder.Configuration);
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
+
+bool isDevelopment = builder.Environment.IsDevelopment();
+
+builder.Services.AddPersistence(builder.Configuration, isDevelopment);
 builder.Services.AddApplication();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+
+if (isDevelopment)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseStaticFiles();
-
-app.UseHttpsRedirection();
+app.UseSerilogRequestLogging();
 
 app.UseStatusCodePages();
 
-app.UseExceptionHandler(); 
+app.UseExceptionHandler();
+
+app.UseStaticFiles();
+
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

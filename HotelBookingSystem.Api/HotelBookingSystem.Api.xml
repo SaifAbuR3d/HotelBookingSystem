@@ -65,7 +65,7 @@
             API endpoints for managing cities
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.ICityService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.ICityService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.CitiesController})">
             <summary>
             API endpoints for managing cities
             </summary>>

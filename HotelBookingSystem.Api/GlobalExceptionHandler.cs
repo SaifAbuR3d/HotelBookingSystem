@@ -21,11 +21,8 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
     {
         var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
-        logger.LogError(
-            exception,
-            "Could not process a request on machine {MachineName}. TraceId: {TraceId}",
-            Environment.MachineName,
-            traceId);
+        logger.LogError("Request Failure {@ErrorType}, {@ErrorMessage}, {@DateTimeUtc}",
+                           exception.GetType().Name, exception.Message, DateTime.UtcNow);
 
         var (statusCode, title, detail) = MapException(exception);
 
@@ -35,13 +32,13 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             detail: detail,
             extensions: new Dictionary<string, object?>
             {
-                //["errors"] = new Dictionary<string, string[]>
-                //{
-                //    [exception.GetType().Name] = [exception.Message]
-                //},
-                ["traceId"] = traceId
+            //["errors"] = new Dictionary<string, string[]>
+            //{
+            //    [exception.GetType().Name] = [exception.Message]
+            //},
+               ["traceId"] = traceId
             }
-            
+
             ).ExecuteAsync(httpContext);
 
         return true;
