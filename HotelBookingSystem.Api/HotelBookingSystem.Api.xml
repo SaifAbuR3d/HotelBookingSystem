@@ -169,6 +169,16 @@
             <returns>All cities</returns>
             <response code="200">Returns all cities</response>
         </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.DiscountsController">
+            <summary>
+            API endpoints for managing Discounts
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IDiscountService)">
+            <summary>
+            API endpoints for managing Discounts
+            </summary>
+        </member>
         <member name="T:HotelBookingSystem.Api.Controllers.GuestsController">
             <summary>
             Controller for managing guests

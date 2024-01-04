@@ -5,7 +5,6 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Hotel.Command;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
-using HotelBookingSystem.Application.DTOs.Review;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +15,7 @@ public class HotelService(IHotelRepository hotelRepository,
                           ICityRepository cityRepository,
                           IGuestRepository guestRepository,
                           IMapper mapper,
-                          IImageHandler imageHandler) : IHotelService 
+                          IImageHandler imageHandler) : IHotelService
 {
     private readonly IHotelRepository _hotelRepository = hotelRepository;
     private readonly ICityRepository _cityRepository = cityRepository;
@@ -122,5 +121,4 @@ public class HotelService(IHotelRepository hotelRepository,
 
         return (mapped, paginationMetadata);
     }
-
 }

@@ -5,7 +5,7 @@ public class Discount : Entity
     public decimal Percentage { get; private set; }
     public DateTime StartDate { get; private set; } // all dates/times are in UTC
     public DateTime EndDate { get; private set; }
-    public bool IsActive => DateTime.UtcNow >= StartDate && DateTime.UtcNow <= EndDate;
+    public bool IsActive => DateTime.UtcNow >= StartDate && DateTime.UtcNow < EndDate;
     public decimal OriginalPrice => Room.Price;
     public decimal DiscountedPrice => Math.Round(OriginalPrice - (OriginalPrice * Percentage / 100), 2);
     public Guid RoomId { get; set; }

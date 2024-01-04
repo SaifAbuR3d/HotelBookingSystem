@@ -15,4 +15,5 @@ public interface IRoomRepository
     Task<bool> SaveChangesAsync();
     Task<bool> IsAvailableAsync(Guid roomId, DateOnly startDate, DateOnly endDate);
     Task<RoomImage> AddRoomImageAsync(Room room, RoomImage roomImage);
+    Task<IEnumerable<Room>> GetRoomsWithHighestDiscounts(int rooms);
 }

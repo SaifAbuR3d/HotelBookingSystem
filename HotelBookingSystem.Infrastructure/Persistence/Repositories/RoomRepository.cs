@@ -100,4 +100,26 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
         }
     }
 
+    public async Task<IEnumerable<Room>> GetRoomsWithHighestDiscounts(int rooms)
+    {
+        var currentDate = DateTime.UtcNow;
+        return await _context.Rooms
+         .Include(r => r.Discounts)
+         .Include(r => r.Hotel.City)
+         .Include(r => r.Hotel.Images)
+         .Where(r => r.Discounts.Any(d => currentDate >= d.StartDate && currentDate < d.EndDate))
+
+         // if multiple discounts are active for a room, select the most recently added one
+         .Select(r => new
+         {
+             Room = r,
+             Percentage = r.Discounts.OrderByDescending(d => d.CreationDate).First().Percentage
+
+         })
+
+         .OrderByDescending(r => r.Percentage)
+         .Take(rooms)
+         .Select(r => r.Room)
+         .ToListAsync();
+    }
 }

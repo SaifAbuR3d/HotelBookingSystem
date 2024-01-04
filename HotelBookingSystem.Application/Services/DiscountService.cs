@@ -2,12 +2,13 @@
 using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Discount;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Domain.Models;
 
 namespace HotelBookingSystem.Application.Services;
 
-public class DiscountService(IRoomRepository roomRepository, IDiscountRepository discountRepository,  IMapper mapper) : IDiscountService
+public class DiscountService(IRoomRepository roomRepository, IDiscountRepository discountRepository, IMapper mapper) : IDiscountService
 {
     private readonly IRoomRepository _roomRepository = roomRepository;
     private readonly IDiscountRepository _discountRepository = discountRepository;
@@ -25,7 +26,7 @@ public class DiscountService(IRoomRepository roomRepository, IDiscountRepository
         // if both are provided, ignore the percentage
         var originalPrice = room.Price;
 
-        Discount discount = default!; 
+        Discount discount = default!;
 
         if (command.DiscountedPrice != null)
         {
@@ -43,16 +44,16 @@ public class DiscountService(IRoomRepository roomRepository, IDiscountRepository
 
         var mapped = _mapper.Map<DiscountOutputModel>(discount);
 
-        mapped.OriginalPrice = discount.OriginalPrice; 
+        mapped.OriginalPrice = discount.OriginalPrice;
         mapped.DiscountedPrice = discount.DiscountedPrice;
 
-        return mapped; 
+        return mapped;
     }
 
     public async Task<DiscountOutputModel?> GetDiscountAsync(Guid roomId, Guid discountId)
     {
         var discount = await _discountRepository.GetDiscountAsync(roomId, discountId) ?? throw new NotFoundException(nameof(Discount), discountId);
-        
+
         var mapped = _mapper.Map<DiscountOutputModel>(discount);
 
         mapped.OriginalPrice = discount.OriginalPrice;
@@ -71,5 +72,21 @@ public class DiscountService(IRoomRepository roomRepository, IDiscountRepository
         }
         return deleted;
     }
+
+    public async Task<IEnumerable<FeaturedDealOutputModel>> GetFeaturedDealsAsync(int deals = 5)
+    {
+        if (deals <= 0 || deals > 20)
+        {
+            throw new BadRequestException($"invalid number of deals: {deals}, The number of deals must be between 1 and 20");
+        }
+
+        var rooms = await _roomRepository.GetRoomsWithHighestDiscounts(deals);
+
+        var featuredDeals = _mapper.Map<IEnumerable<FeaturedDealOutputModel>>(rooms);
+
+        return featuredDeals;
+
+    }
+
 
 }

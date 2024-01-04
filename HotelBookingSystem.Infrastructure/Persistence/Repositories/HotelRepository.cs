@@ -56,13 +56,6 @@ public class HotelRepository(ApplicationDbContext context) : IHotelRepository
         return await _context.SaveChangesAsync() >= 1;
     }
 
-
-    public async Task<IEnumerable<FeaturedDealOutputModel>> GetHotelsHavingRoomsWithHighestDiscountPercentage(int deals = 5)
-    {
-        throw new NotImplementedException();
-    }
-
-
     public async Task<(IEnumerable<Hotel>, PaginationMetadata)> GetAllHotelsAsync(GetHotelsQueryParameters request)
     {
         var query = _context.Hotels

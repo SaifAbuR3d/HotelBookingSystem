@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Discount;
+using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -12,7 +13,7 @@ namespace HotelBookingSystem.Api.Controllers;
 public class DiscountsController(IDiscountService discountService) : ControllerBase
 {
     [HttpPost("{roomId}/discounts")]
-    public async Task<ActionResult<DiscountOutputModel>> AddDiscount(Guid roomId,CreateDiscountCommand command)
+    public async Task<ActionResult<DiscountOutputModel>> AddDiscount(Guid roomId, CreateDiscountCommand command)
     {
         var discount = await discountService.AddDiscountAsync(roomId, command);
 
@@ -30,7 +31,7 @@ public class DiscountsController(IDiscountService discountService) : ControllerB
     [HttpDelete("{roomId}/discounts/{id}")]
     public async Task<ActionResult> DeleteDiscount(Guid roomId, Guid id)
     {
-        bool deleted = await  discountService.DeleteDiscountAsync(roomId, id);
+        bool deleted = await discountService.DeleteDiscountAsync(roomId, id);
 
         if (!deleted)
         {
@@ -39,5 +40,14 @@ public class DiscountsController(IDiscountService discountService) : ControllerB
 
         return NoContent();
     }
+
+    [HttpGet("featured-deals/{deals}")]
+    public async Task<ActionResult<IEnumerable<FeaturedDealOutputModel>>> GetFeaturedDeals(int deals = 5)
+    {
+        var featuredDeals = await discountService.GetFeaturedDealsAsync(deals);
+
+        return Ok(featuredDeals);
+    }
+
 
 }

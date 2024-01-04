@@ -15,5 +15,4 @@ public interface IHotelRepository
     Task<Hotel?> GetHotelByNameAsync(string Name);
     Task<HotelImage> AddHotelImageAsync(Hotel hotel, HotelImage hotelImage);
     Task<(IEnumerable<Hotel>, PaginationMetadata)> SearchAndFilterHotelsAsync(HotelSearchAndFilterParameters request);
-    Task<IEnumerable<HotelRoomAsFeaturedDealOutputModel>> GetHotelsHavingRoomsWithHighestDiscountPercentage(int deals);
 }
