@@ -2,6 +2,7 @@
 using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using HotelBookingSystem.Application.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Services;
@@ -45,9 +46,15 @@ public class GuestService(IGuestRepository guestRepository,
 
     public async Task<IEnumerable<RecentlyVisitedHotelOutputModel>> GetRecentlyVisitedHotelsAsync(Guid guestId, int count = 5)
     {
+        _logger.LogDebug("Validating {countRecentlyVisited}", count);
+        if (count <= 0 || count > 100)
+        {
+            throw new BadRequestException($"invalid parameter: {count}. Number of hotels must be between 1 and 100");
+        }
+
         _logger.LogInformation("GetRecentlyVisitedHotelsAsync started for guest with ID: {GuestId}, count: {recentlyVisitedHotelsCount}", guestId, count);
-        
-        _logger.LogDebug("Retrieving recent bookings for guest with ID: {GuestId} from the repository", guestId)
+
+        _logger.LogDebug("Retrieving recent bookings for guest with ID: {GuestId} from the repository", guestId);
         var recentBookings = await _guestRepository.GetRecentBookingsInDifferentHotelsAsync(guestId, count);
 
         _logger.LogDebug("Mapping the retrieved Booking entities to RecentlyVisitedHotelOutputModel"); 

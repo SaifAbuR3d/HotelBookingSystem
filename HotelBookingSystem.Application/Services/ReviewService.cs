@@ -126,8 +126,11 @@ public class ReviewService(IHotelRepository hotelRepository,
         _logger.LogDebug("Getting the average rating from the repository"); 
         var rating = await _reviewRepository.GetHotelAverageRatingAsync(hotel);
 
+        _logger.LogDebug("Rounding the rating to 1 decimal place"); 
+        double roundedRating = double.Round(rating, 1);
+
         _logger.LogInformation("GetHotelAverageRatingAsync for hotel with ID: {HotelId} completed successfully", id);
-        return double.Round(rating, 1);
+        return roundedRating; 
 
     }
 }

@@ -80,10 +80,21 @@ public class CityService(ICityRepository cityRepository,
 
     public async Task<IEnumerable<CityAsTrendingDestinationOutputModel>> MostVisitedCitiesAsync(int count = 5)
     {
-        _logger.LogInformation("MostVisitedCitiesAsync started with count: {count}", count); 
+        _logger.LogInformation("MostVisitedCitiesAsync started with count: {count}", count);
+
+        _logger.LogDebug("Validating {countMostVisited}", count); 
+        if (count <= 0 || count > 100)
+        {
+            throw new BadRequestException($"invalid parameter: {count}. Number of cities must be between 1 and 100"); 
+        }
 
         _logger.LogDebug("Getting the most visited cities from the repository");
         var cities = await _cityRepository.MostVisitedCitiesAsync(count);
+
+        if(!cities.Any())
+        {
+            _logger.LogError("No Cities were retrieved from the repository at MostVisitedCitiesAsync");
+        }
 
         _logger.LogDebug("Mapping the City Entities to CityAsTrendingDestinationOutputModel");
         var mapped = _mapper.Map<IEnumerable<CityAsTrendingDestinationOutputModel>>(cities);
@@ -126,9 +137,4 @@ public class CityService(ICityRepository cityRepository,
     {
         return await _cityRepository.CityExistsAsync(id);
     }
-
-
-
-
-    
 }
