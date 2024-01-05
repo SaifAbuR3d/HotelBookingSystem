@@ -18,7 +18,9 @@ public class RoomService(IHotelRepository hotelRepository,
 {
     private readonly IHotelRepository _hotelRepository = hotelRepository;
     private readonly IRoomRepository _roomRepository = roomRepository;
+
     private readonly IMapper _mapper = mapper;
+
     private readonly IImageHandler _imageHandler = imageHandler;
 
     public async Task<(IEnumerable<RoomOutputModel>, PaginationMetadata)> GetAllRoomsAsync(GetRoomsQueryParameters parameters)

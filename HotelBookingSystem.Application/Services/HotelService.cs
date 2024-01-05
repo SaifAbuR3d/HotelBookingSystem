@@ -8,6 +8,7 @@ using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Services;
 
@@ -15,13 +16,18 @@ public class HotelService(IHotelRepository hotelRepository,
                           ICityRepository cityRepository,
                           IGuestRepository guestRepository,
                           IMapper mapper,
-                          IImageHandler imageHandler) : IHotelService
+                          IImageHandler imageHandler, 
+                          ILogger<HotelService> logger) : IHotelService
 {
     private readonly IHotelRepository _hotelRepository = hotelRepository;
     private readonly ICityRepository _cityRepository = cityRepository;
     private readonly IGuestRepository _guestRepository = guestRepository;
+
     private readonly IMapper _mapper = mapper;
+
     private readonly IImageHandler _imageHandler = imageHandler;
+
+    private readonly ILogger<HotelService> _logger = logger;
 
 
     public async Task<(IEnumerable<HotelOutputModel>, PaginationMetadata)> GetAllHotelsAsync(GetHotelsQueryParameters request)
@@ -115,10 +121,15 @@ public class HotelService(IHotelRepository hotelRepository,
 
     public async Task<(IEnumerable<HotelSearchResultOutputModel>, PaginationMetadata)> SearchAndFilterHotelsAsync(HotelSearchAndFilterParameters request)
     {
+        _logger.LogInformation("SearchAndFilterHotelsAsync started with request: {@HotelSearchAndFilterParameters}", request);
+
+        _logger.LogDebug("Searching and filtering hotels from the repository");
         var (hotels, paginationMetadata) = await _hotelRepository.SearchAndFilterHotelsAsync(request);
 
+        _logger.LogDebug("Mapping the Hotel Entities to HotelSearchResultOutputModel");
         var mapped = _mapper.Map<IEnumerable<HotelSearchResultOutputModel>>(hotels);
 
+        _logger.LogInformation("SearchAndFilterHotelsAsync completed successfully with request: {@HotelSearchAndFilterParameters}", request);
         return (mapped, paginationMetadata);
     }
 }
