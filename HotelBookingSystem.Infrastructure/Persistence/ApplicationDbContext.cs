@@ -28,19 +28,24 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Computed properties are not persisted 
-        modelBuilder.Entity<Hotel>()
-                    .Ignore(h => h.RoomsNumber);
-        modelBuilder.Entity<Discount>()
-                    .Ignore(d => d.IsActive);
-        modelBuilder.Entity<Discount>()
-                    .Ignore(d => d.OriginalPrice);
-        modelBuilder.Entity<Discount>()
-                    .Ignore(d => d.DiscountedPrice);
+        IgnoreComputedProperties(modelBuilder);
 
+        SetPrecisionForFloatingPointTypes(modelBuilder);
+
+        SeedData(modelBuilder);
+    }
+
+    private void SetPrecisionForFloatingPointTypes(ModelBuilder modelBuilder)
+    {
         // set precision for decimal properties
         modelBuilder.Entity<Room>()
                     .Property(r => r.Price)
+                    .HasPrecision(18, 2);
+        modelBuilder.Entity<Booking>()
+                    .Property(b => b.Price)
+                    .HasPrecision(18, 2);
+        modelBuilder.Entity<Discount>()
+                    .Property(d => d.Percentage)
                     .HasPrecision(18, 2);
 
         // set precision for double properties
@@ -50,11 +55,21 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Hotel>()
                     .Property(h => h.Longitude)
                     .HasPrecision(9, 6);
-
-        SeedData(modelBuilder);
     }
 
-    private void SeedData(ModelBuilder modelBuilder)
+    private void IgnoreComputedProperties(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Hotel>()
+                    .Ignore(h => h.RoomsNumber);
+        modelBuilder.Entity<Discount>()
+                    .Ignore(d => d.IsActive);
+        modelBuilder.Entity<Discount>()
+                    .Ignore(d => d.OriginalPrice);
+        modelBuilder.Entity<Discount>()
+                    .Ignore(d => d.DiscountedPrice);
+    }
+
+    private static void SeedData(ModelBuilder modelBuilder)
     {
         var newYorkId = new Guid("1183b59c-f7f8-4b21-b1df-5149fb57984e");
         var londonId = new Guid("1283b59c-f7f8-4b21-b1df-5149fb57984e");
