@@ -6,7 +6,7 @@ namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 
 public interface ICityRepository
 {
-    Task<City> AddCityAsync(City city); // 
+    Task<City> AddCityAsync(City city);
     Task<bool> CityExistsAsync(Guid id);
     Task<(IEnumerable<City>, PaginationMetadata)> GetAllCitiesAsync(GetCitiesQueryParameters request);
     Task<City?> GetCityAsync(Guid id);

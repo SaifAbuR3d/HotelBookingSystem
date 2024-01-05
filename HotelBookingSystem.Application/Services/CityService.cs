@@ -8,16 +8,22 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Services;
 
 public class CityService(ICityRepository cityRepository,
                          IMapper mapper,
-                         IImageHandler imageHandler) : ICityService
+                         IImageHandler imageHandler, 
+                         ILogger<CityService> logger) : ICityService
 {
     private readonly ICityRepository _cityRepository = cityRepository;
+
     private readonly IMapper _mapper = mapper;
+
     private readonly IImageHandler _imageHandler = imageHandler;
+
+    private readonly ILogger<CityService> _logger = logger;
 
     public async Task<(IEnumerable<CityOutputModel>, PaginationMetadata)> GetAllCitiesAsync(GetCitiesQueryParameters request)
     {
@@ -74,8 +80,16 @@ public class CityService(ICityRepository cityRepository,
 
     public async Task<IEnumerable<CityAsTrendingDestinationOutputModel>> MostVisitedCitiesAsync(int count = 5)
     {
+        _logger.LogInformation("MostVisitedCitiesAsync started with count: {count}", count); 
+
+        _logger.LogDebug("Getting the most visited cities from the repository");
         var cities = await _cityRepository.MostVisitedCitiesAsync(count);
-        return _mapper.Map<IEnumerable<CityAsTrendingDestinationOutputModel>>(cities);
+
+        _logger.LogDebug("Mapping the City Entities to CityAsTrendingDestinationOutputModel");
+        var mapped = _mapper.Map<IEnumerable<CityAsTrendingDestinationOutputModel>>(cities);
+
+        _logger.LogInformation("MostVisitedCitiesAsync completed successfully with count: {count}", count);
+        return mapped; 
     }
 
     public async Task<bool> UploadImageAsync(Guid cityId, IFormFile file, string basePath, string? alternativeText, bool? thumbnail = false)
