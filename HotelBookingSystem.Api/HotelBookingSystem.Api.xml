@@ -594,19 +594,39 @@
             <response code="200">Returns the list of rooms based on the query parameters.</response>
             <response code="400">If the request parameters are invalid or missing.</response>
         </member>
-        <member name="T:HotelBookingSystem.Api.GlobalExceptionHandler">
+        <member name="T:HotelBookingSystem.Api.Filters.LogActivityFilter">
+            <summary>
+            Filter to log requests to the API
+            </summary>
+            <param name = "logger" ></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Filters.LogActivityFilter.#ctor(Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Filters.LogActivityFilter})">
+            <summary>
+            Filter to log requests to the API
+            </summary>
+            <param name = "logger" ></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Filters.LogActivityFilter.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            log the action name and action arguments and controller name before and after the action is executed
+            </summary>
+            <param name = "context" ></param >
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler">
             <summary>
             Exception Handling Middleware
             </summary>
             <param name="logger"></param>
         </member>
-        <member name="M:HotelBookingSystem.Api.GlobalExceptionHandler.#ctor(Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.GlobalExceptionHandler})">
+        <member name="M:HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler.#ctor(Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler})">
             <summary>
             Exception Handling Middleware
             </summary>
             <param name="logger"></param>
         </member>
-        <member name="M:HotelBookingSystem.Api.GlobalExceptionHandler.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
+        <member name="M:HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
             <summary>
             Handles the exception
             </summary>
