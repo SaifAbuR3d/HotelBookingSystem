@@ -2,27 +2,23 @@
 using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Services;
 
-public class GuestService : IGuestService
+public class GuestService(IGuestRepository guestRepository,
+                          IBookingRepository bookingRepository,
+                          IHotelRepository hotelRepository,
+                          IMapper mapper, 
+                          ILogger<GuestService> logger) : IGuestService
 {
-    private readonly IGuestRepository _guestRepository;
-    private readonly IBookingRepository _bookingRepository;
-    private readonly IHotelRepository _hotelRepository;
-    private readonly IMapper _mapper;
+    private readonly IGuestRepository _guestRepository = guestRepository;
+    private readonly IBookingRepository _bookingRepository = bookingRepository;
+    private readonly IHotelRepository _hotelRepository = hotelRepository;
 
+    private readonly IMapper _mapper = mapper;
 
-    public GuestService(IGuestRepository guestRepository,     
-      IBookingRepository bookingRepository,
-      IHotelRepository hotelRepository, 
-      IMapper mapper)
-    {
-        _guestRepository = guestRepository;
-        _bookingRepository = bookingRepository;
-        _hotelRepository = hotelRepository;
-        _mapper = mapper;
-    }
+    private readonly ILogger<GuestService> _logger = logger;
 
     /// <summary>
     /// Retrieves a collection of unique recently visited hotels for a guest, presenting essential details.
@@ -49,8 +45,14 @@ public class GuestService : IGuestService
 
     public async Task<IEnumerable<RecentlyVisitedHotelOutputModel>> GetRecentlyVisitedHotelsAsync(Guid guestId, int count = 5)
     {
+        _logger.LogInformation("GetRecentlyVisitedHotelsAsync started for guest with ID: {GuestId}, count: {recentlyVisitedHotelsCount}", guestId, count);
+        
+        _logger.LogDebug("Retrieving recent bookings for guest with ID: {GuestId} from the repository", guestId)
         var recentBookings = await _guestRepository.GetRecentBookingsInDifferentHotelsAsync(guestId, count);
 
-        return _mapper.Map<IEnumerable<RecentlyVisitedHotelOutputModel>>(recentBookings);
+        _logger.LogDebug("Mapping the retrieved Booking entities to RecentlyVisitedHotelOutputModel"); 
+        var mapped = _mapper.Map<IEnumerable<RecentlyVisitedHotelOutputModel>>(recentBookings);
+
+        return mapped; 
     }
 }
