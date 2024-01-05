@@ -17,7 +17,17 @@ public class UpdateHotelCommand
     /// <summary>
     /// Location of the hotel
     /// </summary>
-    public string Location { get; set; } = default!;
+    public string Street { get; set; } = default!;
+
+    /// <summary>
+    /// Latitude for the hotel  
+    /// </summary>
+    public double Latitude { get; set; }
+
+    /// <summary>
+    /// Longitude for the hotel
+    /// </summary>
+    public double Longitude { get; set; }
 
     /// <summary>
     /// City name where the hotel is located

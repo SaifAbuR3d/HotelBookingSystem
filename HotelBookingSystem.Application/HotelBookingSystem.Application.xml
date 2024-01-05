@@ -124,9 +124,19 @@
             Star Rate of the hotel
             </summary>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.Location">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.Street">
             <summary>
-            Location of the hotel
+            Street of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.Latitude">
+            <summary>
+            Latitude for the hotel  
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.Longitude">
+            <summary>
+            Longitude for the hotel
             </summary>
         </member>
         <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.CityName">
@@ -149,9 +159,19 @@
             Owner of the hotel
             </summary>>
         </member>
-        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.Location">
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.Street">
             <summary>
             Location of the hotel
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.Latitude">
+            <summary>
+            Latitude for the hotel  
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.Longitude">
+            <summary>
+            Longitude for the hotel
             </summary>
         </member>
         <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand.CityName">

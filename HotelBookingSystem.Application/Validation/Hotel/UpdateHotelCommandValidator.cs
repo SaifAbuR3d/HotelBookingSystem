@@ -6,6 +6,7 @@ namespace HotelBookingSystem.Application.Validation.Hotel;
 
 using static Domain.Models.Constants.Common;
 using static Domain.Models.Constants.Hotel;
+using static Domain.Models.Constants.Location;
 
 public class UpdateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
 {
@@ -23,7 +24,15 @@ public class UpdateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
         RuleFor(h => h.StarRate)
             .InclusiveBetween(MinHotelStars, MaxHotelStars);
 
-        RuleFor(h => h.Location) ////
+        RuleFor(h => h.Street)
             .NotEmpty();
+
+        RuleFor(h => h.Latitude)
+            .NotEmpty()
+            .InclusiveBetween(MinLatitude, MaxLatitude);
+
+        RuleFor(h => h.Longitude)
+            .NotEmpty()
+            .InclusiveBetween(MinLongitude, MaxLongitude);
     }
 }
