@@ -1,8 +1,7 @@
 ﻿using HotelBookingSystem.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Diagnostics;
-
-namespace HotelBookingSystem.Api;
+namespace HotelBookingSystem.Api.Middlewares;
 
 /// <summary>
 /// Exception Handling Middleware
@@ -21,8 +20,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
     {
         var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
-        logger.LogError("Request Failure {@ErrorType}, {@ErrorMessage}, {@DateTimeUtc}",
-                           exception.GetType().Name, exception.Message, DateTime.UtcNow);
+        Log(exception);
 
         var (statusCode, title, detail) = MapException(exception);
 
@@ -32,11 +30,11 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             detail: detail,
             extensions: new Dictionary<string, object?>
             {
-            //["errors"] = new Dictionary<string, string[]>
-            //{
-            //    [exception.GetType().Name] = [exception.Message]
-            //},
-               ["traceId"] = traceId
+                //["errors"] = new Dictionary<string, string[]>
+                //{
+                //    [exception.GetType().Name] = [exception.Message]
+                //},
+                ["traceId"] = traceId
             }
 
             ).ExecuteAsync(httpContext);
@@ -55,5 +53,19 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             BadRequestException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Something went wrong", "We made a mistake but we are working on it")
         };
+    }
+    private void Log(Exception exception)
+    {
+        if (exception is CustomException)
+        {
+            var (statusCode, title, detail) = MapException(exception);
+
+            logger.LogWarning("Could not complete the request, responded with {statusCode}, {title}, {detail}", statusCode, title, detail);
+        }
+        else
+        {
+            logger.LogError(exception, "Request Failure {@ErrorType}, {@ErrorMessage}, {@DateTimeUtc}",
+                  exception.GetType().Name, exception.Message, DateTime.UtcNow);
+        }
     }
 }
