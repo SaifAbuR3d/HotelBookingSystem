@@ -10,7 +10,8 @@ namespace HotelBookingSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BookingsController(IBookingService bookingService) : ControllerBase
+public class BookingsController(IBookingService bookingService, 
+                                ILogger<BookingsController> logger) : ControllerBase
 {
     /// <summary>
     /// Get a booking by its id
@@ -22,8 +23,11 @@ public class BookingsController(IBookingService bookingService) : ControllerBase
     [HttpGet("{id}", Name = "GetBookingAsync")]
     public async Task<ActionResult<BookingConfirmationOutputModel>> GetBooking(Guid id)
     {
+        logger.LogInformation("GetBooking started for booking with ID: {BookingId}", id);
+
         var booking = await bookingService.GetBookingAsync(id);
 
+        logger.LogInformation("GetBooking for booking with ID: {BookingId} completed successfully", id);
         return Ok(booking);
     }
 
@@ -54,8 +58,11 @@ public class BookingsController(IBookingService bookingService) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<BookingConfirmationOutputModel>> CreateBooking(CreateBookingCommand request)
     {
+        logger.LogInformation("CreateBooking started for request: {@CreateBooking}", request);
+
         var booking = await bookingService.CreateBookingAsync(request);
 
+        logger.LogInformation("CreateBooking for request: {@CreateBooking} completed successfully", request);
         return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
     }
 
@@ -70,8 +77,11 @@ public class BookingsController(IBookingService bookingService) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBooking(Guid id)
     {
+        logger.LogInformation("DeleteBooking started for booking with ID: {BookingId}", id);
+
         await bookingService.DeleteBookingAsync(id);
 
+        logger.LogInformation("DeleteBooking for booking with ID: {BookingId} completed successfully", id);
         return NoContent();
     }
 }

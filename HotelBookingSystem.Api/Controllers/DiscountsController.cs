@@ -10,13 +10,14 @@ namespace HotelBookingSystem.Api.Controllers;
 /// </summary>
 [Route("api/rooms")]
 [ApiController]
-public class DiscountsController(IDiscountService discountService) : ControllerBase
+public class DiscountsController(IDiscountService discountService, 
+                                 ILogger<DiscountsController> logger) : ControllerBase
 {
     /// <summary>
     /// Create a new discount
     /// </summary>
     /// <param name="roomId">The id of the room</param>
-    /// <param name="command">The data for the new discount</param>
+    /// <param name="request">The data for the new discount</param>
     /// <remarks>
     /// Sample request:
     ///
@@ -34,10 +35,14 @@ public class DiscountsController(IDiscountService discountService) : ControllerB
     /// <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
     /// <response code="400">If the request data is invalid</response>
     [HttpPost("{roomId}/discounts")]
-    public async Task<ActionResult<DiscountOutputModel>> AddDiscount(Guid roomId, CreateDiscountCommand command)
+    public async Task<ActionResult<DiscountOutputModel>> AddDiscount(Guid roomId, CreateDiscountCommand request)
     {
-        var discount = await discountService.AddDiscountAsync(roomId, command);
+        logger.LogInformation("AddDiscount started for room with ID: {RoomId}, request: {@CreateDiscount}",
+            roomId, request);
 
+        var discount = await discountService.AddDiscountAsync(roomId, request);
+
+        logger.LogInformation("AddDiscount for room with ID: {RoomId}, request: {@CreateDiscount} completed successfully", roomId, request);
         return CreatedAtAction(nameof(GetDiscount), new { roomId = discount.RoomId, id = discount.Id }, discount);
     }
 
@@ -53,8 +58,11 @@ public class DiscountsController(IDiscountService discountService) : ControllerB
     [HttpGet("{roomId}/discounts/{id}", Name = "GetDiscount")]
     public async Task<ActionResult<DiscountOutputModel>> GetDiscount(Guid roomId, Guid id)
     {
-        DiscountOutputModel discount = await discountService.GetDiscountAsync(roomId, id);
+        logger.LogInformation("GetDiscount started for room with ID: {RoomId}, discount with ID: {DiscountId}", roomId, id);
 
+        var discount = await discountService.GetDiscountAsync(roomId, id);
+
+        logger.LogInformation("GetDiscount for room with ID: {RoomId}, discount with ID: {DiscountId} completed successfully", roomId, id);
         return Ok(discount);
     }
 
@@ -71,8 +79,11 @@ public class DiscountsController(IDiscountService discountService) : ControllerB
     [HttpDelete("{roomId}/discounts/{id}")]
     public async Task<ActionResult> DeleteDiscount(Guid roomId, Guid id)
     {
-        bool deleted = await discountService.DeleteDiscountAsync(roomId, id);
+        logger.LogInformation("DeleteDiscount started for room with ID: {RoomId}, discount with ID: {DiscountId}", roomId, id);
 
+        await discountService.DeleteDiscountAsync(roomId, id);
+
+        logger.LogInformation("DeleteDiscount for room with ID: {RoomId}, discount with ID: {DiscountId} completed successfully", roomId, id);
         return NoContent();
     }
 
@@ -101,8 +112,11 @@ public class DiscountsController(IDiscountService discountService) : ControllerB
     [HttpGet("featured-deals/{deals}")]
     public async Task<ActionResult<IEnumerable<FeaturedDealOutputModel>>> GetFeaturedDeals(int deals = 5)
     {
+        logger.LogInformation("GetFeaturedDeals started with count: {featuredDealsCount}", deals);
+
         var featuredDeals = await discountService.GetFeaturedDealsAsync(deals);
 
+        logger.LogInformation("GetFeaturedDeals with count: {featuredDealsCount} completed successfully", deals);
         return Ok(featuredDeals);
     }
 

@@ -5,6 +5,7 @@ using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.DTOs.Review;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography.Xml;
 using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -15,7 +16,9 @@ namespace HotelBookingSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HotelsController(IHotelService hotelService, IWebHostEnvironment environment) : ControllerBase
+public class HotelsController(IHotelService hotelService,
+                              IWebHostEnvironment environment, 
+                              ILogger<HotelsController> logger) : ControllerBase
 {
 
     /// <summary>
@@ -28,8 +31,11 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     [HttpGet("{id}", Name = "GetHotel")]
     public async Task<ActionResult<HotelOutputModel>> GetHotel(Guid id)
     {
+        logger.LogInformation("GetHotel started for hotel with ID: {HotelId}", id);
+
         var hotel = await hotelService.GetHotelAsync(id);
 
+        logger.LogInformation("GetHotel for hotel with ID: {HotelId} completed successfully", id);
         return Ok(hotel);
     }
 
@@ -57,8 +63,11 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     [HttpPost]
     public async Task<ActionResult<HotelOutputModel>> CreateHotel(CreateHotelCommand request)
     {
+        logger.LogInformation("CreateHotel started for request: {@CreateHotel}", request);
+
         var hotel = await hotelService.CreateHotelAsync(request);
 
+        logger.LogInformation("CreateHotel for request: {@CreateHotel} completed successfully", request);
         return CreatedAtAction(nameof(GetHotel), new { id = hotel.Id }, hotel);
     }
 
@@ -73,13 +82,11 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteHotel(Guid id)
     {
-        var deleted = await hotelService.DeleteHotelAsync(id);
+        logger.LogInformation("DeleteHotel started for hotel with ID: {HotelId}", id);
 
-        if (!deleted)
-        {
-            return NotFound();
-        }
+        await hotelService.DeleteHotelAsync(id);
 
+        logger.LogInformation("DeleteHotel for hotel with ID: {HotelId} completed successfully", id);
         return NoContent();
     }
 
@@ -96,13 +103,11 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateHotel(Guid id, UpdateHotelCommand request)
     {
-        var updated = await hotelService.UpdateHotelAsync(id, request);
-       
-        if (!updated)
-        {
-            return NotFound();
-        }
+        logger.LogInformation("UpdateHotel started for hotel with ID: {HotelId}, request: {@UpdateHotel} ", id, request);
 
+        await hotelService.UpdateHotelAsync(id, request);
+
+        logger.LogInformation("UpdateHotel completed successfully for hotel with ID: {HotelId}, request: {@UpdateHotel}", id, request);
         return NoContent();
     }
 
@@ -121,13 +126,11 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     [HttpPost("{id}/images")]
     public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
     {
-        var uploaded = await hotelService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
+        logger.LogInformation("UploadImage started for hotel with ID: {HotelId}", id);
 
-        if (!uploaded)
-        {
-            return NotFound();
-        }
+        await hotelService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
 
+        logger.LogInformation("UploadImage completed successfully for hotel with ID: {HotelId}", id);
         return NoContent();
     }
 
@@ -154,12 +157,15 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     [HttpGet(Name = "GetHotels")]
     public async Task<ActionResult<IEnumerable<HotelOutputModel>>> GetHotels([FromQuery] GetHotelsQueryParameters request)
     {
+        logger.LogInformation("GetHotels started for query: {@GetHotelsQuery}", request);
+
         var (hotels, paginationMetadata) = await hotelService.GetAllHotelsAsync(request);
 
         AddPageLinks(paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
+        logger.LogInformation("GetHotels for query: {@GetHotelsQuery} completed successfully", request);
         return Ok(hotels);
     }
 
@@ -187,26 +193,43 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     [HttpGet("search", Name = "SearchHotels")]
     public async Task<ActionResult<IEnumerable<HotelSearchResultOutputModel>>> SearchAndFilterHotels([FromQuery] HotelSearchAndFilterParameters request)
     {
+        logger.LogInformation("SearchAndFilterHotels started for query: {@HotelSearchAndFilterParameters}", request);
+
         var (hotels, paginationMetadata) = await hotelService.SearchAndFilterHotelsAsync(request);
 
-        AddPageLinks(paginationMetadata, request); 
+        AddPageLinks(paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
+        logger.LogInformation("SearchAndFilterHotels for query: {@HotelSearchAndFilterParameters} completed successfully", request);
         return Ok(hotels);
     }
 
     
     private void AddPageLinks(PaginationMetadata paginationMetadata, HotelSearchAndFilterParameters parameters)
     {
+        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+
         paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
         paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+
+        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
+
     }
-     
+
     private string? CreatePageLink(PaginationMetadata paginationMetadata, HotelSearchAndFilterParameters parameters, bool next)
     {
+        if (next)
+        {
+            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+        else
+        {
+            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+
         var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        return
+        var link =
             Url.Link("SearchHotels", new
             {
                 sortOrder = parameters.SortOrder,
@@ -227,18 +250,34 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
                 amenities = parameters?.Amenities,
                 roomTypes = parameters?.RoomTypes
             });
+
+        return link; 
     }
 
     private void AddPageLinks(PaginationMetadata paginationMetadata, GetHotelsQueryParameters parameters)
     {
+        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+
         paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
         paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+
+        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
+
     }
 
     private string? CreatePageLink(PaginationMetadata paginationMetadata, GetHotelsQueryParameters parameters, bool next)
     {
+        if (next)
+        {
+            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+        else
+        {
+            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+
         var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        return
+        var link =
             Url.Link("GetHotels", new
             {
                 sortOrder = parameters.SortOrder,
@@ -247,6 +286,8 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
                 pageSize = paginationMetadata.PageSize,
                 searchQuery = parameters.SearchTerm,
             });
+
+        return link; 
     }
 
 

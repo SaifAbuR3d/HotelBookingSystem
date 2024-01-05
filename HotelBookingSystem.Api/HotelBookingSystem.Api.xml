@@ -9,7 +9,7 @@
             API endpoints for managing bookings
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IBookingService)">
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IBookingService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.BookingsController})">
             <summary>
             API endpoints for managing bookings
             </summary>>
@@ -179,7 +179,7 @@
             API endpoints for managing Discounts
             </summary>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IDiscountService)">
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IDiscountService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.DiscountsController})">
             <summary>
             API endpoints for managing Discounts
             </summary>
@@ -189,7 +189,7 @@
              Create a new discount
              </summary>
              <param name="roomId">The id of the room</param>
-             <param name="command">The data for the new discount</param>
+             <param name="request">The data for the new discount</param>
              <remarks>
              Sample request:
             
@@ -236,11 +236,10 @@
             <remarks>
             This endpoint allows clients to retrieve a curated list of featured deals.
             The response includes essential details for each deal,
-            such as its unique identifier, title, description, and discounted price.
+            such as its hotel name, room type, star rating, discount percentage, and discounted price.
             
             The number of featured deals to be retrieved can be specified
-            using the <paramref name="deals"/> parameter.
-            If no count is provided, the default is set to 5.
+            using the <paramref name="deals"/> parameter. If no count is provided, the default is set to 5.
             
             Sample request:
             
@@ -258,7 +257,7 @@
             Controller for managing guests
             </summary>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IGuestService)">
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IGuestService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.GuestsController})">
             <summary>
             Controller for managing guests
             </summary>
@@ -290,7 +289,7 @@
             API endpoints for managing hotels
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IHotelService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IHotelService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.HotelsController})">
             <summary>
             API endpoints for managing hotels
             </summary>>
@@ -406,7 +405,7 @@
             API endpoints for managing hotels reviews
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IReviewService)">
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IReviewService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.ReviewsController})">
             <summary>
             API endpoints for managing hotels reviews
             </summary>>
@@ -505,7 +504,7 @@
             API endpoints for managing rooms
             </summary>>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IRoomService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IRoomService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.RoomsController})">
             <summary>
             API endpoints for managing rooms
             </summary>>

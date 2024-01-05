@@ -14,7 +14,9 @@ namespace HotelBookingSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RoomsController(IRoomService roomService, IWebHostEnvironment environment) : ControllerBase
+public class RoomsController(IRoomService roomService,
+                             IWebHostEnvironment environment, 
+                             ILogger<RoomsController> logger) : ControllerBase
 {
 
     /// <summary>
@@ -27,8 +29,11 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     [HttpGet("{id}")]
     public async Task<ActionResult<RoomOutputModel>> GetRoom(Guid id)
     {
+        logger.LogInformation("GetRoom started for room with ID: {RoomId}", id);
+
         var room = await roomService.GetRoomAsync(id);
 
+        logger.LogInformation("GetRoom for room with ID: {RoomId} completed successfully", id);
         return Ok(room);
     }
 
@@ -56,8 +61,11 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     [HttpPost]
     public async Task<ActionResult<RoomOutputModel>> CreateRoom(CreateRoomCommand request)
     {
+        logger.LogInformation("CreateRoom started for request: {@CreateRoom}", request);
+
         var room = await roomService.CreateRoomAsync(request);
 
+        logger.LogInformation("CreateRoom for request: {@CreateRoom} completed successfully", request);
         return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, room);
     }
 
@@ -71,13 +79,11 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteRoom(Guid id)
     {
-        var deleted = await roomService.DeleteRoomAsync(id);
+        logger.LogInformation("DeleteRoom started for room with ID: {RoomId}", id);
 
-        if (!deleted)
-        {
-            return NotFound();
-        }
+        await roomService.DeleteRoomAsync(id);
 
+        logger.LogInformation("DeleteRoom for room with ID: {RoomId} completed successfully", id);
         return NoContent();
     }
 
@@ -93,13 +99,11 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     [HttpPut("{id}")]
     public async Task<ActionResult<RoomOutputModel>> UpdateRoom(Guid id, UpdateRoomCommand request)
     {
-        var updated = await roomService.UpdateRoomAsync(id, request);
+        logger.LogInformation("UpdateRoom started for room with ID: {RoomId} and request: {@UpdateRoom}", id, request);
 
-        if (!updated)
-        {
-            return NotFound();
-        }
+        await roomService.UpdateRoomAsync(id, request);
 
+        logger.LogInformation("UpdateRoom for room with ID: {RoomId} and request: {@UpdateRoom} completed successfully", id, request);
         return NoContent();
     }
 
@@ -118,13 +122,11 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     [HttpPost("{id}/images")]
     public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
     {
-        var uploaded = await roomService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
+        logger.LogInformation("UploadImage started for room with ID: {RoomId}", id);
 
-        if (!uploaded)
-        {
-            return NotFound();
-        }
+        await roomService.UploadImageAsync(id, file, environment.WebRootPath, alternativeText, thumbnail);
 
+        logger.LogInformation("UploadImage for room with ID: {RoomId} completed successfully", id);
         return NoContent();
     }
 
@@ -149,25 +151,42 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     [HttpGet(Name = "GetRooms")]
     public async Task<ActionResult<IEnumerable<RoomOutputModel>>> GetRooms([FromQuery] GetRoomsQueryParameters request)
     {
+        logger.LogInformation("GetRooms started for query: {@GetRoomsQuery}", request);
+
         var (rooms, paginationMetadata) = await roomService.GetAllRoomsAsync(request);
 
         AddPageLinks(paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
+        logger.LogInformation("GetRooms for query: {@GetRoomsQuery} completed successfully", request);
         return Ok(rooms);
     }
 
     private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
     {
+        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+
         paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
         paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+
+        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
+
     }
 
     private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
     {
+        if (next)
+        {
+            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+        else
+        {
+            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+        }
+
         var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        return
+        var link =
             Url.Link("GetRooms", new
             {
                 sortOrder = parameters.SortOrder,
@@ -176,5 +195,7 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
                 pageSize = paginationMetadata.PageSize,
                 searchQuery = parameters.SearchTerm,
             });
+
+        return link;
     }
 }

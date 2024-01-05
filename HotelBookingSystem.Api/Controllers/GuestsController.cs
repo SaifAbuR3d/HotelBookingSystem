@@ -9,7 +9,8 @@ namespace HotelBookingSystem.Api.Controllers;
 /// </summary>
 [Route("api/[controller]")]
 [ApiController]
-public class GuestsController(IGuestService guestService) : ControllerBase
+public class GuestsController(IGuestService guestService, 
+                              ILogger<GuestsController> logger) : ControllerBase
 {
 
     /// <summary>
@@ -35,6 +36,11 @@ public class GuestsController(IGuestService guestService) : ControllerBase
     [HttpGet("{guestId}/recently-visited-hotels")]
     public async Task<ActionResult<IEnumerable<RecentlyVisitedHotelOutputModel>>> GetRecentlyVisitedHotels(Guid guestId, int count = 5)
     {
-        return Ok(await guestService.GetRecentlyVisitedHotelsAsync(guestId, count));
+        logger.LogInformation("GetRecentlyVisitedHotels started for guest with ID: {GuestId}, count: {recentlyVisitedHotelsCount}", guestId, count); 
+
+        var hotels = await guestService.GetRecentlyVisitedHotelsAsync(guestId, count);
+
+        logger.LogInformation("GetRecentlyVisitedHotels for guest with ID: {GuestId}, count: {recentlyVisitedHotelsCount} completed successfully", guestId, count);
+        return Ok(hotels);
     }
 }

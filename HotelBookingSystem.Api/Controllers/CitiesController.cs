@@ -15,8 +15,11 @@ namespace HotelBookingSystem.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
-public class CitiesController(ICityService cityService, IWebHostEnvironment environment, ILogger<CitiesController> logger) : ControllerBase
+public class CitiesController(ICityService cityService,
+                              IWebHostEnvironment environment,
+                              ILogger<CitiesController> logger) : ControllerBase
 {
+
     /// <summary>
     /// Get a city by its id
     /// </summary>
@@ -224,8 +227,6 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
                 pageSize = paginationMetadata.PageSize,
                 searchQuery = parameters.SearchTerm,
             });
-
-        logger.LogDebug("CreatePageLinks for next and previous pages has finished for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
 
         return link; 
     }
