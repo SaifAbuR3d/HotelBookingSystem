@@ -133,12 +133,26 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
 
 
     /// <summary>
-    /// Get all hotels
+    /// Retrieves a list of hotels based on the specified query parameters.
     /// </summary>
-    /// <returns>All hotels</returns>
-    /// <response code="200">Returns all hotels</response>
+    /// <remarks>
+    /// The retrieval of hotels can be customized by providing various query parameters.
+    /// These parameters include sorting options, page number, page size, and a search term.
+    /// 
+    /// Sample request:
+    /// 
+    ///     GET /hotels?sortOrder=asc&amp;sortColumn=name&amp;pageNumber=1&amp;pageSize=10&amp;searchQuery=Carlton
+    ///     
+    /// </remarks>
+    /// <param name="request">The query parameters for hotel retrieval.</param>
+    /// <returns>
+    /// A collection of <see cref="HotelOutputModel"/> objects, each representing a hotel that matches the specified criteria.
+    /// </returns>
+    /// <response code="200">Returns the list of hotels based on the query parameters.</response>
+    /// <response code="400">If the request parameters are invalid or missing.</response>
+
     [HttpGet(Name = "GetHotels")]
-    public async Task<ActionResult<IEnumerable<HotelOutputModel>>> GetAllHotels([FromQuery] GetHotelsQueryParameters request)
+    public async Task<ActionResult<IEnumerable<HotelOutputModel>>> GetHotels([FromQuery] GetHotelsQueryParameters request)
     {
         var (hotels, paginationMetadata) = await hotelService.GetAllHotelsAsync(request);
 
@@ -166,7 +180,7 @@ public class HotelsController(IHotelService hotelService, IWebHostEnvironment en
     /// </remarks>
     /// <param name="request">The query parameters for hotel search and filtering.</param>
     /// <returns>
-    /// a list of <see cref="HotelSearchResultOutputModel"/> representing the search results.
+    /// a collection of <see cref="HotelSearchResultOutputModel"/> representing the search results.
     /// </returns>
     /// <response code="200">Returns the list of hotels based on the search criteria.</response>
     /// <response code="400">If the request parameters are invalid or missing.</response>

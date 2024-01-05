@@ -22,6 +22,19 @@ public class ReviewsController(IReviewService reviewService) : ControllerBase
     /// </summary>
     /// <param name="hotelId">The ID of the hotel for which the review is added.</param>
     /// <param name="request">The model containing review details.</param>
+    /// <remarks>
+    /// This endpoint allows users to submit a review for a particular hotel identified by the provided <paramref name="hotelId"/>.
+    /// 
+    /// Sample request:
+    /// 
+    ///     POST /hotels/{hotelId}/reviews
+    ///     {
+    ///         "Title": "Amazing Experience",
+    ///         "Description": "The hotel provided exceptional service and comfortable accommodations.",
+    ///         "Rating": 5
+    ///     }
+    ///     
+    /// </remarks>
     /// <returns>The newly created Review</returns>
     /// <response code="201">Review successfully added.</response>
     /// <response code="400">Invalid input or missing required fields.</response>
@@ -113,12 +126,25 @@ public class ReviewsController(IReviewService reviewService) : ControllerBase
 
 
     /// <summary>
-    /// Get list of reviews for a hotel
+    /// Retrieves the reviews for a specific hotel based on the specified query parameters.
     /// </summary>
-    /// <param name="hotelId">The id of the hotel</param>
-    /// <returns>List of reviews for the hotel</returns>
-    /// <response code="200">Returns list of reviews for the hotel</response>
-    /// <response code="404">If the hotel is not found</response>
+    /// <remarks>
+    /// The retrieval of hotel reviews can be customized by providing various query parameters.
+    /// These parameters include sorting options, page number, page size, and a search term.
+    /// 
+    /// Sample request:
+    /// 
+    ///     GET /hotels/{hotelId}/reviews?sortOrder=desc&amp;sortColumn=creationDate&amp;pageNumber=1&amp;pageSize=5&amp;searchQuery=Excellent
+    ///     
+    /// </remarks>
+    /// <param name="hotelId">The unique identifier of the hotel.</param>
+    /// <param name="request">The query parameters for hotel review retrieval.</param>
+    /// <returns>
+    /// A collection of <see cref="ReviewOutputModel"/> objects, each representing a review that matches the specified criteria for the specified hotel.
+    /// </returns>
+    /// <response code="200">Returns the list of hotel reviews based on the query parameters.</response>
+    /// <response code="400">If the request parameters are invalid or missing.</response>
+    /// <response code="404">If the hotel is not found.</response>
     [HttpGet("{hotelId}/reviews", Name = "GetHotelReviews")]
     public async Task<ActionResult<ReviewOutputModel>> GetHotelReviews(Guid hotelId, [FromQuery] GetHotelReviewsQueryParameters request)
     {

@@ -107,7 +107,7 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
          .Include(r => r.Discounts)
          .Include(r => r.Hotel.City)
          .Include(r => r.Hotel.Images)
-         .Where(r => r.Discounts.Any(d => currentDate >= d.StartDate && currentDate < d.EndDate))
+         .Where(r => r.Discounts.Any(d => currentDate >= d.StartDate && currentDate < d.EndDate)) // only active discounts
 
          // if multiple discounts are active for a room, select the most recently added one
          .Select(r => new

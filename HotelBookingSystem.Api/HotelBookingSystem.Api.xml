@@ -8,13 +8,11 @@
             <summary>
             API endpoints for managing bookings
             </summary>>
-            
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IBookingService)">
             <summary>
             API endpoints for managing bookings
             </summary>>
-            
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.GetBooking(System.Guid)">
             <summary>
@@ -124,27 +122,21 @@
             Returns TOP N most visited cities, N is 5 by default
             </summary>
             <param name="count">The number of trending destinations to retrieve. Default is 5.</param>
-            <returns>
-            An asynchronous task representing the operation, returning an <see cref="T:Microsoft.AspNetCore.Mvc.ActionResult"/> containing a collection
-            of <see cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
-            </returns>
             <remarks>
-            <para>
             This endpoint allows clients to retrieve a curated list of trending destinations, specifically the topmost visited cities.
             The response includes essential details for each city, such as its unique identifier, name, and a visually appealing thumbnail.
-            </para>
-            <para>
+            
             The number of trending destinations to be retrieved can be specified using the <paramref name="count"/> parameter.
             If no count is provided, the default is set to 5.
-            </para>
+            
+            Sample request:
+            
+                GET /trending-destinations?count=3
+                
             </remarks>
-            <example>
-            <code>
-            // Retrieves the top 3 trending destinations
-            var trendingDestinations = await MostVisitedCities(3);
-            // Process the trendingDestinations ActionResult as needed.
-            </code>
-            </example>
+            <returns>
+            a collection of <see cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
+            </returns>
             <response code="200">Returns TOP N most visited cities, N is 5 by default</response>
             <seealso cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel"/>
         </member>
@@ -162,12 +154,25 @@
             <response code="400">If the request data is invalid</response>
             
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetAllCities(HotelBookingSystem.Application.DTOs.City.Query.GetCitiesQueryParameters)">
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetCities(HotelBookingSystem.Application.DTOs.City.Query.GetCitiesQueryParameters)">
             <summary>
-            Get all cities
+            Retrieves a list of cities based on the specified query parameters.
             </summary>
-            <returns>All cities</returns>
-            <response code="200">Returns all cities</response>
+            <remarks>
+            The retrieval of cities can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /cities?sortOrder=asc&amp;sortColumn=name
+                
+            </remarks>
+            <param name="request">The query parameters for city retrieval.</param>
+            <returns>
+            a collection of <see cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityOutputModel"/> objects, each representing a city that matches the specified criteria.
+            </returns>
+            <response code="200">Returns the list of cities based on the query parameters.</response>
+            <response code="400">If the request parameters are invalid or missing.</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.DiscountsController">
             <summary>
@@ -178,6 +183,75 @@
             <summary>
             API endpoints for managing Discounts
             </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.AddDiscount(System.Guid,HotelBookingSystem.Application.DTOs.Discount.CreateDiscountCommand)">
+             <summary>
+             Create a new discount
+             </summary>
+             <param name="roomId">The id of the room</param>
+             <param name="command">The data for the new discount</param>
+             <remarks>
+             Sample request:
+            
+                 POST /rooms/{roomId}/discounts
+                 {
+                    "Percentage": 20
+                    "StartDate": "2024-02-0200:00:00",
+                    "EndDate": "2024-03-03T00:00:00"
+                 }
+            
+             </remarks>
+             <returns>The newly created discount</returns>
+             <response code="201">Returns the newly created discount</response>
+             <response code="401">User is not authenticated.</response>
+             <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
+             <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.GetDiscount(System.Guid,System.Guid)">
+            <summary>
+            Get a discount by its id
+            </summary>
+            <param name="roomId">The id of the room</param>
+            <param name="id">The id of the discount</param>
+            <returns>The discount with the given id</returns>
+            <response code="200">Returns the discount with the given id</response>
+            <response code="404">If the discount is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.DeleteDiscount(System.Guid,System.Guid)">
+            <summary>
+            Delete a discount
+            </summary>
+            <param name="roomId">The id of the room</param>
+            <param name="id">The id of the discount</param>
+            <returns></returns>
+            <response code="204">If the discount is deleted</response>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
+            <response code="404">If the discount is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.GetFeaturedDeals(System.Int32)">
+            <summary>
+            Retrieves a collection of featured deals based on the specified count.
+            </summary>
+            <remarks>
+            This endpoint allows clients to retrieve a curated list of featured deals.
+            The response includes essential details for each deal,
+            such as its unique identifier, title, description, and discounted price.
+            
+            The number of featured deals to be retrieved can be specified
+            using the <paramref name="deals"/> parameter.
+            If no count is provided, the default is set to 5.
+            
+            Sample request:
+            
+                GET /featured-deals?deals=3
+                
+            </remarks>
+            <param name="deals">The number of featured deals to retrieve. Default is 5.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.FeaturedDealOutputModel"/> objects, each representing a featured deal.
+            </returns>
+            <response code="200">Returns the collection of featured deals.</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.GuestsController">
             <summary>
@@ -191,12 +265,24 @@
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.GetRecentlyVisitedHotels(System.Guid,System.Int32)">
             <summary>
-            Gets recently booked rooms for a guest
+            Retrieves a collection of unique recently visited hotels for a guest, presenting essential details.
             </summary>
-            <param name="guestId"></param>
-            <param name="count"></param>
-            <returns>the last 5 different hotels the guest visited</returns>
-            <response code = "200">Returns the last 5 different hotels the guest visited</response>>
+            <param name="guestId">The id of the guest for whom recently visited hotels are to be retrieved.</param>
+            <param name="count">The maximum number of unique recently visited hotels to retrieve. Default is 5.</param>
+            <remarks>
+            The resulting collection provides essential information about the last N different hotels the guest visited, such as hotel name, city name, star rating, and price.
+            
+            Sample request:
+            
+                GET guests/{guestId}/recently-visited-hotels?count=3
+                
+            </remarks>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/> objects, each representing an hotel the user recently visited
+            </returns>
+            <response code="200">Returns the last 5 different hotels the guest visited</response>>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
             <response code="404">If the guest is not found</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.HotelsController">
@@ -273,12 +359,25 @@
             <response code="404">If the hotel is not found</response>
             <response code="400">If the request data is invalid</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetAllHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.GetHotelsQueryParameters)">
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.GetHotelsQueryParameters)">
             <summary>
-            Get all hotels
+            Retrieves a list of hotels based on the specified query parameters.
             </summary>
-            <returns>All hotels</returns>
-            <response code="200">Returns all hotels</response>
+            <remarks>
+            The retrieval of hotels can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /hotels?sortOrder=asc&amp;sortColumn=name&amp;pageNumber=1&amp;pageSize=10&amp;searchQuery=Carlton
+                
+            </remarks>
+            <param name="request">The query parameters for hotel retrieval.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelOutputModel"/> objects, each representing a hotel that matches the specified criteria.
+            </returns>
+            <response code="200">Returns the list of hotels based on the query parameters.</response>
+            <response code="400">If the request parameters are invalid or missing.</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.SearchAndFilterHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.HotelSearchAndFilterParameters)">
              <summary>
@@ -297,7 +396,7 @@
              </remarks>
              <param name="request">The query parameters for hotel search and filtering.</param>
              <returns>
-             a list of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelSearchResultOutputModel"/> representing the search results.
+             a collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelSearchResultOutputModel"/> representing the search results.
              </returns>
              <response code="200">Returns the list of hotels based on the search criteria.</response>
              <response code="400">If the request parameters are invalid or missing.</response>
@@ -318,6 +417,19 @@
             </summary>
             <param name="hotelId">The ID of the hotel for which the review is added.</param>
             <param name="request">The model containing review details.</param>
+            <remarks>
+            This endpoint allows users to submit a review for a particular hotel identified by the provided <paramref name="hotelId"/>.
+            
+            Sample request:
+            
+                POST /hotels/{hotelId}/reviews
+                {
+                    "Title": "Amazing Experience",
+                    "Description": "The hotel provided exceptional service and comfortable accommodations.",
+                    "Rating": 5
+                }
+                
+            </remarks>
             <returns>The newly created Review</returns>
             <response code="201">Review successfully added.</response>
             <response code="400">Invalid input or missing required fields.</response>
@@ -368,12 +480,25 @@
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetHotelReviews(System.Guid,HotelBookingSystem.Application.DTOs.Review.Query.GetHotelReviewsQueryParameters)">
             <summary>
-            Get list of reviews for a hotel
+            Retrieves the reviews for a specific hotel based on the specified query parameters.
             </summary>
-            <param name="hotelId">The id of the hotel</param>
-            <returns>List of reviews for the hotel</returns>
-            <response code="200">Returns list of reviews for the hotel</response>
-            <response code="404">If the hotel is not found</response>
+            <remarks>
+            The retrieval of hotel reviews can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /hotels/{hotelId}/reviews?sortOrder=desc&amp;sortColumn=creationDate&amp;pageNumber=1&amp;pageSize=5&amp;searchQuery=Excellent
+                
+            </remarks>
+            <param name="hotelId">The unique identifier of the hotel.</param>
+            <param name="request">The query parameters for hotel review retrieval.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Review.OutputModel.ReviewOutputModel"/> objects, each representing a review that matches the specified criteria for the specified hotel.
+            </returns>
+            <response code="200">Returns the list of hotel reviews based on the query parameters.</response>
+            <response code="400">If the request parameters are invalid or missing.</response>
+            <response code="404">If the hotel is not found.</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.RoomsController">
             <summary>
@@ -450,12 +575,25 @@
             <response code="404">If the room is not found</response>
             <response code="400">If the request data is invalid</response>
         </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetAllRooms(HotelBookingSystem.Application.DTOs.Room.Query.GetRoomsQueryParameters)">
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetRooms(HotelBookingSystem.Application.DTOs.Room.Query.GetRoomsQueryParameters)">
             <summary>
-            Get all rooms
+            Retrieves a list of rooms based on the specified query parameters.
             </summary>
-            <returns>All rooms</returns>
-            <response code="200">Returns all rooms</response>
+            <remarks>
+            The retrieval of rooms can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /rooms?sortOrder=asc&amp;sortColumn=price&amp;pageNumber=1&amp;pageSize=10&amp;searchQuery=Ritz
+                
+            </remarks>
+            <param name="request">The query parameters for room retrieval.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Room.OutputModel.RoomOutputModel"/> objects, each representing a room that matches the specified criteria.
+            </returns>
+            <response code="200">Returns the list of rooms based on the query parameters.</response>
+            <response code="400">If the request parameters are invalid or missing.</response>
         </member>
         <member name="T:HotelBookingSystem.Api.GlobalExceptionHandler">
             <summary>

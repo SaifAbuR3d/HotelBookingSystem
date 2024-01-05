@@ -129,12 +129,25 @@ public class RoomsController(IRoomService roomService, IWebHostEnvironment envir
     }
 
     /// <summary>
-    /// Get all rooms
+    /// Retrieves a list of rooms based on the specified query parameters.
     /// </summary>
-    /// <returns>All rooms</returns>
-    /// <response code="200">Returns all rooms</response>
+    /// <remarks>
+    /// The retrieval of rooms can be customized by providing various query parameters.
+    /// These parameters include sorting options, page number, page size, and a search term.
+    /// 
+    /// Sample request:
+    /// 
+    ///     GET /rooms?sortOrder=asc&amp;sortColumn=price&amp;pageNumber=1&amp;pageSize=10&amp;searchQuery=Ritz
+    ///     
+    /// </remarks>
+    /// <param name="request">The query parameters for room retrieval.</param>
+    /// <returns>
+    /// A collection of <see cref="RoomOutputModel"/> objects, each representing a room that matches the specified criteria.
+    /// </returns>
+    /// <response code="200">Returns the list of rooms based on the query parameters.</response>
+    /// <response code="400">If the request parameters are invalid or missing.</response>
     [HttpGet(Name = "GetRooms")]
-    public async Task<ActionResult<IEnumerable<RoomOutputModel>>> GetAllRooms([FromQuery] GetRoomsQueryParameters request)
+    public async Task<ActionResult<IEnumerable<RoomOutputModel>>> GetRooms([FromQuery] GetRoomsQueryParameters request)
     {
         var (rooms, paginationMetadata) = await roomService.GetAllRoomsAsync(request);
 

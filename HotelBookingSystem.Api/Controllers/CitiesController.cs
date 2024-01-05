@@ -107,27 +107,21 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     /// Returns TOP N most visited cities, N is 5 by default
     /// </summary>
     /// <param name="count">The number of trending destinations to retrieve. Default is 5.</param>
-    /// <returns>
-    /// An asynchronous task representing the operation, returning an <see cref="ActionResult"/> containing a collection
-    /// of <see cref="CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
-    /// </returns>
     /// <remarks>
-    /// <para>
     /// This endpoint allows clients to retrieve a curated list of trending destinations, specifically the topmost visited cities.
     /// The response includes essential details for each city, such as its unique identifier, name, and a visually appealing thumbnail.
-    /// </para>
-    /// <para>
+    /// 
     /// The number of trending destinations to be retrieved can be specified using the <paramref name="count"/> parameter.
     /// If no count is provided, the default is set to 5.
-    /// </para>
+    /// 
+    /// Sample request:
+    /// 
+    ///     GET /trending-destinations?count=3
+    ///     
     /// </remarks>
-    /// <example>
-    /// <code>
-    /// // Retrieves the top 3 trending destinations
-    /// var trendingDestinations = await MostVisitedCities(3);
-    /// // Process the trendingDestinations ActionResult as needed.
-    /// </code>
-    /// </example>
+    /// <returns>
+    /// a collection of <see cref="CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
+    /// </returns>
     /// <response code="200">Returns TOP N most visited cities, N is 5 by default</response>
     /// <seealso cref="CityAsTrendingDestinationOutputModel"/>
     [HttpGet("trending-destinations")]
@@ -166,18 +160,31 @@ public class CitiesController(ICityService cityService, IWebHostEnvironment envi
     }
 
     /// <summary>
-    /// Get cities
+    /// Retrieves a list of cities based on the specified query parameters.
     /// </summary>
-    /// <returns> cities</returns>
-    /// <response code="200">Returns cities</response>
+    /// <remarks>
+    /// The retrieval of cities can be customized by providing various query parameters.
+    /// These parameters include sorting options, page number, page size, and a search term.
+    /// 
+    /// Sample request:
+    /// 
+    ///     GET /cities?sortOrder=asc&amp;sortColumn=name
+    ///     
+    /// </remarks>
+    /// <param name="request">The query parameters for city retrieval.</param>
+    /// <returns>
+    /// a collection of <see cref="CityOutputModel"/> objects, each representing a city that matches the specified criteria.
+    /// </returns>
+    /// <response code="200">Returns the list of cities based on the query parameters.</response>
+    /// <response code="400">If the request parameters are invalid or missing.</response>
     [HttpGet(Name = "GetCities")]
     public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetCities([FromQuery] GetCitiesQueryParameters request)
     {
-        logger.LogInformation("GetCities started for query: {@GetCitiesQuery}", request); 
+        logger.LogInformation("GetCities started for query: {@GetCitiesQuery}", request);
 
         var (cities, paginationMetadata) = await cityService.GetAllCitiesAsync(request);
 
-        AddPageLinks(paginationMetadata, request); 
+        AddPageLinks(paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 

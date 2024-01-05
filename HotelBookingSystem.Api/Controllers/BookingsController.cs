@@ -7,26 +7,11 @@ namespace HotelBookingSystem.Api.Controllers;
 /// <summary>
 /// API endpoints for managing bookings
 /// </summary>>
-/// 
+
 [Route("api/[controller]")]
 [ApiController]
 public class BookingsController(IBookingService bookingService) : ControllerBase
 {
-
-
-    /// <summary>
-    /// Get all bookings
-    /// </summary>
-    /// <returns>All bookings</returns>
-    /// <response code="200">Returns all bookings</response>
-    //[HttpGet]
-    //public async Task<ActionResult<IEnumerable<BookingConfirmationOutputModel>>> GetAllBookings()
-    //{
-    //    var bookings = await _bookingService.GetAllBookingsAsync();
-
-    //    return Ok(bookings);
-    //}
-
     /// <summary>
     /// Get a booking by its id
     /// </summary>
