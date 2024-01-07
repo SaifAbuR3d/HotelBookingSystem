@@ -1,7 +1,7 @@
 ﻿using HotelBookingSystem.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Diagnostics;
-namespace HotelBookingSystem.Api.Middleware;
+namespace HotelBookingSystem.Api.Middlewares;
 
 /// <summary>
 /// Exception Handling Middleware

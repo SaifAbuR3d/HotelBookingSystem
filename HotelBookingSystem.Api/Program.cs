@@ -1,10 +1,13 @@
 using HotelBookingSystem.Api.Filters;
+using HotelBookingSystem.Api.Middleware;
 using HotelBookingSystem.Api.Middlewares;
 using HotelBookingSystem.Application;
+using HotelBookingSystem.Application.Identity;
 using HotelBookingSystem.Infrastructure.Identity;
 using HotelBookingSystem.Infrastructure.Persistence;
 using Serilog;
 using System.Reflection;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +45,17 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.GuestOnly, policy => policy
+                                      .RequireRole(UserRoles.Guest)
+                                      .RequireClaim(ClaimTypes.NameIdentifier));
+
+    options.AddPolicy(Policies.AdminOnly, policy => policy
+                                      .RequireRole(UserRoles.Admin)
+                                      .RequireClaim(ClaimTypes.Role, UserRoles.Admin));
+});
+
 var app = builder.Build();
 
 
@@ -60,6 +74,8 @@ app.UseExceptionHandler();
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
