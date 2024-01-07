@@ -28,11 +28,14 @@ public class IdentityManager(UserManager<ApplicationUser> userManager,
 
         var roles = await _userManager.GetRolesAsync(user);
 
-        // TODO check user must have a role
+        if (roles.Count == 0)
+        {
+            throw new NoRolesException(user.Id);
+        }
 
         var token = jwtTokenGenerator.GenerateToken(user, roles);
 
-        return new LoginSuccessModel(user.Id, token); 
+        return new LoginSuccessModel(user.Id, token, roles.First()); 
     }
 
     public async Task<IUser> RegisterUser(RegisterUserModel model, string role)

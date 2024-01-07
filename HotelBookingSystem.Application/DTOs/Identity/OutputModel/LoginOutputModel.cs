@@ -2,13 +2,13 @@
 
 public class LoginOutputModel
 {
-    public LoginOutputModel(Guid guestId, string token)
+    public LoginOutputModel(string userId, string token)
     {
-        this.GuestId = guestId;
+        this.UserId = userId;
         this.Token = token;
     }
 
-    public Guid GuestId { get; }
+    public string UserId { get; }
 
     public string Token { get; }
 }

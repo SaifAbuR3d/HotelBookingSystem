@@ -60,6 +60,8 @@ public class GuestService(IGuestRepository guestRepository,
 
     public async Task<IEnumerable<RecentlyVisitedHotelOutputModel>> GetRecentlyVisitedHotelsAsync(Guid guestId, int count = 5)
     {
+        _logger.LogInformation("GetRecentlyVisitedHotelsAsync started for guest with ID: {GuestId}, count: {recentlyVisitedHotelsCount}", guestId, count);
+
         _logger.LogDebug("Validating {countRecentlyVisited}", count);
         if (count <= 0 || count > 100)
         {
@@ -73,8 +75,6 @@ public class GuestService(IGuestRepository guestRepository,
         {
             throw new NotFoundException(nameof(Guest), guestId);
         }
-
-        _logger.LogInformation("GetRecentlyVisitedHotelsAsync started for guest with ID: {GuestId}, count: {recentlyVisitedHotelsCount}", guestId, count);
 
         _logger.LogDebug("Retrieving recent bookings for guest with ID: {GuestId} from the repository", guestId);
         var recentBookings = await _guestRepository.GetRecentBookingsInDifferentHotelsAsync(guestId, count);
@@ -114,23 +114,30 @@ public class GuestService(IGuestRepository guestRepository,
     /// </returns>
     public async Task<IEnumerable<RecentlyVisitedHotelOutputModel>> GetRecentlyVisitedHotelsAsync(int count = 5)
     {
+        _logger.LogInformation("GetRecentlyVisitedHotelsAsync started for current user, count: {recentlyVisitedHotelsCount}", count);
+
+        _logger.LogDebug("Getting the user id from HttpContext"); 
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) 
             ?? throw new UnauthenticatedException();
 
+        _logger.LogDebug("Getting the user role from HttpContext");
         var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role)
             ?? throw new UnauthenticatedException();
 
-
+        _logger.LogDebug("Checking if the user is a guest");
         if (role != UserRoles.Guest)
         {
             throw new BadRequestException($"Invalid role: {role} at GetRecentlyVisitedHotelsAsync, user should be a {UserRoles.Guest}");
         }
 
+        _logger.LogDebug("Getting the guest id from the repository");
         var guestId = await _guestRepository.GetGuestIdByUserIdAsync(userId) 
             ?? throw new NotFoundException(nameof(Guest), userId);
 
+        _logger.LogDebug("Calling GetRecentlyVisitedHotelsAsync with guestId: {guestId}, count: {count}", guestId, count);
         var result = await GetRecentlyVisitedHotelsAsync(guestId, count);
 
+        _logger.LogInformation("GetRecentlyVisitedHotelsAsync finished for current user, count: {recentlyVisitedHotelsCount}", count);
         return result;
        
     }

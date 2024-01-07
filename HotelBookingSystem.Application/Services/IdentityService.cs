@@ -11,6 +11,7 @@ using HotelBookingSystem.Domain.Models;
 namespace HotelBookingSystem.Application.Services;
 
 public class IdentityService(IIdentityManager identityManager, 
+                             
                              IGuestRepository guestRepository) : IIdentityService
 {
     private readonly IIdentityManager _identityManager = identityManager;
@@ -20,11 +21,18 @@ public class IdentityService(IIdentityManager identityManager,
     {
         var user = await _identityManager.Login(model);
 
-        var guest = await _guestRepository.GetGuestByUserIdAsync(user.UserId);
+        if (user.Role == UserRoles.Admin)
+        {
+            return new LoginOutputModel(user.UserId.ToString(), user.Token);
+        }
+        
+        var guest = await _guestRepository.GetGuestByUserIdAsync(user.UserId) 
+            ?? throw new NotFoundException(nameof(Guest), user.UserId);
 
-        var outputModel = new LoginOutputModel(guest.Id, user.Token);
+        var outputModel = new LoginOutputModel(guest.Id.ToString(), user.Token);
         return outputModel;
     }
+
 
     public async Task<IUser> RegisterUser(RegisterUserModel model, string role)
     {
