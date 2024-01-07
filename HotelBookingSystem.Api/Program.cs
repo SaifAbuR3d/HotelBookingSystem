@@ -1,6 +1,7 @@
 using HotelBookingSystem.Api.Filters;
 using HotelBookingSystem.Api.Middlewares;
 using HotelBookingSystem.Application;
+using HotelBookingSystem.Infrastructure.Identity;
 using HotelBookingSystem.Infrastructure.Persistence;
 using Serilog;
 using System.Reflection;
@@ -37,6 +38,7 @@ bool isDevelopment = builder.Environment.IsDevelopment();
 
 builder.Services.AddPersistence(builder.Configuration, isDevelopment);
 builder.Services.AddApplication();
+builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

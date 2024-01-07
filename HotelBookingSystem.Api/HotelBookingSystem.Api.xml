@@ -400,6 +400,39 @@
              <response code="200">Returns the list of hotels based on the search criteria.</response>
              <response code="400">If the request parameters are invalid or missing.</response>
         </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.IdentityController">
+            <summary>
+            Controller for Identity related actions
+            </summary>
+            <param name="identityService"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IIdentityService)">
+            <summary>
+            Controller for Identity related actions
+            </summary>
+            <param name="identityService"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.RegisterGuest(HotelBookingSystem.Application.DTOs.Identity.Command.RegisterUserModel)">
+            <summary>
+            Register a guest
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.RegisterAdmin(HotelBookingSystem.Application.DTOs.Identity.Command.RegisterUserModel)">
+            <summary>
+            Register an admin
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.Login(HotelBookingSystem.Application.DTOs.Identity.Command.LoginUserModel)">
+            <summary>
+            login a user
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="T:HotelBookingSystem.Api.Controllers.ReviewsController">
             <summary>
             API endpoints for managing hotels reviews
