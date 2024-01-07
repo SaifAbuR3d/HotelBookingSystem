@@ -1,4 +1,4 @@
-﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Room.Query;
 using HotelBookingSystem.Domain.Models;

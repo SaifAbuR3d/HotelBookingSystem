@@ -1,4 +1,4 @@
-﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,23 +7,36 @@ namespace HotelBookingSystem.Infrastructure.Persistence.Repositories;
 public class GuestRepository : IGuestRepository
 {
     private readonly ApplicationDbContext _context;
-    private Guid fakeId = new("2783b59c-f7f8-4b21-b1df-5149fb57984e");
     public GuestRepository(ApplicationDbContext context)
     {
         _context = context;
     }
 
+    public async Task<Guest> AddGuestAsync(Guest guest)
+    {
+        var entry = await _context.Guests.AddAsync(guest);
+
+        return entry.Entity;
+    }
+
     public async Task<IEnumerable<Booking>> GetBookingsForGuestAsync(Guid guestId)
     {
-        guestId = fakeId;
         return await _context.Bookings.Where(b => b.GuestId == guestId).ToListAsync();
     }
 
     public async Task<Guest?> GetGuestAsync(Guid guestId)
     {
-        guestId = fakeId;
         return await _context.Guests.FindAsync(guestId);
 
+    }
+
+    public async Task<Guest?> GetGuestByUserIdAsync(string userId)
+    {
+        return await _context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Guest)
+                .Select(u => u.Guest)
+                .FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -79,5 +92,10 @@ public class GuestRepository : IGuestRepository
     {
         return _context.Reviews
             .AnyAsync(r => r.GuestId == guest.Id && r.HotelId == hotel.Id);
+    }
+
+    public async Task<bool> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync() >= 1;
     }
 }
