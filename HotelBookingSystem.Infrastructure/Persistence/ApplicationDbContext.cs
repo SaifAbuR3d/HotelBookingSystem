@@ -1,9 +1,12 @@
-﻿using HotelBookingSystem.Domain.Models;
+﻿using HotelBookingSystem.Application.Abstractions;
+using HotelBookingSystem.Domain.Models;
+using HotelBookingSystem.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBookingSystem.Infrastructure.Persistence;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
@@ -31,6 +34,12 @@ public class ApplicationDbContext : DbContext
         IgnoreComputedProperties(modelBuilder);
 
         SetPrecisionForFloatingPointTypes(modelBuilder);
+
+        modelBuilder.Entity<ApplicationUser>()
+            .HasOne(a => a.Guest)
+            .WithOne()
+            .HasForeignKey<ApplicationUser>("GuestId"); 
+
 
         SeedData(modelBuilder);
     }
@@ -119,10 +128,10 @@ public class ApplicationDbContext : DbContext
         var bobSmithId = new Guid("3183b59c-f7f8-4b21-b1df-5149fb57984e");
 
         modelBuilder.Entity<Guest>().HasData(
-            new Guest { Id = johnDoeId, Username = "john_doe", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Guest { Id = janeSmithId, Username = "jane_smith", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Guest { Id = aliceJonesId, Username = "alice_jones", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Guest { Id = bobSmithId, Username = "bob_smith", CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
+            new Guest { Id = johnDoeId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
+            new Guest { Id = janeSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
+            new Guest { Id = aliceJonesId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
+            new Guest { Id = bobSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
         );
 
         var review1Id = new Guid("3283b59c-f7f8-4b21-b1df-5149fb57984e");
