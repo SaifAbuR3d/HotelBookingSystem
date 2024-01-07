@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.Exceptions;

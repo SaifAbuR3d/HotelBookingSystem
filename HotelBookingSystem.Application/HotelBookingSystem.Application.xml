@@ -4,6 +4,12 @@
         <name>HotelBookingSystem.Application</name>
     </assembly>
     <members>
+        <member name="T:HotelBookingSystem.Application.Abstractions.IUser">
+            <summary>
+            this interface is used to make a user a guest
+            it is created to avoid circular dependency (when registering the user)
+            </summary>
+        </member>
         <member name="T:HotelBookingSystem.Application.DTOs.Booking.BookingConfirmationOutputModel">
             <summary>
             This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Booking"/> entity.

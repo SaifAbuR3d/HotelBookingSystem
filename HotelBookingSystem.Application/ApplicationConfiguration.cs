@@ -21,5 +21,6 @@ public static class ApplicationConfiguration
             .AddScoped<IBookingService, BookingService>()
             .AddScoped<IGuestService, GuestService>()
             .AddScoped<IReviewService, ReviewService>()
-            .AddScoped<IDiscountService, DiscountService>();
+            .AddScoped<IDiscountService, DiscountService>()
+            .AddTransient<IIdentityService, IdentityService>();
 }
