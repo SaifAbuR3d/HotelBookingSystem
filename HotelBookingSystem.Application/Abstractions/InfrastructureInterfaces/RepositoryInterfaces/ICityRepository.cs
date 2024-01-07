@@ -2,7 +2,7 @@
 using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Domain.Models;
 
-namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+namespace HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 
 public interface ICityRepository
 {

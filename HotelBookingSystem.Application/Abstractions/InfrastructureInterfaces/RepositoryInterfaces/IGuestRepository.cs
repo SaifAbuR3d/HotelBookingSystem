@@ -1,6 +1,6 @@
 ﻿using HotelBookingSystem.Domain.Models;
 
-namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+namespace HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 
 public interface IGuestRepository
 {
@@ -9,4 +9,7 @@ public interface IGuestRepository
     Task<IEnumerable<Booking>> GetRecentBookingsInDifferentHotelsAsync(Guid guestId, int count = 5);
     Task<bool> HasGuestBookedHotelAsync(Hotel hotel, Guest guest);
     Task<bool> HasGuestReviewedHotelAsync(Hotel hotel, Guest guest);
+    Task<Guest?> GetGuestByUserIdAsync(string userId);
+    Task<Guest> AddGuestAsync(Guest guest);
+    Task<bool> SaveChangesAsync();
 }

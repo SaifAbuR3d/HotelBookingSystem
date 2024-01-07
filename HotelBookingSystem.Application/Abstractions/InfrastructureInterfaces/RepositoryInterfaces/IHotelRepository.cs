@@ -2,7 +2,7 @@
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Domain.Models;
-namespace HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+namespace HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 
 public interface IHotelRepository
 {
