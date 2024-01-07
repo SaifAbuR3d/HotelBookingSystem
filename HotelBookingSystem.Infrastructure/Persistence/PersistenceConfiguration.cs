@@ -1,5 +1,7 @@
-﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.IdentityInterfaces;
+using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Infrastructure.Identity;
 using HotelBookingSystem.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +15,9 @@ public static class PersistenceConfiguration
         this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         => services
             .AddDatabase(configuration.GetConnectionString("SqlServer"), isDevelopment)
-            .AddRepositories();
+            .AddRepositories()
+            .AddImageHandling();
+            
 
     private static IServiceCollection AddDatabase(
         this IServiceCollection services, string connectionString, bool isDevelopment)
@@ -32,7 +36,12 @@ public static class PersistenceConfiguration
             .AddScoped<IGuestRepository, GuestRepository>()
             .AddScoped<IBookingRepository, BookingRepository>()
             .AddScoped<IGuestRepository, GuestRepository>()
-            .AddScoped<IImageHandler, ImageHandler>()
             .AddScoped<IReviewRepository, ReviewRepository>()
-            .AddScoped<IDiscountRepository, DiscountRepository>(); 
+            .AddScoped<IDiscountRepository, DiscountRepository>();
+
+    public static IServiceCollection AddImageHandling(
+        this IServiceCollection services)
+        => services
+            .AddScoped<IImageHandler, ImageHandler>();
+
 }
