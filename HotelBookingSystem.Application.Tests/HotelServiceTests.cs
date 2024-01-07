@@ -1,10 +1,11 @@
-﻿using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Hotel.Command;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
 using HotelBookingSystem.Application.Tests.Shared;
+using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Tests;
 
@@ -25,12 +26,14 @@ public class HotelServiceTests
         guestRepositoryMock = new Mock<IGuestRepository>();
         mapper = AutoMapperSingleton.Mapper;
         var imageHandlerMock = new Mock<IImageHandler>();
+        var logger = Mock.Of<ILogger<HotelService>>();
 
         sut = new HotelService(hotelRepositoryMock.Object,
                                cityRepositoryMock.Object,
                                guestRepositoryMock.Object,
                                mapper,
-                               imageHandlerMock.Object);
+                               imageHandlerMock.Object, 
+                               logger);
     }
     [Fact]
     public async Task GetAllHotelsAsync_ShouldReturnAllHotelsWithCorrectPaginationMetadata_IfHotelsCountIsLessThanOrEqualPageSize()

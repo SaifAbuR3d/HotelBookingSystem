@@ -1,10 +1,11 @@
-using HotelBookingSystem.Application.Abstractions.RepositoryInterfaces;
+using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.City.Command;
 using HotelBookingSystem.Application.DTOs.City.OutputModel;
 using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.Tests.Shared;
+using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Tests;
 
@@ -21,10 +22,12 @@ public class CityServiceTests
         cityRepositoryMock = new Mock<ICityRepository>();
         mapper = AutoMapperSingleton.Mapper;
         var imageHandler = new Mock<IImageHandler>();
+        var logger = Mock.Of<ILogger<CityService>>();
 
         sut = new CityService(cityRepositoryMock.Object,
                               mapper,
-                              imageHandler.Object);
+                              imageHandler.Object,
+                              logger);
     }
 
     [Fact]
