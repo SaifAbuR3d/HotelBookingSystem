@@ -1,5 +1,6 @@
 ﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using HotelBookingSystem.Application.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -65,6 +66,7 @@ public class GuestsController(IGuestService guestService,
     /// <response code="200">Returns the last 5 different hotels the guest visited</response>>
     /// <response code="401">User is not authenticated.</response>
     /// <response code="404">If the guest is not found</response>
+    [Authorize(Policy = Policies.GuestOnly)]
     [HttpGet("recently-visited-hotels")]
     public async Task<ActionResult<IEnumerable<RecentlyVisitedHotelOutputModel>>> GetRecentlyVisitedHotels(int count = 5)
     {

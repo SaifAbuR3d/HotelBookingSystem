@@ -1,7 +1,7 @@
 ﻿using HotelBookingSystem.Application.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Diagnostics;
-namespace HotelBookingSystem.Api.Middlewares;
+namespace HotelBookingSystem.Api.Middleware;
 
 /// <summary>
 /// Exception Handling Middleware
@@ -53,6 +53,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             BadRequestException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
             InvalidUserCredentialsException => (StatusCodes.Status401Unauthorized, "Invalid Credentials", exception.Message),
             UnauthenticatedException => (StatusCodes.Status401Unauthorized, "Unauthenticated", exception.Message),
+            NoRolesException => (StatusCodes.Status403Forbidden, "Unauthorized", exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Something went wrong", "We made a mistake but we are working on it")
         };
     }
