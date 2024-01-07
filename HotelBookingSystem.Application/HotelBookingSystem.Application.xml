@@ -265,6 +265,21 @@
             This class is a data transfer object (DTO) for the <see cref="T:HotelBookingSystem.Domain.Models.Room"/> entity. Mainly for Hotel Page.
             </summary>
         </member>
+        <member name="T:HotelBookingSystem.Application.Identity.CurrentUser">
+            <summary>
+            gets the current authenticated user information
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.Identity.CurrentUser.Id">
+            <summary>
+            get the id of the current user
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.Identity.CurrentUser.Role">
+            <summary>
+            get the role of the current user
+            </summary>
+        </member>
         <member name="M:HotelBookingSystem.Application.Services.GuestService.GetRecentlyVisitedHotelsAsync(System.Guid,System.Int32)">
             <summary>
             Retrieves a collection of unique recently visited hotels for a guest, presenting essential details.
@@ -287,7 +302,33 @@
             </code>
             </example>
             <seealso cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/>
+            <returns>
+            An asynchronous task representing the operation, returning a collection of unique recently visited hotels.
+            </returns>
+        </member>
+        <member name="M:HotelBookingSystem.Application.Services.GuestService.GetRecentlyVisitedHotelsAsync(System.Int32)">
+            <summary>
+            Retrieves a collection of unique recently visited hotels for a guest (current logged in guest), presenting essential details.
+            </summary>
+            <param name="count">The maximum number of unique recently visited hotels to retrieve. Default is 5.</param>
             <returns>An asynchronous task representing the operation, returning a collection of unique recently visited hotels.</returns>
+            <remarks>
+            <para>
+            This method asynchronously retrieves recent bookings associated with the specified guest, including information about the booked rooms and their respective hotels.
+            It then maps the relevant details to a simplified hotels model, <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/>, for a cleaner representation of the data.
+            The resulting collection provides essential information about the unique recently visited hotels, such as hotel name, city name, star rating, and price.
+            </para>
+            <para>
+            This method is intended to be used by the current logged in guest, and therefore does not require a guestId parameter.
+            </para>
+            <para>
+            This method internally depends on the <see cref="M:HotelBookingSystem.Application.Services.GuestService.GetRecentlyVisitedHotelsAsync(System.Guid,System.Int32)"/>
+            </para>
+            </remarks>
+            <seealso cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/>
+            <returns>
+            An asynchronous task representing the operation, returning a collection of unique recently visited hotels.
+            </returns>
         </member>
     </members>
 </doc>

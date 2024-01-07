@@ -3,9 +3,7 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Hotel.Command;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
-using HotelBookingSystem.Application.DTOs.Review;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.Xml;
 using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Controllers;

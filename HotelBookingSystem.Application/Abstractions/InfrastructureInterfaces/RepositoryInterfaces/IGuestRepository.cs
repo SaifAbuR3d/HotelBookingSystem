@@ -12,4 +12,6 @@ public interface IGuestRepository
     Task<Guest?> GetGuestByUserIdAsync(string userId);
     Task<Guest> AddGuestAsync(Guest guest);
     Task<bool> SaveChangesAsync();
+    Task<Guid?> GetGuestIdByUserIdAsync(string userId);
+    Task<bool> GuestExistsAsync(Guid guestId);
 }

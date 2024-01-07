@@ -3,7 +3,7 @@
 public class InvalidUserCredentialsException : Exception
 {
     public InvalidUserCredentialsException()
-        : base("Invalid credentials.")
+        : base("Invalid Email or Password.")
     {
     }
 }

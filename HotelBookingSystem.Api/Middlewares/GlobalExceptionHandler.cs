@@ -51,6 +51,8 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             InvalidNumberOfGuestsException => (StatusCodes.Status400BadRequest, "Invalid Number Of Guests", exception.Message),
             BadFileException => (StatusCodes.Status400BadRequest, "Bad File", exception.Message),
             BadRequestException => (StatusCodes.Status400BadRequest, "Bad Request", exception.Message),
+            InvalidUserCredentialsException => (StatusCodes.Status401Unauthorized, "Invalid Credentials", exception.Message),
+            UnauthenticatedException => (StatusCodes.Status401Unauthorized, "Unauthenticated", exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Something went wrong", "We made a mistake but we are working on it")
         };
     }

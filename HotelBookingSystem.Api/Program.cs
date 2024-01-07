@@ -40,6 +40,8 @@ builder.Services.AddPersistence(builder.Configuration, isDevelopment);
 builder.Services.AddApplication();
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 

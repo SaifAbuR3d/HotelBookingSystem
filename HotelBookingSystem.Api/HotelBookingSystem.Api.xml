@@ -280,8 +280,26 @@
             A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/> objects, each representing an hotel the user recently visited
             </returns>
             <response code="200">Returns the last 5 different hotels the guest visited</response>>
+            <response code="404">If the guest is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.GetRecentlyVisitedHotels(System.Int32)">
+            <summary>
+            Retrieves a collection of unique recently visited hotels for a the current authorized guest, presenting essential details.
+            </summary>
+            <param name="count">The maximum number of unique recently visited hotels to retrieve. Default is 5.</param>
+            <remarks>
+            The resulting collection provides essential information about the last N different hotels the guest visited, such as hotel name, city name, star rating, and price.
+            
+            Sample request:
+            
+                GET guests/{guestId}/recently-visited-hotels?count=3
+                
+            </remarks>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/> objects, each representing an hotel the user recently visited
+            </returns>
+            <response code="200">Returns the last 5 different hotels the guest visited</response>>
             <response code="401">User is not authenticated.</response>
-            <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
             <response code="404">If the guest is not found</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.HotelsController">

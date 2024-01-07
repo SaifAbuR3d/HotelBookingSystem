@@ -39,6 +39,14 @@ public class GuestRepository : IGuestRepository
                 .FirstOrDefaultAsync();
     }
 
+    public async Task<Guid?> GetGuestIdByUserIdAsync(string userId)
+    {
+        return await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.Guest != null ? u.Guest.Id : Guid.NewGuid())
+                .FirstOrDefaultAsync();
+    }
+
     /// <summary>
     /// Retrieves a collection of most recent bookings for a guest, each representing the most recent booking in different hotels.
     /// </summary>
@@ -80,6 +88,11 @@ public class GuestRepository : IGuestRepository
 
 
         return  guestRecentBookingsInDifferentHotels;
+    }
+
+    public async Task<bool> GuestExistsAsync(Guid guestId)
+    {
+        return await _context.Guests.AnyAsync(g => g.Id == guestId);
     }
 
     public async Task<bool> HasGuestBookedHotelAsync(Hotel hotel, Guest guest)
