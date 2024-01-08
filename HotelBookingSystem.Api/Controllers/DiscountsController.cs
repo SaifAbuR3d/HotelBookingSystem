@@ -1,6 +1,8 @@
 ﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Discount;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
+using HotelBookingSystem.Application.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -8,6 +10,8 @@ namespace HotelBookingSystem.Api.Controllers;
 /// <summary>
 /// API endpoints for managing Discounts
 /// </summary>
+
+[Authorize(Policy = Policies.AdminOnly)]
 [Route("api/rooms")]
 [ApiController]
 public class DiscountsController(IDiscountService discountService, 
@@ -31,9 +35,9 @@ public class DiscountsController(IDiscountService discountService,
     /// </remarks>
     /// <returns>The newly created discount</returns>
     /// <response code="201">Returns the newly created discount</response>
-    /// <response code="401">User is not authenticated.</response>
-    /// <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">User is not authenticated.</response>
+    /// <response code="403">User is not authorized (not an admin).</response>
     [HttpPost("{roomId}/discounts")]
     public async Task<ActionResult<DiscountOutputModel>> AddDiscount(Guid roomId, CreateDiscountCommand request)
     {
@@ -55,6 +59,7 @@ public class DiscountsController(IDiscountService discountService,
     /// <returns>The discount with the given id</returns>
     /// <response code="200">Returns the discount with the given id</response>
     /// <response code="404">If the discount is not found</response>
+    [AllowAnonymous]
     [HttpGet("{roomId}/discounts/{id}", Name = "GetDiscount")]
     public async Task<ActionResult<DiscountOutputModel>> GetDiscount(Guid roomId, Guid id)
     {
@@ -74,7 +79,7 @@ public class DiscountsController(IDiscountService discountService,
     /// <returns></returns>
     /// <response code="204">If the discount is deleted</response>
     /// <response code="401">User is not authenticated.</response>
-    /// <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
+    /// <response code="403">User is not authorized (not an admin).</response>
     /// <response code="404">If the discount is not found</response>
     [HttpDelete("{roomId}/discounts/{id}")]
     public async Task<ActionResult> DeleteDiscount(Guid roomId, Guid id)
@@ -109,6 +114,7 @@ public class DiscountsController(IDiscountService discountService,
     /// A collection of <see cref="FeaturedDealOutputModel"/> objects, each representing a featured deal.
     /// </returns>
     /// <response code="200">Returns the collection of featured deals.</response>
+    [AllowAnonymous]
     [HttpGet("featured-deals/{deals}")]
     public async Task<ActionResult<IEnumerable<FeaturedDealOutputModel>>> GetFeaturedDeals(int deals = 5)
     {

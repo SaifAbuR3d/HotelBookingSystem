@@ -46,8 +46,10 @@
             
              </remarks>
              <response code="201">Returns the newly created booking</response>
-             <response code = "404">If the hotel/room or guest is not found</response>
              <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not a guest)</response>
+             <response code="404">If the hotel/room or guest is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.DeleteBooking(System.Guid)">
             <summary>
@@ -56,6 +58,8 @@
             <param name="id">The id of the booking to delete</param>
             <returns>No content</returns>
             <response code="204">If the booking is deleted</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not a guest)</response>
             <response code="404">If the booking is not found</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.CitiesController">
@@ -96,6 +100,8 @@
              </remarks>
              <response code="201">Returns the newly created city</response>
              <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.DeleteCity(System.Guid)">
             <summary>
@@ -104,6 +110,8 @@
             <param name="id">The id of the city to delete</param>
             <returns>No content</returns>
             <response code="204">If the city is deleted</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response>
             <response code="404">If the city is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.UpdateCity(System.Guid,HotelBookingSystem.Application.DTOs.City.Command.UpdateCityCommand)">
@@ -115,6 +123,8 @@
             <returns>No content</returns>
             <response code="204">If the city is updated</response>
             <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response>
             <response code="404">If the city is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.MostVisitedCities(System.Int32)">
@@ -150,9 +160,10 @@
             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
             <returns></returns>
             <response code="204">If the image is successfully uploaded</response>
-            <response code="404">If the city is not found</response>
             <response code="400">If the request data is invalid</response>
-            
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response>
+            <response code="404">If the city is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetCities(HotelBookingSystem.Application.DTOs.City.Query.GetCitiesQueryParameters)">
             <summary>
@@ -203,9 +214,9 @@
              </remarks>
              <returns>The newly created discount</returns>
              <response code="201">Returns the newly created discount</response>
-             <response code="401">User is not authenticated.</response>
-             <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
              <response code="400">If the request data is invalid</response>
+             <response code="401">User is not authenticated.</response>
+             <response code="403">User is not authorized (not an admin).</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.GetDiscount(System.Guid,System.Guid)">
             <summary>
@@ -226,7 +237,7 @@
             <returns></returns>
             <response code="204">If the discount is deleted</response>
             <response code="401">User is not authenticated.</response>
-            <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
+            <response code="403">User is not authorized (not an admin).</response>
             <response code="404">If the discount is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.GetFeaturedDeals(System.Int32)">
@@ -342,6 +353,8 @@
              </remarks>
              <response code="201">Returns the newly created hotel</response>
              <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response> 
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.DeleteHotel(System.Guid)">
             <summary>
@@ -350,6 +363,8 @@
             <param name="id">The id of the hotel to delete</param>
             <returns>No content</returns>
             <response code="204">If the hotel is successfully deleted</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
             <response code="404">If the hotel is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UpdateHotel(System.Guid,HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand)">
@@ -360,8 +375,10 @@
             <param name="request">The data for the uploaded hotel</param>
             <returns>No content</returns>
             <response code="204">If the hotel is successfully uploaded</response>
-            <response code="404">If the hotel is not found</response>
             <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+            <response code="404">If the hotel is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
             <summary>
@@ -373,8 +390,10 @@
             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
             <returns></returns>
             <response code="204">If the image is successfully uploaded</response>
-            <response code="404">If the hotel is not found</response>
             <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+            <response code="404">If the hotel is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.GetHotelsQueryParameters)">
             <summary>
@@ -435,6 +454,8 @@
             Register a guest
             </summary>
             <param name="request"></param>
+            <response code="201"></response>
+            <response code="400">if the request data is invalid</response>
             <returns></returns>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.RegisterAdmin(HotelBookingSystem.Application.DTOs.Identity.Command.RegisterUserModel)">
@@ -442,14 +463,18 @@
             Register an admin
             </summary>
             <param name="request"></param>
-            <returns></returns>
+            <response code="201"></response>
+            <response code="400">if the request data is invalid</response> 
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.Login(HotelBookingSystem.Application.DTOs.Identity.Command.LoginUserModel)">
             <summary>
             login a user
             </summary>
             <param name="request"></param>
-            <returns></returns>
+            <response code="201"></response>
+            <response code="400">if the request data is invalid</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.ReviewsController">
             <summary>
@@ -484,7 +509,7 @@
             <response code="201">Review successfully added.</response>
             <response code="400">Invalid input or missing required fields.</response>
             <response code="401">User is not authenticated.</response>
-            <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
+            <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
             <response code="404">Hotel with the specified id not found.</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetReview(System.Guid,System.Guid)">
@@ -515,8 +540,10 @@
             <param name="request">The data for the updated review</param>
             <returns>No content</returns>
             <response code="204">If the review is successfully updated</response>
-            <response code="404">If the hotel or review is not found</response>
             <response code="400">If the request data is invalid</response>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
+            <response code="404">If the hotel or review is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.DeleteReview(System.Guid,System.Guid)">
             <summary>
@@ -526,6 +553,8 @@
             <param name="reviewId">The id of the review to delete</param>
             <returns>No content</returns>
             <response code="204">If the review is successfully deleted</response>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
             <response code="404">If the hotel is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetHotelReviews(System.Guid,HotelBookingSystem.Application.DTOs.Review.Query.GetHotelReviewsQueryParameters)">
@@ -547,7 +576,7 @@
             A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Review.OutputModel.ReviewOutputModel"/> objects, each representing a review that matches the specified criteria for the specified hotel.
             </returns>
             <response code="200">Returns the list of hotel reviews based on the query parameters.</response>
-            <response code="400">If the request parameters are invalid or missing.</response>
+            <response code="400">If the request data is invalid</response>
             <response code="404">If the hotel is not found.</response>
         </member>
         <member name="T:HotelBookingSystem.Api.Controllers.RoomsController">
@@ -590,6 +619,8 @@
             
              </remarks>
              <response code="201">Returns the newly created room</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response> 
              <response code="400">If the request data is invalid</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.DeleteRoom(System.Guid)">
@@ -599,6 +630,8 @@
             <param name="id">The id of the room to delete</param>
             <returns>No content</returns>
             <response code="204">If the room is successfully deleted</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
             <response code="404">If the room is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UpdateRoom(System.Guid,HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand)">
@@ -609,8 +642,10 @@
             <param name="request">The new data for the room</param>
             <returns>No content</returns>
             <response code="204">If the room is successfully updated</response>
-            <response code="404">If the room is not found</response>
             <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+            <response code="404">If the room is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
             <summary>
@@ -622,8 +657,10 @@
             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
             <returns></returns>
             <response code="204">If the image is successfully uploaded</response>
-            <response code="404">If the room is not found</response>
             <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+            <response code="404">If the room is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetRooms(HotelBookingSystem.Application.DTOs.Room.Query.GetRoomsQueryParameters)">
             <summary>
@@ -685,6 +722,38 @@
             <param name="exception"></param>
             <param name="cancellationToken"></param>
             <returns>true if the exception was properly handled</returns>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Services.CurrentUser">
+            <summary>
+            Get information about the current authenticated user
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Services.CurrentUser.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Get information about the current authenticated user
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.Id">
+            <summary>
+            Get the Id of the current authenticated user
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.Role">
+            <summary>
+            Get the role of the current authenticated user
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.IsGuest">
+            <summary>
+            returns true is the current authenticated user is a guest
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.IsAdmin">
+            <summary>
+            returns true is the current authenticated user is an admin
+            </summary>
         </member>
     </members>
 </doc>
