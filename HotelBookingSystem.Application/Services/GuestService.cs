@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
+using HotelBookingSystem.Application.Abstractions;
 using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Application.Identity;
 using HotelBookingSystem.Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
 
 namespace HotelBookingSystem.Application.Services;
 
@@ -15,7 +14,7 @@ public class GuestService(IGuestRepository guestRepository,
                           IBookingRepository bookingRepository,
                           IHotelRepository hotelRepository,
                           IMapper mapper,
-                          IHttpContextAccessor httpContextAccessor,
+                          ICurrentUser currentUser,
                           ILogger<GuestService> logger) : IGuestService
 {
     private readonly IGuestRepository _guestRepository = guestRepository;
@@ -26,8 +25,7 @@ public class GuestService(IGuestRepository guestRepository,
 
     private readonly ILogger<GuestService> _logger = logger;
 
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor ;
-
+    private readonly ICurrentUser _currentUser = currentUser;
 
     /// <summary>
     /// Retrieves a collection of unique recently visited hotels for a guest, presenting essential details.
@@ -116,29 +114,25 @@ public class GuestService(IGuestRepository guestRepository,
     {
         _logger.LogInformation("GetRecentlyVisitedHotelsAsync started for current user, count: {recentlyVisitedHotelsCount}", count);
 
-        _logger.LogDebug("Getting the user id from HttpContext"); 
-        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) 
-            ?? throw new UnauthenticatedException();
+        var (guest, _) = await GetGuestFromCurrentUser();
 
-        _logger.LogDebug("Getting the user role from HttpContext");
-        var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role)
-            ?? throw new UnauthenticatedException();
+        _logger.LogDebug("Calling GetRecentlyVisitedHotelsAsync with guestId: {guestId}, count: {count}", guest.Id, count);
+        var result = await GetRecentlyVisitedHotelsAsync(guest.Id, count);
 
-        _logger.LogDebug("Checking if the user is a guest");
-        if (role != UserRoles.Guest)
-        {
-            throw new BadRequestException($"Invalid role: {role} at GetRecentlyVisitedHotelsAsync, user should be a {UserRoles.Guest}");
-        }
-
-        _logger.LogDebug("Getting the guest id from the repository");
-        var guestId = await _guestRepository.GetGuestIdByUserIdAsync(userId) 
-            ?? throw new NotFoundException(nameof(Guest), userId);
-
-        _logger.LogDebug("Calling GetRecentlyVisitedHotelsAsync with guestId: {guestId}, count: {count}", guestId, count);
-        var result = await GetRecentlyVisitedHotelsAsync(guestId, count);
-
-        _logger.LogInformation("GetRecentlyVisitedHotelsAsync finished for current user, count: {recentlyVisitedHotelsCount}", count);
+        _logger.LogInformation("GetRecentlyVisitedHotelsAsync completed successfully for current user, count: {recentlyVisitedHotelsCount}, with guestId: {@guestId}", count, guest.Id);
         return result;
        
+    }
+
+    private async Task<(Guest, string)> GetGuestFromCurrentUser()
+    {
+        _logger.LogDebug("Getting the user id from CurrentUser");
+        var userId = _currentUser.Id;
+
+        _logger.LogDebug("Getting the guest from the repository");
+        var guest = await _guestRepository.GetGuestByUserIdAsync(userId)
+            ?? throw new NotFoundException(nameof(Guest), userId);
+
+        return (guest, userId);
     }
 }
