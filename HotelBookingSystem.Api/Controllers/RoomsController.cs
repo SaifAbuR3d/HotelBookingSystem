@@ -3,6 +3,8 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Room.Command;
 using HotelBookingSystem.Application.DTOs.Room.OutputModel;
 using HotelBookingSystem.Application.DTOs.Room.Query;
+using HotelBookingSystem.Application.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -11,7 +13,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// <summary>
 /// API endpoints for managing rooms
 /// </summary>>
-
+[Authorize(Policy = Policies.AdminOnly)]
 [Route("api/[controller]")]
 [ApiController]
 public class RoomsController(IRoomService roomService,
@@ -26,6 +28,7 @@ public class RoomsController(IRoomService roomService,
     /// <returns>The room with the given id</returns>
     /// <response code="200">Returns the room with the given id</response>
     /// <response code="404">If the room is not found</response>
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<RoomOutputModel>> GetRoom(Guid id)
     {
@@ -57,6 +60,8 @@ public class RoomsController(IRoomService roomService,
     ///
     /// </remarks>
     /// <response code="201">Returns the newly created room</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
     /// <response code="400">If the request data is invalid</response>
     [HttpPost]
     public async Task<ActionResult<RoomOutputModel>> CreateRoom(CreateRoomCommand request)
@@ -75,6 +80,8 @@ public class RoomsController(IRoomService roomService,
     /// <param name="id">The id of the room to delete</param>
     /// <returns>No content</returns>
     /// <response code="204">If the room is successfully deleted</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
     /// <response code="404">If the room is not found</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteRoom(Guid id)
@@ -94,8 +101,10 @@ public class RoomsController(IRoomService roomService,
     /// <param name="request">The new data for the room</param>
     /// <returns>No content</returns>
     /// <response code="204">If the room is successfully updated</response>
-    /// <response code="404">If the room is not found</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
+    /// <response code="404">If the room is not found</response>
     [HttpPut("{id}")]
     public async Task<ActionResult<RoomOutputModel>> UpdateRoom(Guid id, UpdateRoomCommand request)
     {
@@ -116,9 +125,10 @@ public class RoomsController(IRoomService roomService,
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
     /// <returns></returns>
     /// <response code="204">If the image is successfully uploaded</response>
-    /// <response code="404">If the room is not found</response>
     /// <response code="400">If the request data is invalid</response>
-
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
+    /// <response code="404">If the room is not found</response>
     [HttpPost("{id}/images")]
     public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
     {
@@ -148,6 +158,7 @@ public class RoomsController(IRoomService roomService,
     /// </returns>
     /// <response code="200">Returns the list of rooms based on the query parameters.</response>
     /// <response code="400">If the request parameters are invalid or missing.</response>
+    [AllowAnonymous]
     [HttpGet(Name = "GetRooms")]
     public async Task<ActionResult<IEnumerable<RoomOutputModel>>> GetRooms([FromQuery] GetRoomsQueryParameters request)
     {

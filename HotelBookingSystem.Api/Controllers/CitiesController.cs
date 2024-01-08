@@ -3,6 +3,8 @@ using HotelBookingSystem.Application.DTOs.City.Command;
 using HotelBookingSystem.Application.DTOs.City.OutputModel;
 using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Common;
+using HotelBookingSystem.Application.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -12,9 +14,9 @@ namespace HotelBookingSystem.Api.Controllers;
 /// API endpoints for managing cities
 /// </summary>>
 
+[Authorize(Policy = Policies.AdminOnly)]
 [Route("api/[controller]")]
 [ApiController]
-
 public class CitiesController(ICityService cityService,
                               IWebHostEnvironment environment,
                               ILogger<CitiesController> logger) : ControllerBase
@@ -27,6 +29,7 @@ public class CitiesController(ICityService cityService,
     /// <returns>The city with the given id</returns>
     /// <response code="200">Returns the city with the given id</response>
     /// <response code="404">If the city is not found</response>
+    [AllowAnonymous]
     [HttpGet("{id}", Name = "GetCity")]
     public async Task<ActionResult<CityOutputModel>> GetCity(Guid id)
     {
@@ -56,6 +59,8 @@ public class CitiesController(ICityService cityService,
     /// </remarks>
     /// <response code="201">Returns the newly created city</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response>
     [HttpPost]
     public async Task<ActionResult<CityOutputModel>> CreateCity(CreateCityCommand request)
     {
@@ -74,6 +79,8 @@ public class CitiesController(ICityService cityService,
     /// <param name="id">The id of the city to delete</param>
     /// <returns>No content</returns>
     /// <response code="204">If the city is deleted</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response>
     /// <response code="404">If the city is not found</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCity(Guid id)
@@ -94,6 +101,8 @@ public class CitiesController(ICityService cityService,
     /// <returns>No content</returns>
     /// <response code="204">If the city is updated</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response>
     /// <response code="404">If the city is not found</response>
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCity(Guid id, UpdateCityCommand request)
@@ -127,6 +136,7 @@ public class CitiesController(ICityService cityService,
     /// </returns>
     /// <response code="200">Returns TOP N most visited cities, N is 5 by default</response>
     /// <seealso cref="CityAsTrendingDestinationOutputModel"/>
+    [AllowAnonymous]
     [HttpGet("trending-destinations")]
     public async Task<ActionResult<IEnumerable<CityAsTrendingDestinationOutputModel>>> MostVisitedCities(int count = 5)
     {
@@ -147,9 +157,10 @@ public class CitiesController(ICityService cityService,
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
     /// <returns></returns>
     /// <response code="204">If the image is successfully uploaded</response>
-    /// <response code="404">If the city is not found</response>
     /// <response code="400">If the request data is invalid</response>
-    /// 
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response>
+    /// <response code="404">If the city is not found</response>
     [HttpPost("{id}/images")]
     public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
     {
@@ -180,6 +191,7 @@ public class CitiesController(ICityService cityService,
     /// </returns>
     /// <response code="200">Returns the list of cities based on the query parameters.</response>
     /// <response code="400">If the request parameters are invalid or missing.</response>
+    [AllowAnonymous]
     [HttpGet(Name = "GetCities")]
     public async Task<ActionResult<IEnumerable<CityOutputModel>>> GetCities([FromQuery] GetCitiesQueryParameters request)
     {

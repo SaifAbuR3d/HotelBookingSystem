@@ -3,6 +3,8 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Hotel.Command;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
+using HotelBookingSystem.Application.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -12,6 +14,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// API endpoints for managing hotels
 /// </summary>>
 
+[Authorize(Policy = Policies.AdminOnly)]
 [Route("api/[controller]")]
 [ApiController]
 public class HotelsController(IHotelService hotelService,
@@ -26,6 +29,7 @@ public class HotelsController(IHotelService hotelService,
     /// <returns>The hotel with the given id</returns>
     /// <response code="200">Returns the hotel with the given id</response>
     /// <response code="404">If the hotel is not found</response>
+    [AllowAnonymous]
     [HttpGet("{id}", Name = "GetHotel")]
     public async Task<ActionResult<HotelOutputModel>> GetHotel(Guid id)
     {
@@ -58,6 +62,8 @@ public class HotelsController(IHotelService hotelService,
     /// </remarks>
     /// <response code="201">Returns the newly created hotel</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
     [HttpPost]
     public async Task<ActionResult<HotelOutputModel>> CreateHotel(CreateHotelCommand request)
     {
@@ -76,6 +82,8 @@ public class HotelsController(IHotelService hotelService,
     /// <param name="id">The id of the hotel to delete</param>
     /// <returns>No content</returns>
     /// <response code="204">If the hotel is successfully deleted</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
     /// <response code="404">If the hotel is not found</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteHotel(Guid id)
@@ -96,8 +104,10 @@ public class HotelsController(IHotelService hotelService,
     /// <param name="request">The data for the uploaded hotel</param>
     /// <returns>No content</returns>
     /// <response code="204">If the hotel is successfully uploaded</response>
-    /// <response code="404">If the hotel is not found</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
+    /// <response code="404">If the hotel is not found</response>
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateHotel(Guid id, UpdateHotelCommand request)
     {
@@ -119,8 +129,10 @@ public class HotelsController(IHotelService hotelService,
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
     /// <returns></returns>
     /// <response code="204">If the image is successfully uploaded</response>
-    /// <response code="404">If the hotel is not found</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized (not an admin)</response> 
+    /// <response code="404">If the hotel is not found</response>
     [HttpPost("{id}/images")]
     public async Task<ActionResult> UploadImage(Guid id, IFormFile file, string? alternativeText, bool? thumbnail = false)
     {
@@ -151,7 +163,7 @@ public class HotelsController(IHotelService hotelService,
     /// </returns>
     /// <response code="200">Returns the list of hotels based on the query parameters.</response>
     /// <response code="400">If the request parameters are invalid or missing.</response>
-
+    [AllowAnonymous]
     [HttpGet(Name = "GetHotels")]
     public async Task<ActionResult<IEnumerable<HotelOutputModel>>> GetHotels([FromQuery] GetHotelsQueryParameters request)
     {
@@ -188,6 +200,7 @@ public class HotelsController(IHotelService hotelService,
     /// </returns>
     /// <response code="200">Returns the list of hotels based on the search criteria.</response>
     /// <response code="400">If the request parameters are invalid or missing.</response>
+    [AllowAnonymous]
     [HttpGet("search", Name = "SearchHotels")]
     public async Task<ActionResult<IEnumerable<HotelSearchResultOutputModel>>> SearchAndFilterHotels([FromQuery] HotelSearchAndFilterParameters request)
     {
