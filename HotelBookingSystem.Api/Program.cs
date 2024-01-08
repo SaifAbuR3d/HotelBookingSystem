@@ -1,7 +1,8 @@
 using HotelBookingSystem.Api.Filters;
-using HotelBookingSystem.Api.Middleware;
 using HotelBookingSystem.Api.Middlewares;
+using HotelBookingSystem.Api.Services;
 using HotelBookingSystem.Application;
+using HotelBookingSystem.Application.Abstractions;
 using HotelBookingSystem.Application.Identity;
 using HotelBookingSystem.Infrastructure.Identity;
 using HotelBookingSystem.Infrastructure.Persistence;
@@ -55,6 +56,8 @@ builder.Services.AddAuthorization(options =>
                                       .RequireRole(UserRoles.Admin)
                                       .RequireClaim(ClaimTypes.Role, UserRoles.Admin));
 });
+
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 var app = builder.Build();
 

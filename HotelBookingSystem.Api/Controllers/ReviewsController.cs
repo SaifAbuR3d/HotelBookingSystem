@@ -3,6 +3,8 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Review.Command;
 using HotelBookingSystem.Application.DTOs.Review.OutputModel;
 using HotelBookingSystem.Application.DTOs.Review.Query;
+using HotelBookingSystem.Application.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -11,7 +13,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// <summary>
 /// API endpoints for managing hotels reviews
 /// </summary>>
-
+[Authorize(Policy = Policies.GuestOnly)]
 [Route("api/hotels")]
 [ApiController]
 public class ReviewsController(IReviewService reviewService, 
@@ -40,7 +42,7 @@ public class ReviewsController(IReviewService reviewService,
     /// <response code="201">Review successfully added.</response>
     /// <response code="400">Invalid input or missing required fields.</response>
     /// <response code="401">User is not authenticated.</response>
-    /// <response code="403">User is authenticated but doesn't have the necessary permissions.</response>
+    /// <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
     /// <response code="404">Hotel with the specified id not found.</response>
     [HttpPost("{hotelId}/reviews")]
     public async Task<ActionResult> AddReview(Guid hotelId, CreateOrUpdateReviewCommand request)
@@ -63,6 +65,7 @@ public class ReviewsController(IReviewService reviewService,
     /// <returns>The review with the given id</returns>
     /// <response code="200">Returns the review with the given id</response>
     /// <response code="404">If the review is not found</response>
+    [AllowAnonymous]
     [HttpGet("{hotelId}/reviews/{reviewId}", Name = "GetReview")]
     public async Task<ActionResult<ReviewOutputModel>> GetReview(Guid hotelId, Guid reviewId)
     {
@@ -81,6 +84,7 @@ public class ReviewsController(IReviewService reviewService,
     /// <returns>Hotel average user ratings</returns>
     /// <response code="200">Returns hotel average rating</response>
     /// <response code="404">If the hotel is not found</response>
+    [AllowAnonymous]
     [HttpGet("{hotelId}/reviews/average")]
     public async Task<ActionResult<double>> GetHotelAverageRating(Guid hotelId)
     {
@@ -101,8 +105,10 @@ public class ReviewsController(IReviewService reviewService,
     /// <param name="request">The data for the updated review</param>
     /// <returns>No content</returns>
     /// <response code="204">If the review is successfully updated</response>
-    /// <response code="404">If the hotel or review is not found</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">User is not authenticated.</response>
+    /// <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
+    /// <response code="404">If the hotel or review is not found</response>
     [HttpPut("{hotelId}/reviews/{reviewId}")]
     public async Task<ActionResult> UpdateReview(Guid hotelId, Guid reviewId, CreateOrUpdateReviewCommand request)
     {
@@ -122,6 +128,8 @@ public class ReviewsController(IReviewService reviewService,
     /// <param name="reviewId">The id of the review to delete</param>
     /// <returns>No content</returns>
     /// <response code="204">If the review is successfully deleted</response>
+    /// <response code="401">User is not authenticated.</response>
+    /// <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
     /// <response code="404">If the hotel is not found</response>
     [HttpDelete("{hotelId}/reviews/{reviewId}")]
     public async Task<ActionResult> DeleteReview(Guid hotelId, Guid reviewId)
@@ -153,8 +161,9 @@ public class ReviewsController(IReviewService reviewService,
     /// A collection of <see cref="ReviewOutputModel"/> objects, each representing a review that matches the specified criteria for the specified hotel.
     /// </returns>
     /// <response code="200">Returns the list of hotel reviews based on the query parameters.</response>
-    /// <response code="400">If the request parameters are invalid or missing.</response>
+    /// <response code="400">If the request data is invalid</response>
     /// <response code="404">If the hotel is not found.</response>
+    [AllowAnonymous]
     [HttpGet("{hotelId}/reviews", Name = "GetHotelReviews")]
     public async Task<ActionResult<ReviewOutputModel>> GetHotelReviews(Guid hotelId, [FromQuery] GetHotelReviewsQueryParameters request)
     {

@@ -54,6 +54,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             InvalidUserCredentialsException => (StatusCodes.Status401Unauthorized, "Invalid Credentials", exception.Message),
             UnauthenticatedException => (StatusCodes.Status401Unauthorized, "Unauthenticated", exception.Message),
             NoRolesException => (StatusCodes.Status403Forbidden, "Unauthorized", exception.Message),
+            UnauthorizedException => (StatusCodes.Status403Forbidden, "Unauthorized", exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Something went wrong", "We made a mistake but we are working on it")
         };
     }
