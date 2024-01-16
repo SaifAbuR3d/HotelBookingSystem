@@ -55,12 +55,18 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             UnauthenticatedException => (StatusCodes.Status401Unauthorized, "Unauthenticated", exception.Message),
             NoRolesException => (StatusCodes.Status403Forbidden, "Unauthorized", exception.Message),
             UnauthorizedException => (StatusCodes.Status403Forbidden, "Unauthorized", exception.Message),
+            NoPriceException => (StatusCodes.Status500InternalServerError, "No Price", exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Something went wrong", "We made a mistake but we are working on it")
         };
     }
     private void Log(Exception exception)
     {
-        if (exception is CustomException)
+        if (exception is ServerErrorException)
+        {
+            logger.LogError(exception, "Request Failure {@ErrorType}, {@ErrorMessage}, {@DateTimeUtc}",
+                  exception.GetType().Name, exception.Message, DateTime.UtcNow);
+        }
+        else if (exception is CustomException)
         {
             var (statusCode, title, detail) = MapException(exception);
 

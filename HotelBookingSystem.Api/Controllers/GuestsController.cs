@@ -72,7 +72,7 @@ public class GuestsController(IGuestService guestService,
     {
         logger.LogInformation("GetRecentlyVisitedHotels started for current user, count: {recentlyVisitedHotelsCount}", count);
 
-        var hotels = await guestService.GetRecentlyVisitedHotelsAsync(count);
+        var hotels = await guestService.GetRecentlyVisitedHotelsForCurrentUserAsync(count);
 
         logger.LogInformation("GetRecentlyVisitedHotels for current user, count: {recentlyVisitedHotelsCount} completed successfully", count);
         return Ok(hotels);

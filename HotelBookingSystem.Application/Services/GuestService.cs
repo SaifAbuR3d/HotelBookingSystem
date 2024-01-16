@@ -110,18 +110,29 @@ public class GuestService(IGuestRepository guestRepository,
     /// <returns>
     /// An asynchronous task representing the operation, returning a collection of unique recently visited hotels.
     /// </returns>
-    public async Task<IEnumerable<RecentlyVisitedHotelOutputModel>> GetRecentlyVisitedHotelsAsync(int count = 5)
+    public async Task<IEnumerable<RecentlyVisitedHotelOutputModel>> GetRecentlyVisitedHotelsForCurrentUserAsync(
+        int count = 5)
     {
         _logger.LogInformation("GetRecentlyVisitedHotelsAsync started for current user, count: {recentlyVisitedHotelsCount}", count);
 
+        _logger.LogDebug("Validating {countRecentlyVisited}", count);
+        if (count <= 0 || count > 100)
+        {
+            throw new BadRequestException($"invalid parameter: {count}. Number of hotels must be between 1 and 100");
+        }
+
         var (guest, _) = await GetGuestFromCurrentUser();
 
-        _logger.LogDebug("Calling GetRecentlyVisitedHotelsAsync with guestId: {guestId}, count: {count}", guest.Id, count);
-        var result = await GetRecentlyVisitedHotelsAsync(guest.Id, count);
+        _logger.LogDebug("Retrieving recent bookings for guest with ID: {GuestId} from the repository", guest.Id);
+        var recentBookings = await _guestRepository.GetRecentBookingsInDifferentHotelsAsync(guest.Id, count);
+
+        _logger.LogDebug("Mapping the retrieved Booking entities to RecentlyVisitedHotelOutputModel");
+        var mapped = _mapper.Map<IEnumerable<RecentlyVisitedHotelOutputModel>>(recentBookings);
 
         _logger.LogInformation("GetRecentlyVisitedHotelsAsync completed successfully for current user, count: {recentlyVisitedHotelsCount}, with guestId: {@guestId}", count, guest.Id);
-        return result;
-       
+        return mapped;
+
+   
     }
 
     private async Task<(Guest, string)> GetGuestFromCurrentUser()
