@@ -4,8 +4,6 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Hotel.Command;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
-using HotelBookingSystem.Application.Tests.Shared;
-using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Tests;
 
@@ -27,7 +25,6 @@ public class HotelServiceTests
         mapper = AutoMapperSingleton.Mapper;
         var imageHandlerMock = new Mock<IImageHandler>();
         var logger = Mock.Of<ILogger<HotelService>>();
-
         sut = new HotelService(hotelRepositoryMock.Object,
                                cityRepositoryMock.Object,
                                guestRepositoryMock.Object,
@@ -122,7 +119,7 @@ public class HotelServiceTests
         // Arrange
         var createHotelCommand = fixture.Create<CreateHotelCommand>();
         var city = fixture.Create<City>();
-        cityRepositoryMock.Setup(x => x.GetCityByNameAsync(createHotelCommand.CityName)).ReturnsAsync(city);
+        cityRepositoryMock.Setup(x => x.GetCityAsync(createHotelCommand.CityId)).ReturnsAsync(city);
         var hotel = mapper.Map<Hotel>(createHotelCommand);
         hotelRepositoryMock.Setup(x => x.AddHotelAsync(It.IsAny<Hotel>())).ReturnsAsync(hotel);
 
@@ -130,7 +127,7 @@ public class HotelServiceTests
         var result = await sut.CreateHotelAsync(createHotelCommand);
 
         // Assert
-        cityRepositoryMock.Verify(c => c.GetCityByNameAsync(createHotelCommand.CityName), Times.Once);
+        cityRepositoryMock.Verify(c => c.GetCityAsync(createHotelCommand.CityId), Times.Once);
         hotelRepositoryMock.Verify(h => h.AddHotelAsync(It.IsAny<Hotel>()), Times.Once);
         hotelRepositoryMock.Verify(h => h.SaveChangesAsync(), Times.Once);
         Assert.NotNull(result);
@@ -143,11 +140,11 @@ public class HotelServiceTests
     {
         // Arrange
         var createHotelCommand = fixture.Create<CreateHotelCommand>();
-        cityRepositoryMock.Setup(x => x.GetCityByNameAsync(createHotelCommand.CityName)).ReturnsAsync((City?)null);
+        cityRepositoryMock.Setup(x => x.GetCityAsync(createHotelCommand.CityId)).ReturnsAsync((City?)null);
 
         // Act & Assert
         var result = await Assert.ThrowsAsync<NotFoundException>(() => sut.CreateHotelAsync(createHotelCommand));
-        cityRepositoryMock.Verify(c => c.GetCityByNameAsync(createHotelCommand.CityName), Times.Once);
+        cityRepositoryMock.Verify(c => c.GetCityAsync(createHotelCommand.CityId), Times.Once);
         Assert.NotNull(result);
     }
 
@@ -159,7 +156,7 @@ public class HotelServiceTests
         var hotel = mapper.Map<Hotel>(updateHotelCommand);
         hotelRepositoryMock.Setup(x => x.GetHotelAsync(It.IsAny<Guid>())).ReturnsAsync(hotel);
         var city = fixture.Create<City>();
-        cityRepositoryMock.Setup(x => x.GetCityByNameAsync(updateHotelCommand.CityName)).ReturnsAsync(city);
+        cityRepositoryMock.Setup(x => x.GetCityAsync(updateHotelCommand.CityId)).ReturnsAsync(city);
 
 
         // Act
@@ -176,7 +173,7 @@ public class HotelServiceTests
     {
         // Arrange
         var updateHotelCommand = fixture.Create<UpdateHotelCommand>();
-        cityRepositoryMock.Setup(x => x.GetCityByNameAsync(updateHotelCommand.CityName)).ReturnsAsync((City?)null);
+        cityRepositoryMock.Setup(x => x.GetCityAsync(updateHotelCommand.CityId)).ReturnsAsync((City?)null);
 
         // Act & Asser
         var result = await Assert.ThrowsAsync<NotFoundException>(() => sut.UpdateHotelAsync(It.IsAny<Guid>(), updateHotelCommand));
@@ -190,7 +187,7 @@ public class HotelServiceTests
         hotelRepositoryMock.Setup(x => x.GetHotelAsync(It.IsAny<Guid>())).ReturnsAsync((Hotel?)null);
         var updateHotelCommand = fixture.Create<UpdateHotelCommand>();
         var city = fixture.Create<City>();
-        cityRepositoryMock.Setup(x => x.GetCityByNameAsync(updateHotelCommand.CityName)).ReturnsAsync(city);
+        cityRepositoryMock.Setup(x => x.GetCityAsync(updateHotelCommand.CityId)).ReturnsAsync(city);
 
         // Act & Assert
         var result = await Assert.ThrowsAsync<NotFoundException>(() => sut.UpdateHotelAsync(It.IsAny<Guid>(), updateHotelCommand));

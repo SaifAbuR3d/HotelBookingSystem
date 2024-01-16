@@ -12,11 +12,16 @@ public class AutoMapperSingleton
             if (_mapper == null)
             {
                 // Auto Mapper Configurations
-                var mappingConfig = new MapperConfiguration(mc =>
+                var mappingConfig = new MapperConfiguration(config =>
                 {
-                    mc.AddProfile(new CityProfile());
-                    mc.AddProfile(new HotelProfile());
-                    mc.AddProfile(new RoomProfile());
+                    config.AddProfile(new CityProfile());
+                    config.AddProfile(new HotelProfile());
+                    config.AddProfile(new RoomProfile());
+                    config.AddProfile(new BookingProfile());
+                    config.AddProfile(new DiscountProfile());
+                    config.AddProfile(new FeaturedDealProfile());
+                    config.AddProfile(new ReviewProfile());
+                    config.AddProfile(new GuestProfile());
                 });
                 IMapper mapper = mappingConfig.CreateMapper();
                 _mapper = mapper;

@@ -4,7 +4,6 @@ using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Room.Command;
 using HotelBookingSystem.Application.DTOs.Room.OutputModel;
 using HotelBookingSystem.Application.DTOs.Room.Query;
-using HotelBookingSystem.Application.Tests.Shared;
 
 namespace HotelBookingSystem.Application.Tests;
 
@@ -12,6 +11,7 @@ public class RoomServiceTests
 {
     private readonly Mock<IHotelRepository> hotelRepositoryMock;
     private readonly Mock<IRoomRepository> roomRepositoryMock;
+
     private readonly IFixture fixture;
     private readonly IMapper mapper;
     private readonly RoomService sut;
@@ -21,6 +21,7 @@ public class RoomServiceTests
         fixture = FixtureFactory.CreateFixture();
         hotelRepositoryMock = new Mock<IHotelRepository>();
         roomRepositoryMock = new Mock<IRoomRepository>();
+
         mapper = AutoMapperSingleton.Mapper;
         var imageHandler = new Mock<IImageHandler>();
 
@@ -55,6 +56,31 @@ public class RoomServiceTests
         Assert.False(paginationMetadata.HasPreviousPage);
         Assert.False(paginationMetadata.HasNextPage);
     }
+
+    [Fact]
+    public async Task GetAllRoomsAsync_ShouldHandlePaginationCorrectly()
+    {
+        // Arrange
+        var requestParameters = new GetRoomsQueryParameters { PageNumber = 2, PageSize = 5 };
+        var expectedRooms = fixture.CreateMany<Room>(10).ToList();
+        var expectedPaginationMetadata = new PaginationMetadata(2, 5, 20); // page 2, 5 items per page, 20 total items
+
+        roomRepositoryMock.Setup(x => x.GetAllRoomsAsync(requestParameters))
+                          .ReturnsAsync((expectedRooms.Skip(5).Take(5).ToList(), expectedPaginationMetadata));
+
+        // Act
+        var (rooms, paginationMetadata) = await sut.GetAllRoomsAsync(requestParameters);
+
+        // Assert
+        roomRepositoryMock.Verify(r => r.GetAllRoomsAsync(requestParameters), Times.Once);
+        Assert.Equal(5, rooms.Count());
+        Assert.Equal(2, paginationMetadata.PageNumber);
+        Assert.Equal(5, paginationMetadata.PageSize);
+        Assert.Equal(20, paginationMetadata.TotalCount);
+        Assert.True(paginationMetadata.HasPreviousPage);
+        Assert.True(paginationMetadata.HasNextPage);
+    }
+
 
     [Fact]
     public async Task GetRoomAsync_ShouldReturnRoom_IfRoomExists()
@@ -121,17 +147,17 @@ public class RoomServiceTests
         var hotel = fixture.Create<Hotel>();
         var room = fixture.Create<Room>();
         var createRoomCommand = fixture.Build<CreateRoomCommand>()
-            .With(x => x.HotelName, hotel.Name)
+            .With(x => x.HotelId, hotel.Id)
             .Create();
 
-        hotelRepositoryMock.Setup(x => x.GetHotelByNameAsync(createRoomCommand.HotelName)).ReturnsAsync(hotel);
+        hotelRepositoryMock.Setup(x => x.GetHotelAsync(createRoomCommand.HotelId)).ReturnsAsync(hotel);
         roomRepositoryMock.Setup(x => x.AddRoomAsync(It.IsAny<Room>())).ReturnsAsync(room);
 
         // Act
         var result = await sut.CreateRoomAsync(createRoomCommand);
 
         // Assert
-        hotelRepositoryMock.Verify(h => h.GetHotelByNameAsync(createRoomCommand.HotelName), Times.Once);
+        hotelRepositoryMock.Verify(h => h.GetHotelAsync(createRoomCommand.HotelId), Times.Once);
         roomRepositoryMock.Verify(r => r.AddRoomAsync(It.IsAny<Room>()), Times.Once);
         roomRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         Assert.NotNull(result);
@@ -144,11 +170,11 @@ public class RoomServiceTests
     {
         // Arrange
         var createRoomCommand = fixture.Create<CreateRoomCommand>();
-        hotelRepositoryMock.Setup(x => x.GetHotelByNameAsync(createRoomCommand.HotelName)).ReturnsAsync((Hotel?)null);
+        hotelRepositoryMock.Setup(x => x.GetHotelAsync(createRoomCommand.HotelId)).ReturnsAsync((Hotel?)null);
 
         // Act & Assert
         var result = await Assert.ThrowsAsync<NotFoundException>(() => sut.CreateRoomAsync(createRoomCommand));
-        hotelRepositoryMock.Verify(h => h.GetHotelByNameAsync(createRoomCommand.HotelName), Times.Once);
+        hotelRepositoryMock.Verify(h => h.GetHotelAsync(createRoomCommand.HotelId), Times.Once);
     }
 
     [Fact]

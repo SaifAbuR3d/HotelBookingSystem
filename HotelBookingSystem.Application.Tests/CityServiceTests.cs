@@ -4,8 +4,6 @@ using HotelBookingSystem.Application.DTOs.City.Command;
 using HotelBookingSystem.Application.DTOs.City.OutputModel;
 using HotelBookingSystem.Application.DTOs.City.Query;
 using HotelBookingSystem.Application.DTOs.Common;
-using HotelBookingSystem.Application.Tests.Shared;
-using Microsoft.Extensions.Logging;
 
 namespace HotelBookingSystem.Application.Tests;
 
@@ -21,6 +19,7 @@ public class CityServiceTests
         fixture = FixtureFactory.CreateFixture();
         cityRepositoryMock = new Mock<ICityRepository>();
         mapper = AutoMapperSingleton.Mapper;
+
         var imageHandler = new Mock<IImageHandler>();
         var logger = Mock.Of<ILogger<CityService>>();
 
@@ -55,6 +54,31 @@ public class CityServiceTests
         Assert.False(paginationMetadata.HasPreviousPage);
         Assert.False(paginationMetadata.HasNextPage);
     }
+
+    [Fact]
+    public async Task GetAllCitiesAsync_ShouldHandlePaginationCorrectly()
+    {
+        // Arrange
+        var requestParameters = new GetCitiesQueryParameters { PageNumber = 2, PageSize = 5 };
+        var expectedCities = fixture.CreateMany<City>(10).ToList();
+        var expectedPaginationMetadata = new PaginationMetadata(2, 5, 20); // page 2, 5 items per page, 20 total items
+
+        cityRepositoryMock.Setup(x => x.GetAllCitiesAsync(requestParameters))
+                          .ReturnsAsync((expectedCities.Skip(5).Take(5).ToList(), expectedPaginationMetadata));
+
+        // Act
+        var (cities, paginationMetadata) = await sut.GetAllCitiesAsync(requestParameters);
+
+        // Assert
+        cityRepositoryMock.Verify(c => c.GetAllCitiesAsync(requestParameters), Times.Once);
+        Assert.Equal(5, cities.Count());
+        Assert.Equal(2, paginationMetadata.PageNumber);
+        Assert.Equal(5, paginationMetadata.PageSize);
+        Assert.Equal(20, paginationMetadata.TotalCount);
+        Assert.True(paginationMetadata.HasPreviousPage);
+        Assert.True(paginationMetadata.HasNextPage);
+    }
+
 
     [Fact]
     public async Task GetCityAsync_ShouldReturnCity_IfCityExists()
