@@ -11,7 +11,7 @@ namespace HotelBookingSystem.Infrastructure.Persistence;
 
 public static class PersistenceConfiguration
 {
-    public static IServiceCollection AddPersistence(
+    public static IServiceCollection AddPersistenceInfrastructure(
         this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         => services
             .AddDatabase(configuration.GetConnectionString("SqlServer"), isDevelopment)

@@ -6,4 +6,5 @@ public interface ICurrentUser
     string Role { get; }
     bool IsGuest { get; }
     bool IsAdmin { get; }
+    string Email { get; }
 }
