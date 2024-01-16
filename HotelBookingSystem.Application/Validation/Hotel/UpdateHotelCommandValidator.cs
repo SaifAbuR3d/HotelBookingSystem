@@ -8,7 +8,7 @@ using static Domain.Models.Constants.Common;
 using static Domain.Models.Constants.Hotel;
 using static Domain.Models.Constants.Location;
 
-public class UpdateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
+public class UpdateHotelCommandValidator : AbstractValidator<UpdateHotelCommand>
 {
     public UpdateHotelCommandValidator()
     {
@@ -17,12 +17,6 @@ public class UpdateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
 
         RuleFor(h => h.Owner)
             .ValidName(MinNameLength, MaxNameLength);
-
-        RuleFor(h => h.CityName)
-            .ValidName(MinNameLength, MaxNameLength);
-
-        RuleFor(h => h.StarRate)
-            .InclusiveBetween(MinHotelStars, MaxHotelStars);
 
         RuleFor(h => h.Street)
             .NotEmpty();

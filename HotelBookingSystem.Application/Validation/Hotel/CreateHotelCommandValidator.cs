@@ -18,9 +18,6 @@ public class CreateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
         RuleFor(h => h.Owner)
             .ValidName(MinNameLength, MaxNameLength);
 
-        RuleFor(h => h.CityName)
-            .ValidName(MinNameLength, MaxNameLength);
-
         RuleFor(h => h.StarRate)
             .InclusiveBetween(MinHotelStars, MaxHotelStars);
 
@@ -34,7 +31,5 @@ public class CreateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
         RuleFor(h => h.Longitude)
             .NotEmpty()
             .InclusiveBetween(MinLongitude, MaxLongitude);
-
-        // or include the validation rules for the UpdateHotelCommand and just add validation for city name
     }
 }

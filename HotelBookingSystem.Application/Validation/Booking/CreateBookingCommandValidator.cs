@@ -1,19 +1,18 @@
 ﻿using FluentValidation;
-using HotelBookingSystem.Application.DTOs.Booking;
+using HotelBookingSystem.Application.DTOs.Booking.Command;
 
 namespace HotelBookingSystem.Application.Validation.Booking;
 
 using static Domain.Models.Constants.Room;
 
-public class CreateBookingCommandValidator : AbstractValidator<CreateBookingCommand>
+public class CreateBookingCommandValidator : 
+                AbstractValidator<CreateBookingCommand>
 {
     public CreateBookingCommandValidator()
     {
-        RuleFor(b => b.GuestId)
-            .NotEmpty(); 
-        
-        RuleFor(b => b.RoomId)
-            .NotEmpty();
+        RuleFor(b => b.RoomIds)
+            .NotEmpty()
+            .ForEach(b => b.NotEmpty());
 
         RuleFor(b => b.NumberOfAdults)
             .InclusiveBetween(0, MaxRoomCapacity); 
@@ -23,7 +22,8 @@ public class CreateBookingCommandValidator : AbstractValidator<CreateBookingComm
 
         RuleFor(b => b.CheckInDate)
             .NotEmpty()
-            .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
+            .Must(dt => DateOnly.FromDateTime(dt) >= DateOnly.FromDateTime(DateTime.UtcNow))
+            .GreaterThanOrEqualTo((DateTime.UtcNow))
             .WithMessage("Check-in date must be in the future");
 
         RuleFor(b => b.CheckOutDate)
