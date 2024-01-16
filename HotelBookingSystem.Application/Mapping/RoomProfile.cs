@@ -18,19 +18,19 @@ public class RoomProfile : Profile
 
         CreateMap<RoomImage, RoomImageOutputModel>();
 
-        var defaultRoomImage = new RoomImage
-        {
-            ImageUrl = "C:\\Users\\user\\source\\repos\\HotelBookingSystem\\HotelBookingSystem.Api\\wwwroot\\images\\common\\defaultRoom.jpg",
-            AlternativeText = "Default room image"
-        };
-
         CreateMap<Room, RoomWithImageOutputModel>()
             .ForMember(dest => dest.RoomImage, opt => opt.MapFrom(src =>
                                 src.Images.FirstOrDefault(i => i.ImageUrl.Contains("thumbnail")) 
                                 ?? src.Images.FirstOrDefault() 
-                                ?? defaultRoomImage          
                                 )
                       );
+
+        CreateMap<Room, RoomWithinInvoice>()
+            .ForMember(dest => dest.PricePerNight, opt => opt.Ignore())
+            .ForMember(dest => dest.PricePerNightAfterDiscount, opt => opt.Ignore())
+            .ForMember(dest => dest.TotalRoomPrice, opt => opt.Ignore())
+            .ForMember(dest => dest.TotalRoomPriceAfterDiscount, opt => opt.Ignore())
+            .ForMember(dest => dest.NumberOfNights, opt => opt.Ignore()); 
 
     }
 }

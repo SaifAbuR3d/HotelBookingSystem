@@ -1,4 +1,7 @@
-﻿namespace HotelBookingSystem.Application.DTOs.Review.OutputModel;
+﻿using HotelBookingSystem.Application.DTOs.Guest;
+using HotelBookingSystem.Domain.Models;
+
+namespace HotelBookingSystem.Application.DTOs.Review.OutputModel;
 
 public class ReviewOutputModel
 {
@@ -8,7 +11,7 @@ public class ReviewOutputModel
     public int Rating { get; set; }
     public DateTime CreationDate { get; set; }
     public DateTime LastModified { get; set; }
-
-    public Guid GuestId { get; set; } // add more guest info (name,maybe visit date..)
-    public Guid HotelId { get; set; } // add more hotel info (maybe name,..)
+    public GuestOutputModel Guest { get; set; } = default!;
+    public Guid HotelId { get; set; }
+    public string HotelName { get; set; } = default!;
 }

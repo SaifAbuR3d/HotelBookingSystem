@@ -10,7 +10,19 @@ public class ResourceQueryParameters
         get => _pageSize;
         set => _pageSize = value > MaxPageSize ? MaxPageSize : value;
     }
+
+    /// <summary>
+    /// search by:
+    /// </summary>
     public string? SearchTerm { get; set; }
+
+    /// <summary>
+    /// sort by:
+    /// </summary>
     public string? SortColumn { get; set; }
+
+    /// <summary>
+    /// asc or desc
+    /// </summary>
     public string? SortOrder { get; set; }
 }

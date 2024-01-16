@@ -10,6 +10,8 @@ public class ReviewProfile : Profile
     public ReviewProfile()
     {
         CreateMap<CreateOrUpdateReviewCommand, Review>();
-        CreateMap<Review, ReviewOutputModel>();
+        CreateMap<Review, ReviewOutputModel>()
+            .ForMember(dest => dest.HotelName, opt => opt.MapFrom(src => src.Hotel.Name));
     }
+           
 }

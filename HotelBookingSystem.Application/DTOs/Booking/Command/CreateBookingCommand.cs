@@ -1,19 +1,21 @@
-﻿namespace HotelBookingSystem.Application.DTOs.Booking;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HotelBookingSystem.Application.DTOs.Booking.Command;
 
 /// <summary>
 /// DTO for creating a Booking
 /// </summary>
-public class CreateBookingCommand 
+public class CreateBookingCommand
 {
     /// <summary>
-    /// The Id of the desired Room
+    /// List of Id's of the desired Rooms
     /// </summary>
-    public Guid RoomId { get; set; }
+    public List<Guid> RoomIds { get; set; } = default!;
 
     /// <summary>
-    /// The Id of the Guest who is making the booking
+    /// the desired Hotel Id 
     /// </summary>
-    public Guid GuestId { get; set; }
+    public Guid HotelId { get; set; }
 
     /// <summary>
     /// Number of adults staying in the room
@@ -26,14 +28,16 @@ public class CreateBookingCommand
     public int NumberOfChildren { get; set; }
 
     /// <summary>
-    /// Check-in date
+    /// Check-in date in UTC
     /// </summary>
-    public DateOnly CheckInDate { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime CheckInDate { get; set; }
 
     /// <summary>
-    /// Check-out date
+    /// Check-out date in UTC
     /// </summary>
-    public DateOnly CheckOutDate { get; set; }
+    [DataType(DataType.Date)]
+    public DateTime CheckOutDate { get; set; }
 
     /// <summary>
     /// User special requests or remarks

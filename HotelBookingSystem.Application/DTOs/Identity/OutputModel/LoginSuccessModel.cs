@@ -4,8 +4,8 @@ public class LoginSuccessModel
 {
     public LoginSuccessModel(string userId, string token, string role)
     {
-        this.UserId = userId;
-        this.Token = token;
+        UserId = userId;
+        Token = token;
         Role = role;
     }
     public string UserId { get; }
