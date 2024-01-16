@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingSystem.Api", "H
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FC6515AB-FFB5-4CF2-8AA0-E8ACDA1D209C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBookingSystem.Application.Tests", "HotelBookingSystem.Application.Tests\HotelBookingSystem.Application.Tests.csproj", "{9907E9D6-790E-4DCB-879B-EA1924476CBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBookingSystem.Application.Tests", "HotelBookingSystem.Application.Tests\HotelBookingSystem.Application.Tests.csproj", "{9907E9D6-790E-4DCB-879B-EA1924476CBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
