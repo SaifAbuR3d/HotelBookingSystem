@@ -22,7 +22,6 @@ public class CityService(ICityRepository cityRepository,
     private readonly IMapper _mapper = mapper;
 
     private readonly IImageHandler _imageHandler = imageHandler;
-
     private readonly ILogger<CityService> _logger = logger;
 
     public async Task<(IEnumerable<CityOutputModel>, PaginationMetadata)> GetAllCitiesAsync(GetCitiesQueryParameters request)

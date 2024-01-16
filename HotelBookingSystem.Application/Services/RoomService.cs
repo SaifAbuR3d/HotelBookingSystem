@@ -53,7 +53,8 @@ public class RoomService(IHotelRepository hotelRepository,
 
     public async Task<RoomOutputModel> CreateRoomAsync(CreateRoomCommand request)
     {
-        var hotel = await _hotelRepository.GetHotelByNameAsync(request.HotelName) ?? throw new NotFoundException(nameof(Hotel), request.HotelName);
+        var hotel = await _hotelRepository.GetHotelAsync(request.HotelId) 
+            ?? throw new NotFoundException(nameof(Hotel), request.HotelId);
 
 
         var room = _mapper.Map<Room>(request);

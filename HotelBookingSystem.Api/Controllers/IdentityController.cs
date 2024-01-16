@@ -2,7 +2,6 @@
 using HotelBookingSystem.Application.DTOs.Identity.Command;
 using HotelBookingSystem.Application.DTOs.Identity.OutputModel;
 using HotelBookingSystem.Application.Identity;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -19,14 +18,27 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     /// Register a guest
     /// </summary>
     /// <param name="request"></param>
+    /// <remarks> 
+    /// Sample request:
+    ///
+    ///     POST /register
+    ///     {
+    ///        "username": "Sample_User_Name",
+    ///        "firstName": "Sample",
+    ///        "lastName": "User",
+    ///        "email": "sample@user.com",
+    ///        "password": "sample_password"
+    ///     }
+    ///
+    /// </remarks>
     /// <response code="201"></response>
     /// <response code="400">if the request data is invalid</response>
-    /// <returns></returns>
+    /// <returns>No Content</returns>
     [HttpPost("api/register")]
     public async Task<ActionResult> RegisterGuest([FromBody] RegisterUserModel request)
     {
         await identityService.RegisterUser(request, UserRoles.Guest);
-        return Ok();
+        return Ok(new { Status = "Success", Message = "User Created Successfully" });
     }
 
 
@@ -34,16 +46,28 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     /// Register an admin
     /// </summary>
     /// <param name="request"></param>
+    /// <remarks> 
+    /// Sample request:
+    ///
+    ///     POST /register-admin
+    ///     {
+    ///        "username": "Sample_User_Name",
+    ///        "firstName": "Sample",
+    ///        "lastName": "User",
+    ///        "email": "sample@user.com",
+    ///        "password": "sample_password"
+    ///     }
+    ///
+    /// </remarks>
     /// <response code="201"></response>
-    /// <response code="400">if the request data is invalid</response> 
-    /// <response code="401">If the user is not authenticated</response>
-    /// <response code="403">If the user is not authorized (not an admin)</response> 
-    [Authorize(Policy = Policies.AdminOnly)]
+    /// <response code="400">if the request data is invalid</response>
+    /// <returns>No Content</returns>
+    //    [Authorize(Policy = Policies.AdminOnly)]
     [HttpPost("api/register-admin")]
     public async Task<ActionResult> RegisterAdmin([FromBody] RegisterUserModel request)
     {
         await identityService.RegisterUser(request, UserRoles.Admin);
-        return Created();
+        return Ok(new {Status = "Success", Message= "User Created Successfully"});
     }
 
 
@@ -51,8 +75,20 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     /// login a user
     /// </summary>
     /// <param name="request"></param>
-    /// <response code="201"></response>
+    /// <remarks> 
+    /// Sample request:
+    ///
+    ///     POST /login
+    ///     {
+    ///        "email": "sample@user.com",
+    ///        "password": "sample_password"
+    ///     }
+    ///
+    /// </remarks>
+    /// <response code="200"></response>
     /// <response code="400">if the request data is invalid</response>
+    /// <returns>userId and a token</returns>
+
     [HttpPost("api/login")]
     public async Task<ActionResult<LoginOutputModel>> Login([FromBody] LoginUserModel request)
     {

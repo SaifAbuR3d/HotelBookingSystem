@@ -5,6 +5,11 @@
 public class UpdateHotelCommand
 {
     /// <summary>
+    /// Id of the city where the hotel is located
+    /// </summary>
+    public Guid CityId { get; set; }
+
+    /// <summary>
     /// Name of the hotel
     /// </summary>
     public string Name { get; set; } = default!;
@@ -29,8 +34,4 @@ public class UpdateHotelCommand
     /// </summary>
     public double Longitude { get; set; }
 
-    /// <summary>
-    /// City name where the hotel is located
-    /// </summary>
-    public string CityName { get; set; } = default!;
 }

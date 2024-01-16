@@ -50,7 +50,7 @@ public class RoomsController(IRoomService roomService,
     ///
     ///     POST /rooms
     ///     {
-    ///        "hotelName": "Hotel Budapest",
+    ///        "hotelId": "{hotelId}",
     ///        "roomNumber": "101",
     ///        "adultsCapacity": 2,
     ///        "childrenCapacity": 1,
@@ -78,11 +78,23 @@ public class RoomsController(IRoomService roomService,
     /// Delete a room
     /// </summary>
     /// <param name="id">The id of the room to delete</param>
+    /// <returns>The newly created room</returns>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /rooms
+    ///     {
+    ///        "roomNumber": "101",
+    ///        "adultsCapacity": 2,
+    ///        "childrenCapacity": 1,
+    ///        "price": 100
+    ///     }
+    ///
+    /// </remarks>
     /// <returns>No content</returns>
-    /// <response code="204">If the room is successfully deleted</response>
+    /// <response code="204">If the operation is successfully done</response>
     /// <response code="401">If the user is not authenticated</response>
     /// <response code="403">If the user is not authorized (not an admin)</response> 
-    /// <response code="404">If the room is not found</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteRoom(Guid id)
     {

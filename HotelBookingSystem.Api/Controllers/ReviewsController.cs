@@ -127,10 +127,9 @@ public class ReviewsController(IReviewService reviewService,
     /// <param name="hotelId">The id of the hotel having the review to delete</param>
     /// <param name="reviewId">The id of the review to delete</param>
     /// <returns>No content</returns>
-    /// <response code="204">If the review is successfully deleted</response>
+    /// <response code="204">If the operation is successfully done</response>
     /// <response code="401">User is not authenticated.</response>
     /// <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
-    /// <response code="404">If the hotel is not found</response>
     [HttpDelete("{hotelId}/reviews/{reviewId}")]
     public async Task<ActionResult> DeleteReview(Guid hotelId, Guid reviewId)
     {

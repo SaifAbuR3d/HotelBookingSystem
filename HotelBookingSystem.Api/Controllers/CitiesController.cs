@@ -78,10 +78,9 @@ public class CitiesController(ICityService cityService,
     /// </summary>
     /// <param name="id">The id of the city to delete</param>
     /// <returns>No content</returns>
-    /// <response code="204">If the city is deleted</response>
+    /// <response code="204">If the operation is successfully done</response>
     /// <response code="401">If the user is not authenticated</response>
     /// <response code="403">If the user is not authorized (not an admin)</response>
-    /// <response code="404">If the city is not found</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCity(Guid id)
     {
@@ -99,6 +98,17 @@ public class CitiesController(ICityService cityService,
     /// <param name="id">The id of the city to update</param>
     /// <param name="request">The data for the updated city</param>
     /// <returns>No content</returns>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     PUT /cities/{cityId}
+    ///     {
+    ///        "name": "Budapest",
+    ///        "country": "Hungary",
+    ///        "postOffice": "1117"
+    ///     }
+    ///
+    /// </remarks>
     /// <response code="204">If the city is updated</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">If the user is not authenticated</response>
@@ -121,7 +131,8 @@ public class CitiesController(ICityService cityService,
     /// <param name="count">The number of trending destinations to retrieve. Default is 5.</param>
     /// <remarks>
     /// This endpoint allows clients to retrieve a curated list of trending destinations, specifically the topmost visited cities.
-    /// The response includes essential details for each city, such as its unique identifier, name, and a visually appealing thumbnail.
+    /// The response includes essential details for each city, such as its unique identifier,
+    /// name, and a visually appealing thumbnail.
     /// 
     /// The number of trending destinations to be retrieved can be specified using the <paramref name="count"/> parameter.
     /// If no count is provided, the default is set to 5.

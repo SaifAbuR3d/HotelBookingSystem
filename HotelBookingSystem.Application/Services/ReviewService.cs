@@ -44,7 +44,9 @@ public class ReviewService(IHotelRepository hotelRepository,
         review.Id = Guid.NewGuid();
         review.CreationDate = DateTime.UtcNow;
         review.LastModified = DateTime.UtcNow;
+        review.Hotel = hotel;
         review.HotelId = hotel.Id;
+        review.Guest = guest;
         review.GuestId = guest.Id;
 
         _logger.LogDebug("Add the review to the repository");
@@ -81,8 +83,8 @@ public class ReviewService(IHotelRepository hotelRepository,
         var userId = _currentUser.Id;
 
         _logger.LogDebug("Getting the guest from the repository");
-        var guest = await _guestRepository.GetGuestByUserIdAsync(userId) 
-            ?? throw new NotFoundException(nameof(Guest),userId );
+        var guest = await _guestRepository.GetGuestByUserIdAsync(userId)
+            ?? throw new UnauthenticatedException();
 
         return (guest, userId);
     }
@@ -125,10 +127,18 @@ public class ReviewService(IHotelRepository hotelRepository,
             hotelId, reviewId);
 
         _logger.LogDebug("Getting the hotel from the repository");
-        var hotel = await _hotelRepository.GetHotelAsync(hotelId) ?? throw new NotFoundException(nameof(Hotel), hotelId);
+        var hotel = await _hotelRepository.GetHotelAsync(hotelId);
+        if (hotel == null)
+        {
+            return false;
+        }
 
         _logger.LogDebug("Getting the review from the repository");
-        var review = await _reviewRepository.GetReviewAsync(hotel, reviewId) ?? throw new NotFoundException(nameof(Review), reviewId);
+        var review = await _reviewRepository.GetReviewAsync(hotel, reviewId);
+        if(review == null)
+        {
+            return false;
+        }
 
         _logger.LogDebug("Getting guest representing the current user");
         var (guest, userId) = await GetGuestFromCurrentUser();
@@ -187,4 +197,5 @@ public class ReviewService(IHotelRepository hotelRepository,
         _logger.LogInformation("GetHotelAverageRatingAsync for hotel with ID: {HotelId} completed successfully", id);
         return roundedRating;
     }
+
 }

@@ -77,10 +77,9 @@ public class DiscountsController(IDiscountService discountService,
     /// <param name="roomId">The id of the room</param>
     /// <param name="id">The id of the discount</param>
     /// <returns></returns>
-    /// <response code="204">If the discount is deleted</response>
+    /// <response code="204">If the operation is successfully done</response>
     /// <response code="401">User is not authenticated.</response>
     /// <response code="403">User is not authorized (not an admin).</response>
-    /// <response code="404">If the discount is not found</response>
     [HttpDelete("{roomId}/discounts/{id}")]
     public async Task<ActionResult> DeleteDiscount(Guid roomId, Guid id)
     {
@@ -115,8 +114,8 @@ public class DiscountsController(IDiscountService discountService,
     /// </returns>
     /// <response code="200">Returns the collection of featured deals.</response>
     [AllowAnonymous]
-    [HttpGet("featured-deals/{deals}")]
-    public async Task<ActionResult<IEnumerable<FeaturedDealOutputModel>>> GetFeaturedDeals(int deals = 5)
+    [HttpGet("featured-deals")]
+    public async Task<ActionResult<IEnumerable<FeaturedDealOutputModel>>> GetFeaturedDeals([FromQuery] int deals = 5)
     {
         logger.LogInformation("GetFeaturedDeals started with count: {featuredDealsCount}", deals);
 

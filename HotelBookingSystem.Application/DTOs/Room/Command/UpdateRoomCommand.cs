@@ -19,4 +19,9 @@ public class UpdateRoomCommand
     /// Children capacity of the room
     /// </summary>
     public int ChildrenCapacity { get; set; }
+
+    /// <summary>
+    /// Price per night of the room
+    /// </summary>
+    public decimal Price { get; set; }
 }

@@ -54,8 +54,10 @@ public class HotelsController(IHotelService hotelService,
     ///     {
     ///        "name": "Hotel Budapest",
     ///        "owner": "Hungarian Hotels Ltd.",
-    ///        "location": "Budapest, 1054 Szabadság tér 9-10.",
-    ///        "cityName": "Budapest"
+    ///        "street": "King lu, 19 st."
+    ///        "latitude": "15.9",
+    ///        "longitude": "20.5",
+    ///        "cityId": "{cityId}"
     ///        "starRate" : "4"
     ///     }
     ///
@@ -81,10 +83,9 @@ public class HotelsController(IHotelService hotelService,
     /// </summary>
     /// <param name="id">The id of the hotel to delete</param>
     /// <returns>No content</returns>
-    /// <response code="204">If the hotel is successfully deleted</response>
+    /// <response code="204">If the operation is successfully done</response>
     /// <response code="401">If the user is not authenticated</response>
     /// <response code="403">If the user is not authorized (not an admin)</response> 
-    /// <response code="404">If the hotel is not found</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteHotel(Guid id)
     {
@@ -103,6 +104,21 @@ public class HotelsController(IHotelService hotelService,
     /// <param name="id">The id of the hotel to update</param>
     /// <param name="request">The data for the uploaded hotel</param>
     /// <returns>No content</returns>
+    /// <remarks> 
+    /// Sample request:
+    ///
+    ///     PUT /hotels/{hotelId}
+    ///     {
+    ///        "name": "Hotel Budapest",
+    ///        "owner": "Hungarian Hotels Ltd.",
+    ///        "street": "King lu, 19 st."
+    ///        "latitude": "15.9",
+    ///        "longitude": "20.5",
+    ///        "starRate" : "4"
+    ///        "cityId": "{cityId}"
+    ///     }
+    ///
+    /// </remarks>
     /// <response code="204">If the hotel is successfully uploaded</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">If the user is not authenticated</response>
@@ -128,6 +144,20 @@ public class HotelsController(IHotelService hotelService,
     /// <param name="alternativeText">Alternative Text(Alt)</param>
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
     /// <returns></returns>
+    /// <remarks> 
+    /// Sample request:
+    ///
+    ///     PUT /hotels/{hotelId}
+    ///     {
+    ///        "name": "Hotel Budapest",
+    ///        "owner": "Hungarian Hotels Ltd.",
+    ///        "street": "King lu, 19 st."
+    ///        "latitude": "15.9",
+    ///        "longitude": "20.5",
+    ///        "cityId": "{cityId}"
+    ///     }
+    ///
+    /// </remarks>
     /// <response code="204">If the image is successfully uploaded</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">If the user is not authenticated</response>
@@ -191,7 +221,7 @@ public class HotelsController(IHotelService hotelService,
     /// 
     /// Sample request:
     ///
-    ///     GET /hotels/search?query=Tokyo
+    ///     GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Single
     ///     
     /// </remarks>
     /// <param name="request">The query parameters for hotel search and filtering.</param>

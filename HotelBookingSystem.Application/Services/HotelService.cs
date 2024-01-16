@@ -59,7 +59,8 @@ public class HotelService(IHotelRepository hotelRepository,
 
     public async Task<HotelOutputModel> CreateHotelAsync(CreateHotelCommand request)
     {
-        var city = await _cityRepository.GetCityByNameAsync(request.CityName) ?? throw new NotFoundException(nameof(City), request.CityName);
+        var city = await _cityRepository.GetCityAsync(request.CityId) ?? throw new NotFoundException(nameof(City),
+            request.CityId);
 
         var hotel = _mapper.Map<Hotel>(request);
 
@@ -67,7 +68,6 @@ public class HotelService(IHotelRepository hotelRepository,
         hotel.CreationDate = DateTime.UtcNow;
         hotel.LastModified = DateTime.UtcNow;
         hotel.City = city;
-
         var createdHotel = await _hotelRepository.AddHotelAsync(hotel);
         await _hotelRepository.SaveChangesAsync();
 
@@ -76,7 +76,8 @@ public class HotelService(IHotelRepository hotelRepository,
 
     public async Task<bool> UpdateHotelAsync(Guid id, UpdateHotelCommand request)
     {
-        var city = await _cityRepository.GetCityByNameAsync(request.CityName) ?? throw new NotFoundException(nameof(City), request.CityName);
+        var city = await _cityRepository.GetCityAsync(request.CityId) ?? throw new NotFoundException(nameof(City),
+            request.CityId);
 
         var hotel = await _hotelRepository.GetHotelAsync(id) ?? throw new NotFoundException(nameof(Hotel), id);
 

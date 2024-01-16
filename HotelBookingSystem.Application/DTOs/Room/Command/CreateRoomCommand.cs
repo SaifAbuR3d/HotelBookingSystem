@@ -8,9 +8,9 @@ namespace HotelBookingSystem.Application.DTOs.Room.Command;
 public class CreateRoomCommand
 {
     /// <summary>
-    /// Name of the hotel
+    /// Id of the hotel where the room is located
     /// </summary>
-    public string HotelName { get; set; } = default!;
+    public Guid HotelId { get; set; }
 
     /// <summary>
     /// Number of the room in the hotel

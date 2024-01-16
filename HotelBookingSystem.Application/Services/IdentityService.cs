@@ -48,11 +48,7 @@ public class IdentityService(IIdentityManager identityManager,
             return user; 
         }
 
-        var guest = new Guest
-        {
-            CreationDate = DateTime.UtcNow,
-            LastModified = DateTime.UtcNow
-        };
+        var guest = new Guest(model.FirstName, model.LastName);
 
         var guestEntity = await _guestRepository.AddGuestAsync(guest);
 
