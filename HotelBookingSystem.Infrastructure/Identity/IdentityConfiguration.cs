@@ -1,4 +1,5 @@
 ﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.IdentityInterfaces;
+using HotelBookingSystem.Application.Exceptions;
 using HotelBookingSystem.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -25,8 +26,11 @@ public static class IdentityConfiguration
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        var key = Encoding.ASCII.GetBytes(configuration.GetSection("JwtConfig").GetSection("Key").Value);
-        var issuer = configuration.GetSection("JwtConfig").GetSection("Issuer").Value;
+        var key = configuration.GetSection(nameof(JwtSettings)).GetSection("Key").Value 
+            ?? throw new TokenGenerationFailedException("secret key is missing");
+        var keyBytes = Encoding.ASCII.GetBytes(key); 
+
+        var issuer = configuration.GetSection(nameof(JwtSettings)).GetSection("Issuer").Value;
 
         services
             .AddAuthentication(authentication =>
@@ -45,12 +49,14 @@ public static class IdentityConfiguration
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
                     ValidIssuer = issuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                    IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
                 };
             });
 
         services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddTransient<IIdentityManager, IdentityManager>();
+
+        services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 
         return services;
     }

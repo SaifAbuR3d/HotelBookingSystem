@@ -24,6 +24,12 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : ICurrentUse
             ?? throw new UnauthenticatedException();
 
     /// <summary>
+    /// Get the email of the current authenticated user
+    /// </summary>
+    public string Email => httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email)
+            ?? throw new UnauthenticatedException();
+
+    /// <summary>
     /// returns true is the current authenticated user is a guest
     /// </summary>
     public bool IsGuest => Role == UserRoles.Guest;

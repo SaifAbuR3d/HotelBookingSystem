@@ -1,5 +1,7 @@
-﻿using HotelBookingSystem.Application.Identity;
+﻿using HotelBookingSystem.Application.Exceptions;
+using HotelBookingSystem.Infrastructure.Email;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,27 +11,26 @@ namespace HotelBookingSystem.Infrastructure.Identity;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
-    private readonly string? key; 
-    private readonly string? issuer;
-    public JwtTokenGenerator(IConfiguration configuration)
+    private readonly JwtSettings _jwtSettings;
+    public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
     {
-        key = configuration.GetSection("JwtConfig").GetSection("Key").Value;
-        issuer = configuration.GetSection("JwtConfig").GetSection("Issuer").Value;
+        _jwtSettings = jwtSettings.Value;
     }
-    public string GenerateToken(ApplicationUser user, IList<string> roles)
+    public string? GenerateToken(ApplicationUser user, IList<string> roles)
     {
-        if (key is null || issuer is null)
+        if (_jwtSettings.Key == null 
+            || _jwtSettings.Issuer == null)
         {
-            throw new Exception("JwtConfig section is missing from appsettings.json");
+            throw new TokenGenerationFailedException("JwtSettings section is missing"); 
         }
 
-        var claims = getClaims(user, roles);
+        var claims = GetClaims(user, roles);
 
-        var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+        var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Key));
 
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            expires: DateTime.UtcNow.AddHours(12),
+            issuer: _jwtSettings.Issuer,
+            expires: DateTime.UtcNow.AddHours(_jwtSettings.TokenExpirationInHours),
             claims: claims,
             signingCredentials: new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256)
             );
@@ -40,12 +41,17 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         return encryptedToken;
     }
 
-    private static List<Claim> getClaims(ApplicationUser user, IList<string> roles)
+    private static List<Claim> GetClaims(ApplicationUser user, IList<string> roles)
     {
+        if (user.Id == null || user.Email == null)
+        {
+            throw new UnauthenticatedException();
+        }
+
         var claims = new List<Claim>
                 {
                     new(ClaimTypes.NameIdentifier, user.Id),
-                    new(ClaimTypes.Name, user.Email)
+                    new(ClaimTypes.Email, user.Email)
                 };
 
         foreach (var role in roles)
