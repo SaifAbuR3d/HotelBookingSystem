@@ -1,15 +1,16 @@
-﻿using HotelBookingSystem.Application.Abstractions;
-using HotelBookingSystem.Domain.Models;
+﻿using HotelBookingSystem.Domain.Models;
 using HotelBookingSystem.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace HotelBookingSystem.Infrastructure.Persistence;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions options) : base(options)
-    {
+    { 
     }
     public DbSet<Hotel> Hotels { get; set; }
     public DbSet<Room> Rooms { get; set; }
@@ -76,6 +77,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                     .Ignore(d => d.OriginalPrice);
         modelBuilder.Entity<Discount>()
                     .Ignore(d => d.DiscountedPrice);
+        modelBuilder.Entity<Guest>()
+                    .Ignore(g => g.FullName);
     }
 
     private static void SeedData(ModelBuilder modelBuilder)
@@ -128,10 +131,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         var bobSmithId = new Guid("3183b59c-f7f8-4b21-b1df-5149fb57984e");
 
         modelBuilder.Entity<Guest>().HasData(
-            new Guest { Id = johnDoeId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Guest { Id = janeSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Guest { Id = aliceJonesId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Guest { Id = bobSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
+            new Guest { Id = johnDoeId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "John", LastName = "Doe" },
+            new Guest { Id = janeSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "Jane", LastName = "Smith" },
+            new Guest { Id = aliceJonesId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "Alice", LastName = "Jones" },
+            new Guest { Id = bobSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "Bob", LastName = "Smith" }
         );
 
         var review1Id = new Guid("3283b59c-f7f8-4b21-b1df-5149fb57984e");
@@ -144,18 +147,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             new Review { Id = review2Id, GuestId = bobSmithId, HotelId = theRitzId, Title = "Amazing Service", Description = "The Ritz never disappoints.", Rating = 4, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
             new Review { Id = review3Id, GuestId = aliceJonesId, HotelId = leMeridienId, Title = "Wonderful Experience", Description = "Great service and comfortable stay.", Rating = 5, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
             new Review { Id = review4Id, GuestId = johnDoeId, HotelId = berlinGrandId, Title = "Good Stay", Description = "Enjoyed my time at Berlin Grand.", Rating = 4, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
-        );
-
-        var booking1Id = new Guid("3683b59c-f7f8-4b21-b1df-5149fb57984e");
-        var booking2Id = new Guid("3783b59c-f7f8-4b21-b1df-5149fb57984e");
-        var booking3Id = new Guid("3883b59c-f7f8-4b21-b1df-5149fb57984e");
-        var booking4Id = new Guid("3983b59c-f7f8-4b21-b1df-5149fb57984e");
-
-        modelBuilder.Entity<Booking>().HasData(
-            new Booking { Id = booking1Id, CheckInDate = new DateOnly(2023, 3, 5), CheckOutDate = new DateOnly(2023, 3, 10), Price = 600, RoomId = room1BerlinGrandId, GuestId = johnDoeId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Booking { Id = booking2Id, CheckInDate = new DateOnly(2023, 4, 15), CheckOutDate = new DateOnly(2023, 4, 20), Price = 700, RoomId = room1GrandHyattId, GuestId = janeSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Booking { Id = booking3Id, CheckInDate = new DateOnly(2023, 5, 8), CheckOutDate = new DateOnly(2023, 5, 15), Price = 550, RoomId = room1LeMeridienId, GuestId = aliceJonesId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Booking { Id = booking4Id, CheckInDate = new DateOnly(2023, 6, 20), CheckOutDate = new DateOnly(2023, 6, 25), Price = 800, RoomId = room1TheRitzId, GuestId = bobSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
         );
     }
 

@@ -13,12 +13,12 @@ public class Hotel : Entity
     public TimeOnly CheckInTime { get; set; }
     public TimeOnly CheckOutTime { get; set; }
 
-    public ICollection<HotelImage> Images { get; set; }
-    public ICollection<Review> Reviews { get; set; }
-    public ICollection<Room> Rooms { get; set; }
+    public ICollection<HotelImage> Images { get; set; } = new List<HotelImage>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<Room> Rooms { get; set; } = new List<Room>();
 
 
-    public City City { get; set; }
+    public City City { get; set; } = default!;
     public Guid CityId { get; set; }
     public int RoomsNumber => Rooms.Count;
 

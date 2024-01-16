@@ -16,6 +16,9 @@ public class Discount : Entity
     }
     public Discount(Room room, decimal percentage, DateTime startDate, DateTime endDate)
     {
+        ValidPercentage(percentage);
+        ValidDates(startDate, endDate);
+
         Room = room;
         Percentage = Math.Round(percentage, 2);
         StartDate = startDate;
@@ -23,28 +26,36 @@ public class Discount : Entity
 
         CreationDate = DateTime.UtcNow;
         LastModified = DateTime.UtcNow;
-
-        ValidPercentage(percentage);
-        ValidDates(startDate, endDate);
     }
 
     public Discount(Room room, decimal originalPrice, decimal discountedPrice,
         DateTime startDate, DateTime endDate)
     {
+        ValidPrices(originalPrice, discountedPrice);
+        ValidDates(startDate, endDate);
+
+        var percentage = CalculateDiscountPercentage(originalPrice, discountedPrice);
+        ValidPercentage(percentage);
+
         Room = room;
-        Percentage = CalculateDiscountPercentage(originalPrice, discountedPrice);
+        Percentage = percentage; 
         StartDate = startDate;
         EndDate = endDate;
 
         CreationDate = DateTime.UtcNow;
         LastModified = DateTime.UtcNow;
+    }
 
+    private static void ValidPrices(decimal originalPrice, decimal discountedPrice)
+    {
+        if (originalPrice <= 0 || discountedPrice <= 0)
+        {
+            throw new ArgumentException("Prices must be greater than 0");
+        }
         if (discountedPrice >= originalPrice)
         {
             throw new ArgumentException("Discounted price must be less than original price");
         }
-        ValidDates(startDate, endDate);
-        ValidPercentage(Percentage);
     }
 
     private static decimal CalculateDiscountPercentage(decimal originalPrice, decimal discountedPrice)

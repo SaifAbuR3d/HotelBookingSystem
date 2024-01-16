@@ -4,6 +4,7 @@ using HotelBookingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240109223953_RemoveRoomFromBooking")]
+    partial class RemoveRoomFromBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BookingRoom", b =>
-                {
-                    b.Property<Guid>("BookingsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoomsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("BookingsId", "RoomsId");
-
-                    b.HasIndex("RoomsId");
-
-                    b.ToTable("BookingRoom");
-                });
 
             modelBuilder.Entity("HotelBookingSystem.Domain.Models.Booking", b =>
                 {
@@ -55,9 +43,6 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                     b.Property<Guid>("GuestId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -74,8 +59,6 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GuestId");
-
-                    b.HasIndex("HotelId");
 
                     b.ToTable("Bookings");
                 });
@@ -226,16 +209,8 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -246,33 +221,25 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                         {
                             Id = new Guid("2783b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "John",
-                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastName = "Doe"
+                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = new Guid("2883b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Jane",
-                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastName = "Smith"
+                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = new Guid("2983b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Alice",
-                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastName = "Jones"
+                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = new Guid("3183b59c-f7f8-4b21-b1df-5149fb57984e"),
                             CreationDate = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Bob",
-                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastName = "Smith"
+                            LastModified = new DateTime(2023, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -855,21 +822,6 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BookingRoom", b =>
-                {
-                    b.HasOne("HotelBookingSystem.Domain.Models.Booking", null)
-                        .WithMany()
-                        .HasForeignKey("BookingsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HotelBookingSystem.Domain.Models.Room", null)
-                        .WithMany()
-                        .HasForeignKey("RoomsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("HotelBookingSystem.Domain.Models.Booking", b =>
                 {
                     b.HasOne("HotelBookingSystem.Domain.Models.Guest", "Guest")
@@ -878,15 +830,7 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HotelBookingSystem.Domain.Models.Hotel", "Hotel")
-                        .WithMany()
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Guest");
-
-                    b.Navigation("Hotel");
                 });
 
             modelBuilder.Entity("HotelBookingSystem.Domain.Models.CityImage", b =>

@@ -44,7 +44,7 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
     public async Task<City?> GetCityAsync(Guid id)
     {
-        return await _context.Cities.FindAsync(id);
+        return await _context.Cities.Include(c => c.Hotels).FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<City?> GetCityByNameAsync(string name)
@@ -55,7 +55,7 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
     public async Task<IEnumerable<City>> MostVisitedCitiesAsync(int count = 5)
     {
         var cityIds = await _context.Bookings
-            .GroupBy(b => b.Room.Hotel.CityId)
+            .GroupBy(b => b.Hotel.CityId)
             .OrderByDescending(g => g.Count())
             .Take(count)
             .Select(g => g.Key)

@@ -34,7 +34,7 @@ public class GuestRepository : IGuestRepository
     {
         return await _context.Users
                 .Where(u => u.Id == userId)
-                .Include(u => u.Guest)
+                .Include(u => u.Guest).ThenInclude(g => g.Bookings)
                 .Select(u => u.Guest)
                 .FirstOrDefaultAsync();
     }
@@ -75,19 +75,19 @@ public class GuestRepository : IGuestRepository
     {
         var guestSortedBookings = await _context.Bookings
             .Where(b => b.GuestId == guestId)
-            .Include(b => b.Room).ThenInclude(r => r.Hotel).ThenInclude(h => h.City)
-            .Include(b => b.Room.Hotel.Images)
+            .Include(r => r.Hotel).ThenInclude(h => h.City)
+            .Include(b => b.Hotel.Images)
             .OrderByDescending(b => b.CheckInDate)
             .ToListAsync();
 
         // Get the most recent booking in each hotel.
         var guestRecentBookingsInDifferentHotels = guestSortedBookings
-            .GroupBy(b => b.Room.HotelId)
+            .GroupBy(b => b.HotelId)
             .Select(group => group.First())
             .Take(count);
 
 
-        return  guestRecentBookingsInDifferentHotels;
+        return guestRecentBookingsInDifferentHotels;
     }
 
     public async Task<bool> GuestExistsAsync(Guid guestId)
@@ -98,7 +98,7 @@ public class GuestRepository : IGuestRepository
     public async Task<bool> HasGuestBookedHotelAsync(Hotel hotel, Guest guest)
     {
         return await _context.Bookings
-            .AnyAsync(b => b.GuestId == guest.Id && b.Room.HotelId == hotel.Id);
+            .AnyAsync(b => b.GuestId == guest.Id && b.HotelId == hotel.Id);
     }
 
     public Task<bool> HasGuestReviewedHotelAsync(Hotel hotel, Guest guest)

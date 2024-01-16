@@ -16,7 +16,7 @@ public class BookingRepository : IBookingRepository
     {
         return await _context.Bookings
             .Include(b => b.Guest)
-            .Include(b => b.Room).ThenInclude(r => r.Hotel)
+            .Include(b => b.Rooms).ThenInclude(r => r.Hotel)
             .FirstOrDefaultAsync(b => b.Id == bookingId);
     }
 
@@ -24,7 +24,7 @@ public class BookingRepository : IBookingRepository
     {
         return await _context.Bookings
             .Include(b => b.Guest)
-            .Include(b => b.Room).ThenInclude(r => r.Hotel)
+            .Include(b => b.Rooms).ThenInclude(r => r.Hotel)
             .FirstOrDefaultAsync(b => b.Id == bookingId && b.GuestId == guestId);
     }
 
@@ -44,6 +44,21 @@ public class BookingRepository : IBookingRepository
 
         _context.Bookings.Remove(booking);
         return true;
+    }
+
+    public async Task BeginTransactionAsync()
+    {
+        await _context.Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitTransactionAsync()
+    {
+        await _context.Database.CommitTransactionAsync();
+    }
+
+    public async Task RollbackTransactionAsync()
+    {
+        await _context.Database.RollbackTransactionAsync();
     }
 
     public async Task<bool> SaveChangesAsync()

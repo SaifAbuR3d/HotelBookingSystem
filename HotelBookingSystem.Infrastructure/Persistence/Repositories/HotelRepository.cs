@@ -46,7 +46,11 @@ public class HotelRepository(ApplicationDbContext context,
 
     public async Task<Hotel?> GetHotelAsync(Guid id)
     {
-        return await _context.Hotels.Include(h => h.Images).Include(h => h.Rooms).FirstOrDefaultAsync(h => h.Id == id);
+        return await _context.Hotels
+            .Include(h => h.City)
+            .Include(h => h.Images)
+            .Include(h => h.Rooms)
+            .FirstOrDefaultAsync(h => h.Id == id);
     }
 
     public async Task<Hotel?> GetHotelByNameAsync(string Name)
@@ -152,6 +156,7 @@ public class HotelRepository(ApplicationDbContext context,
 
         var checkInDateAsDateOnly = DateOnly.FromDateTime((DateTime)checkInDate);
         var checkOutDateAsDateOnly = DateOnly.FromDateTime((DateTime)checkOutDate);
+
 
         hotels = hotels
                  .Where(h => h.Rooms.Count(r => !r.Bookings
