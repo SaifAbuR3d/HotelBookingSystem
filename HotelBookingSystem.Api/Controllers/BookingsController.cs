@@ -1,5 +1,8 @@
 ﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Booking;
+using HotelBookingSystem.Application.DTOs.Booking.Command;
+using HotelBookingSystem.Application.DTOs.Booking.OutputModel;
+using HotelBookingSystem.Application.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -8,6 +11,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// API endpoints for managing bookings
 /// </summary>>
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class BookingsController(IBookingService bookingService, 
@@ -21,14 +25,33 @@ public class BookingsController(IBookingService bookingService,
     /// <response code="200">Returns the booking with the given id</response>
     /// <response code="404">If the booking is not found</response>
     [HttpGet("{id}", Name = "GetBookingAsync")]
-    public async Task<ActionResult<BookingConfirmationOutputModel>> GetBooking(Guid id)
+    public async Task<ActionResult<BookingOutputModel>> GetBooking(Guid id)
     {
         logger.LogInformation("GetBooking started for booking with ID: {BookingId}", id);
 
-        var booking = await bookingService.GetBookingAsync(id);
+        var bookingInvoice = await bookingService.GetBookingAsync(id);
 
         logger.LogInformation("GetBooking for booking with ID: {BookingId} completed successfully", id);
-        return Ok(booking);
+        return Ok(bookingInvoice);
+    }
+
+
+    /// <summary>
+    /// Get an invoice by booking id
+    /// </summary>
+    /// <param name="id">The booking id</param>
+    /// <returns>The invoice with the given id</returns>
+    /// <response code="200">Returns the invoice with the given id</response>
+    /// <response code="404">If there is no booking related to the given id</response>
+    [HttpGet("{id}/invoice")]
+    public async Task<ActionResult<Invoice>> GetInvoice(Guid id)
+    {
+        logger.LogInformation("GetInvoice started for booking with ID: {BookingId}", id);
+
+        var invoice = await bookingService.GetInvoiceAsync(id); 
+
+        logger.LogInformation("GetInvoice for booking with ID: {BookingId} completed successfully", id);
+        return Ok(invoice);
     }
 
     /// <summary>
@@ -41,8 +64,8 @@ public class BookingsController(IBookingService bookingService,
     ///
     ///     POST /booking
     ///     {
-    ///        "guestId": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-    ///        "roomId": "31d26773-2eb9-4695-bc61-0b717bd97e0b",
+    ///        "roomsId": ["31d26773-2eb9-4695-bc61-0b717bd97e0b", "54a26773-2eb9-4695-bc61-0b717bd97e0b"],
+    ///        "hotelId": "46c26773-2eb9-4695-bc61-0b717bd97e0b",
     ///        "checkInDate": "2024-01-10",
     ///        "checkOutDate": "2024-01-15",
     ///        "numberOfAdults": 1,
@@ -53,17 +76,20 @@ public class BookingsController(IBookingService bookingService,
     ///
     /// </remarks>
     /// <response code="201">Returns the newly created booking</response>
-    /// <response code = "404">If the hotel/room or guest is not found</response>
     /// <response code="400">If the request data is invalid</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized</response>
+    /// <response code="404">If the hotel/room or guest is not found</response>
+    [Authorize(Policy = Policies.GuestOnly)]
     [HttpPost]
-    public async Task<ActionResult<BookingConfirmationOutputModel>> CreateBooking(CreateBookingCommand request)
+    public async Task<ActionResult<BookingOutputModel>> CreateBooking(CreateBookingCommand request)
     {
         logger.LogInformation("CreateBooking started for request: {@CreateBooking}", request);
 
         var booking = await bookingService.CreateBookingAsync(request);
 
         logger.LogInformation("CreateBooking for request: {@CreateBooking} completed successfully", request);
-        return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
+        return CreatedAtAction(nameof(GetBooking), new { id = booking.ConfirmationId }, booking);
     }
 
 
@@ -72,8 +98,10 @@ public class BookingsController(IBookingService bookingService,
     /// </summary>
     /// <param name="id">The id of the booking to delete</param>
     /// <returns>No content</returns>
-    /// <response code="204">If the booking is deleted</response>
-    /// <response code="404">If the booking is not found</response>
+    /// <response code="204">If the operation is successfully done</response>
+    /// <response code="401">If the user is not authenticated</response>
+    /// <response code="403">If the user is not authorized</response>
+    [Authorize(Policy = Policies.GuestOnly)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBooking(Guid id)
     {
@@ -83,5 +111,18 @@ public class BookingsController(IBookingService bookingService,
 
         logger.LogInformation("DeleteBooking for booking with ID: {BookingId} completed successfully", id);
         return NoContent();
+    }
+
+    /// <summary>
+    /// Retrieve a booking invoice as a PDF file, to download or print
+    /// </summary>
+    /// <returns></returns>
+    [AllowAnonymous]
+    [HttpGet("{id}/pdf")]
+    public async Task<FileContentResult> GetInvoicePdf(Guid id)
+    {
+        var pdfBytes = await bookingService.GetInvoicePdfByBookingIdAsync(id);
+
+        return File(pdfBytes, "application/pdf", "invoice.pdf");
     }
 }
