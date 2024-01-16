@@ -2,7 +2,10 @@
 
 public class InvalidNumberOfGuestsException : CustomException
 {
-    public InvalidNumberOfGuestsException(Guid roomId, int numberOfAdults, int numberOfChildren)
-            : base($"Room with id: '{roomId}' cannot accommodate {numberOfAdults} Adults and {numberOfChildren} Children.")
+    public InvalidNumberOfGuestsException(int numberOfAdults, int numberOfChildren)
+            : base($"requested Rooms cannot accommodate {numberOfAdults} Adults and {numberOfChildren} Children.")
+    { }
+
+    public InvalidNumberOfGuestsException(string message) : base(message)
     { }
 }

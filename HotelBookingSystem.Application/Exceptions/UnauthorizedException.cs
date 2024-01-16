@@ -11,4 +11,8 @@ public class UnauthorizedException : Exception
         base($"The user with Id {userId} has no access to guest with Id {guestId}")
     {
     }
+    public UnauthorizedException(string userId, string entityName, object entityId) :
+        base($"The user with Id {userId} has no access to Entity '{entityName}' ({entityId})")
+    {
+    }
 }

@@ -51,26 +51,12 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
         return await _context.SaveChangesAsync() >= 1;
     }
 
-    public async Task<IEnumerable<Booking>> GetBookingsForRoomAsync(Guid roomId)
-    {
-        return await _context.Bookings.Where(b => b.RoomId == roomId).ToListAsync();
-    }
-
     public async Task<bool> IsAvailableAsync(Guid roomId, DateOnly startDate, DateOnly endDate)
     {
 
-        //bool isAvailable = await _context.Bookings
-        //    .Where(b => b.RoomId == roomId)
-        //    .AllAsync(b => startDate > b.CheckOutDate || endDate < b.CheckInDate);
-        // return isAvailable;
-
-
-
-        bool OverlapsWithSomeBooking = await _context.Bookings
-            .Where(b => b.RoomId == roomId)
-            .AnyAsync(b => startDate <= b.CheckOutDate && endDate >= b.CheckInDate);
-
-        return !OverlapsWithSomeBooking;
+        return await _context.Rooms
+            .Where(r => r.Id == roomId)
+            .AllAsync(r => r.Bookings.All(b => startDate >= b.CheckOutDate || endDate <= b.CheckInDate));
     }
 
     public async Task<(IEnumerable<Room>, PaginationMetadata)> GetAllRoomsAsync(GetRoomsQueryParameters request)
@@ -121,5 +107,26 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
          .Take(rooms)
          .Select(r => r.Room)
          .ToListAsync();
+    }
+
+    public async Task<decimal?> GetPrice(Guid roomId, DateOnly checkInDate, DateOnly checkOutDate)
+    {
+        var checkInDateTime = checkInDate.ToDateTime(TimeOnly.MinValue); 
+        var checkOutDateTime = checkOutDate.ToDateTime(TimeOnly.MinValue);
+
+        var recentDiscount = await _context.Rooms
+            .Include(r => r.Discounts)
+            .Where(r => r.Id == roomId)
+            .Where(r => r.Discounts.Any(d => checkInDateTime >= d.StartDate && checkOutDateTime < d.EndDate))
+            .Select(r => r.Discounts.OrderByDescending(d => d.CreationDate).FirstOrDefault())
+            .FirstOrDefaultAsync();
+
+        if (recentDiscount is null)
+        {
+            var room = await GetRoomAsync(roomId);
+            return room?.Price;
+        }
+
+        return recentDiscount.DiscountedPrice;
     }
 }
