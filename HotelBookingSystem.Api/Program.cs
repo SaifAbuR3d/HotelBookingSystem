@@ -35,6 +35,8 @@ if (isDevelopment)
 
 app.UseHttpsRedirection();
 
+app.Migrate();
+
 app.UseStaticFiles();
 
 app.UseSerilogRequestLogging();
