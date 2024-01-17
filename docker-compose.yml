@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  web_api:
+    image: saif2/hotelbookingsystemapi
+    container_name: hotel_booking_system_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "ms_sql_server"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - DBPassword=A&VeryComplex123Password
+    volumes:
+      - ./HotelBookingSystem.Api/wwwroot:/app/wwwroot
+
+  ms_sql_server:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports: 
+      - "1433:1433" 
+    restart: always
+    container_name: sql_server2022
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=A&VeryComplex123Password
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:
