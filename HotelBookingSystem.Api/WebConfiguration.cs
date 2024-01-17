@@ -46,11 +46,13 @@ public static class WebConfiguration
         {
             options.AddPolicy(Policies.GuestOnly, policy => policy
                                               .RequireRole(UserRoles.Guest)
-                                              .RequireClaim(ClaimTypes.NameIdentifier));
+                                              .RequireClaim(ClaimTypes.NameIdentifier)
+                                              .RequireClaim(ClaimTypes.Email));
 
             options.AddPolicy(Policies.AdminOnly, policy => policy
                                               .RequireRole(UserRoles.Admin)
-                                              .RequireClaim(ClaimTypes.Role, UserRoles.Admin));
+                                              .RequireClaim(ClaimTypes.NameIdentifier)
+                                              .RequireClaim(ClaimTypes.Email));
         });
 
 
@@ -97,6 +99,7 @@ public static class WebConfiguration
                 }
             });
 
+            #region include xml comments
             var actionMethodsXmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var actionMethodsXmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, actionMethodsXmlCommentsFile);
 
@@ -105,6 +108,7 @@ public static class WebConfiguration
 
             setup.IncludeXmlComments(actionMethodsXmlCommentsFullPath);
             setup.IncludeXmlComments(DTOsXmlCommentsFullPath);
+            #endregion
         });
 
 }

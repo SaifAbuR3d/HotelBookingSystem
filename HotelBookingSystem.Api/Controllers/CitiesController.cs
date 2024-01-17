@@ -1,4 +1,5 @@
-﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+﻿using Asp.Versioning;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.City.Command;
 using HotelBookingSystem.Application.DTOs.City.OutputModel;
 using HotelBookingSystem.Application.DTOs.City.Query;
@@ -14,6 +15,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// API endpoints for managing cities
 /// </summary>>
 
+[ApiVersion("1.0")]
 [Authorize(Policy = Policies.AdminOnly)]
 [Route("api/[controller]")]
 [ApiController]

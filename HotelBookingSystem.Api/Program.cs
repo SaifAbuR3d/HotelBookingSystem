@@ -35,11 +35,11 @@ if (isDevelopment)
 
 app.UseHttpsRedirection();
 
-app.Migrate();
+app.UseSerilogRequestLogging();
 
 app.UseStaticFiles();
 
-app.UseSerilogRequestLogging();
+app.Migrate();
 
 app.UseCors();
 

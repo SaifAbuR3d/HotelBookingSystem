@@ -1,4 +1,5 @@
-﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+﻿using Asp.Versioning;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Identity.Command;
 using HotelBookingSystem.Application.DTOs.Identity.OutputModel;
 using HotelBookingSystem.Application.Identity;
@@ -11,6 +12,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// </summary>
 /// <param name="identityService"></param>
 
+[ApiVersion("1.0")]
 [ApiController]
 public class IdentityController(IIdentityService identityService) : ControllerBase
 {

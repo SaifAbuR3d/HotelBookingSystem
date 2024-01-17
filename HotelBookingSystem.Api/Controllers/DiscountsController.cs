@@ -1,4 +1,5 @@
-﻿using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+﻿using Asp.Versioning;
+using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Discount;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.Identity;
@@ -11,6 +12,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// API endpoints for managing Discounts
 /// </summary>
 
+[ApiVersion("1.0")]
 [Authorize(Policy = Policies.AdminOnly)]
 [Route("api/rooms")]
 [ApiController]
