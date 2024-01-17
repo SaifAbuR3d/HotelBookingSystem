@@ -53,12 +53,20 @@ public class BookingRepository : IBookingRepository
 
     public async Task CommitTransactionAsync()
     {
-        await _context.Database.CommitTransactionAsync();
+        var currentTransaction = _context.Database.CurrentTransaction;
+        if (currentTransaction != null)
+        {
+            await _context.Database.CommitTransactionAsync();
+        }
     }
 
     public async Task RollbackTransactionAsync()
     {
-        await _context.Database.RollbackTransactionAsync();
+        var currentTransaction = _context.Database.CurrentTransaction;
+        if (currentTransaction != null)
+        {
+            await _context.Database.RollbackTransactionAsync();
+        }
     }
 
     public async Task<bool> SaveChangesAsync()

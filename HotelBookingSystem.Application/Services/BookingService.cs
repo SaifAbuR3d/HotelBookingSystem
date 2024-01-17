@@ -162,9 +162,9 @@ public class BookingService(IHotelRepository hotelRepository,
             var booking = await ValidateAndCreateBooking(request);
             await _bookingRepository.AddBookingAsync(booking);
             await _bookingRepository.SaveChangesAsync();
-            await _bookingRepository.CommitTransactionAsync();
-
             var outputModel = await PostBookingProcess(booking, _currentUser.Email);
+
+            await _bookingRepository.CommitTransactionAsync();
             return outputModel;
         }
         catch (Exception ex)
