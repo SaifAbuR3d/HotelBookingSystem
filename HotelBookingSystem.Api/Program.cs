@@ -33,23 +33,25 @@ var app = builder.Build();
     app.UseSwaggerUI();
 //}
 
-app.UseHttpsRedirection();
+app.UseDeveloperExceptionPage();
+
+//app.UseHttpsRedirection();
 
 app.UseSerilogRequestLogging();
 
-app.UseStaticFiles();
+//app.UseStaticFiles();
 
-app.Migrate();
+//app.Migrate();
 
 app.UseCors();
 
-app.UseStatusCodePages();
+//app.UseStatusCodePages();
 
-app.UseExceptionHandler();
+//app.UseExceptionHandler();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
