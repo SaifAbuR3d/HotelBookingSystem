@@ -1,4 +1,4 @@
-name: Publish 🚀
+name: Publish
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  AZURE_WEBAPP_NAME: saifhotels
+  AZURE_WEBAPP_NAME: saif-hotels
   AZURE_WEBAPP_PACKAGE_PATH: "./publish"
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.0.x'
           
       - name: Restore
         run: dotnet restore
