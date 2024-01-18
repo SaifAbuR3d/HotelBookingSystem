@@ -1,0 +1,877 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HotelBookingSystem.Api</name>
+    </assembly>
+    <members>
+        <member name="T:HotelBookingSystem.Api.Controllers.BookingsController">
+            <summary>
+            API endpoints for managing bookings
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IBookingService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.BookingsController})">
+            <summary>
+            API endpoints for managing bookings
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.GetBooking(System.Guid)">
+            <summary>
+            Get a booking by its id
+            </summary>
+            <param name="id">The id of the booking</param>
+            <returns>The booking with the given id</returns>
+            <response code="200">Returns the booking with the given id</response>
+            <response code="404">If the booking is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.GetInvoice(System.Guid)">
+            <summary>
+            Get an invoice by booking id
+            </summary>
+            <param name="id">The booking id</param>
+            <returns>The invoice with the given id</returns>
+            <response code="200">Returns the invoice with the given id</response>
+            <response code="404">If there is no booking related to the given id</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.CreateBooking(HotelBookingSystem.Application.DTOs.Booking.Command.CreateBookingCommand)">
+             <summary>
+             Create a new booking
+             </summary>
+             <param name="request">The data for the new booking</param>
+             <returns>The newly created booking</returns>
+             <remarks>
+             Sample request:
+            
+                 POST /booking
+                 {
+                    "roomsId": ["31d26773-2eb9-4695-bc61-0b717bd97e0b", "54a26773-2eb9-4695-bc61-0b717bd97e0b"],
+                    "hotelId": "46c26773-2eb9-4695-bc61-0b717bd97e0b",
+                    "checkInDate": "2024-01-10",
+                    "checkOutDate": "2024-01-15",
+                    "numberOfAdults": 1,
+                    "numberOfChildren": 1,
+                    "userRemarks": "I need a baby cot.",
+                    "paymentMethod": "CreditCard"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created booking</response>
+             <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized</response>
+             <response code="404">If the hotel/room or guest is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.DeleteBooking(System.Guid)">
+            <summary>
+            Delete a booking
+            </summary>
+            <param name="id">The id of the booking to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the operation is successfully done</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.BookingsController.GetInvoicePdf(System.Guid)">
+            <summary>
+            Retrieve a booking invoice as a PDF file, to download or print
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.CitiesController">
+            <summary>
+            API endpoints for managing cities
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.ICityService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.CitiesController})">
+            <summary>
+            API endpoints for managing cities
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetCity(System.Guid)">
+            <summary>
+            Get a city by its id
+            </summary>
+            <param name="id">The id of the city</param>
+            <returns>The city with the given id</returns>
+            <response code="200">Returns the city with the given id</response>
+            <response code="404">If the city is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.CreateCity(HotelBookingSystem.Application.DTOs.City.Command.CreateCityCommand)">
+             <summary>
+             Create a new city
+             </summary>
+             <param name="request">The data for the new city</param>
+             <returns>The newly created city</returns>
+             <remarks>
+             Sample request:
+            
+                 POST /cities
+                 {
+                    "name": "Budapest",
+                    "country": "Hungary",
+                    "postOffice": "1054"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created city</response>
+             <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.DeleteCity(System.Guid)">
+            <summary>
+            Delete a city
+            </summary>
+            <param name="id">The id of the city to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the operation is successfully done</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.UpdateCity(System.Guid,HotelBookingSystem.Application.DTOs.City.Command.UpdateCityCommand)">
+             <summary>
+             Update a city
+             </summary>
+             <param name="id">The id of the city to update</param>
+             <param name="request">The data for the updated city</param>
+             <returns>No content</returns>
+             <remarks>
+             Sample request:
+            
+                 PUT /cities/{cityId}
+                 {
+                    "name": "Budapest",
+                    "country": "Hungary",
+                    "postOffice": "1117"
+                 }
+            
+             </remarks>
+             <response code="204">If the city is updated</response>
+             <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response>
+             <response code="404">If the city is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.MostVisitedCities(System.Int32)">
+            <summary>
+            Returns TOP N most visited cities, N is 5 by default
+            </summary>
+            <param name="count">The number of trending destinations to retrieve. Default is 5.</param>
+            <remarks>
+            This endpoint allows clients to retrieve a curated list of trending destinations, specifically the topmost visited cities.
+            The response includes essential details for each city, such as its unique identifier,
+            name, and a visually appealing thumbnail.
+            
+            The number of trending destinations to be retrieved can be specified using the <paramref name="count"/> parameter.
+            If no count is provided, the default is set to 5.
+            
+            Sample request:
+            
+                GET /trending-destinations?count=3
+                
+            </remarks>
+            <returns>
+            a collection of <see cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel"/> objects, each representing a trending destination city.
+            </returns>
+            <response code="200">Returns TOP N most visited cities, N is 5 by default</response>
+            <seealso cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityAsTrendingDestinationOutputModel"/>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Upload an image to a city
+            </summary>
+            <param name="id">The id of the city to upload image</param>
+            <param name="file">HotelImage data</param>
+            <param name="alternativeText">Alternative Text(Alt)</param>
+            <param name="thumbnail">indicates if the image should be used as thumbnail</param>
+            <returns></returns>
+            <response code="204">If the image is successfully uploaded</response>
+            <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response>
+            <response code="404">If the city is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.CitiesController.GetCities(HotelBookingSystem.Application.DTOs.City.Query.GetCitiesQueryParameters)">
+            <summary>
+            Retrieves a list of cities based on the specified query parameters.
+            </summary>
+            <remarks>
+            The retrieval of cities can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /cities?sortOrder=asc&amp;sortColumn=name
+                
+            </remarks>
+            <param name="request">The query parameters for city retrieval.</param>
+            <returns>
+            a collection of <see cref="T:HotelBookingSystem.Application.DTOs.City.OutputModel.CityOutputModel"/> objects, each representing a city that matches the specified criteria.
+            </returns>
+            <response code="200">Returns the list of cities based on the query parameters.</response>
+            <response code="400">If the request parameters are invalid or missing.</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.DiscountsController">
+            <summary>
+            API endpoints for managing Discounts
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IDiscountService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.DiscountsController})">
+            <summary>
+            API endpoints for managing Discounts
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.AddDiscount(System.Guid,HotelBookingSystem.Application.DTOs.Discount.CreateDiscountCommand)">
+             <summary>
+             Create a new discount
+             </summary>
+             <param name="roomId">The id of the room</param>
+             <param name="request">The data for the new discount</param>
+             <remarks>
+             Sample request:
+            
+                 POST /rooms/{roomId}/discounts
+                 {
+                    "Percentage": 20
+                    "StartDate": "2024-02-0200:00:00",
+                    "EndDate": "2024-03-03T00:00:00"
+                 }
+            
+             </remarks>
+             <returns>The newly created discount</returns>
+             <response code="201">Returns the newly created discount</response>
+             <response code="400">If the request data is invalid</response>
+             <response code="401">User is not authenticated.</response>
+             <response code="403">User is not authorized (not an admin).</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.GetDiscount(System.Guid,System.Guid)">
+            <summary>
+            Get a discount by its id
+            </summary>
+            <param name="roomId">The id of the room</param>
+            <param name="id">The id of the discount</param>
+            <returns>The discount with the given id</returns>
+            <response code="200">Returns the discount with the given id</response>
+            <response code="404">If the discount is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.DeleteDiscount(System.Guid,System.Guid)">
+            <summary>
+            Delete a discount
+            </summary>
+            <param name="roomId">The id of the room</param>
+            <param name="id">The id of the discount</param>
+            <returns></returns>
+            <response code="204">If the operation is successfully done</response>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is not authorized (not an admin).</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.DiscountsController.GetFeaturedDeals(System.Int32)">
+            <summary>
+            Retrieves a collection of featured deals based on the specified count.
+            </summary>
+            <remarks>
+            This endpoint allows clients to retrieve a curated list of featured deals.
+            The response includes essential details for each deal,
+            such as its hotel name, room type, star rating, discount percentage, and discounted price.
+            
+            The number of featured deals to be retrieved can be specified
+            using the <paramref name="deals"/> parameter. If no count is provided, the default is set to 5.
+            
+            Sample request:
+            
+                GET /featured-deals?deals=3
+                
+            </remarks>
+            <param name="deals">The number of featured deals to retrieve. Default is 5.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.FeaturedDealOutputModel"/> objects, each representing a featured deal.
+            </returns>
+            <response code="200">Returns the collection of featured deals.</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.GuestsController">
+            <summary>
+            Controller for managing guests
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IGuestService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.GuestsController})">
+            <summary>
+            Controller for managing guests
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.GetRecentlyVisitedHotels(System.Guid,System.Int32)">
+            <summary>
+            Retrieves a collection of unique recently visited hotels for a guest, presenting essential details.
+            </summary>
+            <param name="guestId">The id of the guest for whom recently visited hotels are to be retrieved.</param>
+            <param name="count">The maximum number of unique recently visited hotels to retrieve. Default is 5.</param>
+            <remarks>
+            The resulting collection provides essential information about the last N different hotels the guest visited, such as hotel name, city name, star rating, and price.
+            
+            Sample request:
+            
+                GET guests/{guestId}/recently-visited-hotels?count=3
+                
+            </remarks>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/> objects, each representing an hotel the user recently visited
+            </returns>
+            <response code="200">Returns the last 5 different hotels the guest visited</response>>
+            <response code="404">If the guest is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.GuestsController.GetRecentlyVisitedHotels(System.Int32)">
+            <summary>
+            Retrieves a collection of unique recently visited hotels for a the current authorized guest, presenting essential details.
+            </summary>
+            <param name="count">The maximum number of unique recently visited hotels to retrieve. Default is 5.</param>
+            <remarks>
+            The resulting collection provides essential information about the last N different hotels the guest visited, such as hotel name, city name, star rating, and price.
+            
+            Sample request:
+            
+                GET guests/{guestId}/recently-visited-hotels?count=3
+                
+            </remarks>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.RecentlyVisitedHotelOutputModel"/> objects, each representing an hotel the user recently visited
+            </returns>
+            <response code="200">Returns the last 5 different hotels the guest visited</response>>
+            <response code="401">User is not authenticated.</response>
+            <response code="404">If the guest is not found</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.HotelsController">
+            <summary>
+            API endpoints for managing hotels
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IHotelService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.HotelsController})">
+            <summary>
+            API endpoints for managing hotels
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetHotel(System.Guid)">
+            <summary>
+            Get a hotel by its id
+            </summary>
+            <param name="id">The id of the hotel</param>
+            <returns>The hotel with the given id</returns>
+            <response code="200">Returns the hotel with the given id</response>
+            <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.CreateHotel(HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand)">
+             <summary>
+             Create a new hotel
+             </summary>
+             <param name="request">The data for the new hotel</param>
+             <returns>The newly created hotel</returns>
+             <remarks> 
+             Sample request:
+            
+                 POST /hotels
+                 {
+                    "name": "Hotel Budapest",
+                    "owner": "Hungarian Hotels Ltd.",
+                    "street": "King lu, 19 st."
+                    "latitude": "15.9",
+                    "longitude": "20.5",
+                    "cityId": "{cityId}"
+                    "starRate" : "4"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created hotel</response>
+             <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response> 
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.DeleteHotel(System.Guid)">
+            <summary>
+            Delete a hotel
+            </summary>
+            <param name="id">The id of the hotel to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the operation is successfully done</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UpdateHotel(System.Guid,HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand)">
+             <summary>
+             Update a hotel
+             </summary>
+             <param name="id">The id of the hotel to update</param>
+             <param name="request">The data for the uploaded hotel</param>
+             <returns>No content</returns>
+             <remarks> 
+             Sample request:
+            
+                 PUT /hotels/{hotelId}
+                 {
+                    "name": "Hotel Budapest",
+                    "owner": "Hungarian Hotels Ltd.",
+                    "street": "King lu, 19 st."
+                    "latitude": "15.9",
+                    "longitude": "20.5",
+                    "starRate" : "4"
+                    "cityId": "{cityId}"
+                 }
+            
+             </remarks>
+             <response code="204">If the hotel is successfully uploaded</response>
+             <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response> 
+             <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
+             <summary>
+             Upload an image to a hotel
+             </summary>
+             <param name="id">The id of the hotel to upload image</param>
+             <param name="file">HotelImage data</param>
+             <param name="alternativeText">Alternative Text(Alt)</param>
+             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
+             <returns></returns>
+             <remarks> 
+             Sample request:
+            
+                 PUT /hotels/{hotelId}
+                 {
+                    "name": "Hotel Budapest",
+                    "owner": "Hungarian Hotels Ltd.",
+                    "street": "King lu, 19 st."
+                    "latitude": "15.9",
+                    "longitude": "20.5",
+                    "cityId": "{cityId}"
+                 }
+            
+             </remarks>
+             <response code="204">If the image is successfully uploaded</response>
+             <response code="400">If the request data is invalid</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response> 
+             <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.GetHotelsQueryParameters)">
+            <summary>
+            Retrieves a list of hotels based on the specified query parameters.
+            </summary>
+            <remarks>
+            The retrieval of hotels can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /hotels?sortOrder=asc&amp;sortColumn=name&amp;pageNumber=1&amp;pageSize=10&amp;searchQuery=Carlton
+                
+            </remarks>
+            <param name="request">The query parameters for hotel retrieval.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelOutputModel"/> objects, each representing a hotel that matches the specified criteria.
+            </returns>
+            <response code="200">Returns the list of hotels based on the query parameters.</response>
+            <response code="400">If the request parameters are invalid or missing.</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.SearchAndFilterHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.HotelSearchAndFilterParameters)">
+             <summary>
+             Searches and filters hotels based on the specified criteria.
+             </summary>
+             <remarks>
+             The search can be performed by providing a query string along with optional parameters
+             such as check-in and check-out dates, number of adults, children, and room count.
+             Additional filters, including minimum star rating, maximum and minimum price,
+             amenities, and room types, can be applied to narrow down the search results.
+             
+             Sample request:
+            
+                 GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Single
+                 
+             </remarks>
+             <param name="request">The query parameters for hotel search and filtering.</param>
+             <returns>
+             a collection of <see cref="T:HotelBookingSystem.Application.DTOs.Hotel.OutputModel.HotelSearchResultOutputModel"/> representing the search results.
+             </returns>
+             <response code="200">Returns the list of hotels based on the search criteria.</response>
+             <response code="400">If the request parameters are invalid or missing.</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.IdentityController">
+            <summary>
+            Controller for Identity related actions
+            </summary>
+            <param name="identityService"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IIdentityService)">
+            <summary>
+            Controller for Identity related actions
+            </summary>
+            <param name="identityService"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.RegisterGuest(HotelBookingSystem.Application.DTOs.Identity.Command.RegisterUserModel)">
+             <summary>
+             Register a guest
+             </summary>
+             <param name="request"></param>
+             <remarks> 
+             Sample request:
+            
+                 POST /register
+                 {
+                    "username": "Sample_User_Name",
+                    "firstName": "Sample",
+                    "lastName": "User",
+                    "email": "sample@user.com",
+                    "password": "sample_password"
+                 }
+            
+             </remarks>
+             <response code="201"></response>
+             <response code="400">if the request data is invalid</response>
+             <returns>No Content</returns>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.RegisterAdmin(HotelBookingSystem.Application.DTOs.Identity.Command.RegisterUserModel)">
+             <summary>
+             Register an admin
+             </summary>
+             <param name="request"></param>
+             <remarks> 
+             Sample request:
+            
+                 POST /register-admin
+                 {
+                    "username": "Sample_User_Name",
+                    "firstName": "Sample",
+                    "lastName": "User",
+                    "email": "sample@user.com",
+                    "password": "sample_password"
+                 }
+            
+             </remarks>
+             <response code="201"></response>
+             <response code="400">if the request data is invalid</response>
+             <returns>No Content</returns>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.IdentityController.Login(HotelBookingSystem.Application.DTOs.Identity.Command.LoginUserModel)">
+             <summary>
+             login a user
+             </summary>
+             <param name="request"></param>
+             <remarks> 
+             Sample request:
+            
+                 POST /login
+                 {
+                    "email": "sample@user.com",
+                    "password": "sample_password"
+                 }
+            
+             </remarks>
+             <response code="200"></response>
+             <response code="400">if the request data is invalid</response>
+             <returns>userId and a token</returns>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.ReviewsController">
+            <summary>
+            API endpoints for managing hotels reviews
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IReviewService,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.ReviewsController})">
+            <summary>
+            API endpoints for managing hotels reviews
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.AddReview(System.Guid,HotelBookingSystem.Application.DTOs.Review.Command.CreateOrUpdateReviewCommand)">
+            <summary>
+            Adds a review for a specific hotel.
+            </summary>
+            <param name="hotelId">The ID of the hotel for which the review is added.</param>
+            <param name="request">The model containing review details.</param>
+            <remarks>
+            This endpoint allows users to submit a review for a particular hotel identified by the provided <paramref name="hotelId"/>.
+            
+            Sample request:
+            
+                POST /hotels/{hotelId}/reviews
+                {
+                    "Title": "Amazing Experience",
+                    "Description": "The hotel provided exceptional service and comfortable accommodations.",
+                    "Rating": 5
+                }
+                
+            </remarks>
+            <returns>The newly created Review</returns>
+            <response code="201">Review successfully added.</response>
+            <response code="400">Invalid input or missing required fields.</response>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
+            <response code="404">Hotel with the specified id not found.</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetReview(System.Guid,System.Guid)">
+            <summary>
+            Get a review by its id
+            </summary>
+            <param name="hotelId">The id of the hotel</param>
+            <param name="reviewId">The id of the review</param>
+            <returns>The review with the given id</returns>
+            <response code="200">Returns the review with the given id</response>
+            <response code="404">If the review is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetHotelAverageRating(System.Guid)">
+            <summary>
+            Get hotel average rating
+            </summary>
+            <param name="hotelId">The id of the hotel</param>
+            <returns>Hotel average user ratings</returns>
+            <response code="200">Returns hotel average rating</response>
+            <response code="404">If the hotel is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.UpdateReview(System.Guid,System.Guid,HotelBookingSystem.Application.DTOs.Review.Command.CreateOrUpdateReviewCommand)">
+            <summary>
+            Update a review
+            </summary>
+            <param name="hotelId">The id of the hotel having the review to update</param>
+            <param name="reviewId">The id of the review to update</param>
+            <param name="request">The data for the updated review</param>
+            <returns>No content</returns>
+            <response code="204">If the review is successfully updated</response>
+            <response code="400">If the request data is invalid</response>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
+            <response code="404">If the hotel or review is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.DeleteReview(System.Guid,System.Guid)">
+            <summary>
+            Delete a review
+            </summary>
+            <param name="hotelId">The id of the hotel having the review to delete</param>
+            <param name="reviewId">The id of the review to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the operation is successfully done</response>
+            <response code="401">User is not authenticated.</response>
+            <response code="403">User is not authorized (not a guest, or didn't visit the hotel).</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.ReviewsController.GetHotelReviews(System.Guid,HotelBookingSystem.Application.DTOs.Review.Query.GetHotelReviewsQueryParameters)">
+            <summary>
+            Retrieves the reviews for a specific hotel based on the specified query parameters.
+            </summary>
+            <remarks>
+            The retrieval of hotel reviews can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /hotels/{hotelId}/reviews?sortOrder=desc&amp;sortColumn=creationDate&amp;pageNumber=1&amp;pageSize=5&amp;searchQuery=Excellent
+                
+            </remarks>
+            <param name="hotelId">The unique identifier of the hotel.</param>
+            <param name="request">The query parameters for hotel review retrieval.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Review.OutputModel.ReviewOutputModel"/> objects, each representing a review that matches the specified criteria for the specified hotel.
+            </returns>
+            <response code="200">Returns the list of hotel reviews based on the query parameters.</response>
+            <response code="400">If the request data is invalid</response>
+            <response code="404">If the hotel is not found.</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Controllers.RoomsController">
+            <summary>
+            API endpoints for managing rooms
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.#ctor(HotelBookingSystem.Application.Abstractions.ServiceInterfaces.IRoomService,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Controllers.RoomsController})">
+            <summary>
+            API endpoints for managing rooms
+            </summary>>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetRoom(System.Guid)">
+            <summary>
+            Get a room by its id
+            </summary>
+            <param name="id">The id of the room</param>
+            <returns>The room with the given id</returns>
+            <response code="200">Returns the room with the given id</response>
+            <response code="404">If the room is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.CreateRoom(HotelBookingSystem.Application.DTOs.Room.Command.CreateRoomCommand)">
+             <summary>
+             Create a new room
+             </summary>
+             <param name="request">The data for the new room</param>
+             <returns>The newly created room</returns>
+             <remarks>
+             Sample request:
+            
+                 POST /rooms
+                 {
+                    "hotelId": "{hotelId}",
+                    "roomNumber": "101",
+                    "adultsCapacity": 2,
+                    "childrenCapacity": 1,
+                    "price": 100,
+                    "roomType": "Standard"
+                 }
+            
+             </remarks>
+             <response code="201">Returns the newly created room</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response> 
+             <response code="400">If the request data is invalid</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.DeleteRoom(System.Guid)">
+             <summary>
+             Delete a room
+             </summary>
+             <param name="id">The id of the room to delete</param>
+             <returns>The newly created room</returns>
+             <remarks>
+             Sample request:
+            
+                 POST /rooms
+                 {
+                    "roomNumber": "101",
+                    "adultsCapacity": 2,
+                    "childrenCapacity": 1,
+                    "price": 100
+                 }
+            
+             </remarks>
+             <returns>No content</returns>
+             <response code="204">If the operation is successfully done</response>
+             <response code="401">If the user is not authenticated</response>
+             <response code="403">If the user is not authorized (not an admin)</response> 
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UpdateRoom(System.Guid,HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand)">
+            <summary>
+            Update a room
+            </summary>
+            <param name="id">The id of the room to update</param>
+            <param name="request">The new data for the room</param>
+            <returns>No content</returns>
+            <response code="204">If the room is successfully updated</response>
+            <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+            <response code="404">If the room is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Upload an image to a room
+            </summary>
+            <param name="id">The id of the room to upload image</param>
+            <param name="file">HotelImage data</param>
+            <param name="alternativeText">Alternative Text(Alt)</param>
+            <param name="thumbnail">indicates if the image should be used as thumbnail</param>
+            <returns></returns>
+            <response code="204">If the image is successfully uploaded</response>
+            <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+            <response code="404">If the room is not found</response>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.GetRooms(HotelBookingSystem.Application.DTOs.Room.Query.GetRoomsQueryParameters)">
+            <summary>
+            Retrieves a list of rooms based on the specified query parameters.
+            </summary>
+            <remarks>
+            The retrieval of rooms can be customized by providing various query parameters.
+            These parameters include sorting options, page number, page size, and a search term.
+            
+            Sample request:
+            
+                GET /rooms?sortOrder=asc&amp;sortColumn=price&amp;pageNumber=1&amp;pageSize=10&amp;searchQuery=Ritz
+                
+            </remarks>
+            <param name="request">The query parameters for room retrieval.</param>
+            <returns>
+            A collection of <see cref="T:HotelBookingSystem.Application.DTOs.Room.OutputModel.RoomOutputModel"/> objects, each representing a room that matches the specified criteria.
+            </returns>
+            <response code="200">Returns the list of rooms based on the query parameters.</response>
+            <response code="400">If the request parameters are invalid or missing.</response>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Filters.LogActivityFilter">
+            <summary>
+            Filter to log requests to the API
+            </summary>
+            <param name = "logger" ></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Filters.LogActivityFilter.#ctor(Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Filters.LogActivityFilter})">
+            <summary>
+            Filter to log requests to the API
+            </summary>
+            <param name = "logger" ></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Filters.LogActivityFilter.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            log the action name and action arguments and controller name before and after the action is executed
+            </summary>
+            <param name = "context" ></param >
+            <param name="next"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler">
+            <summary>
+            Exception Handling Middleware
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler.#ctor(Microsoft.Extensions.Logging.ILogger{HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler})">
+            <summary>
+            Exception Handling Middleware
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler.TryHandleAsync(Microsoft.AspNetCore.Http.HttpContext,System.Exception,System.Threading.CancellationToken)">
+            <summary>
+            Handles the exception
+            </summary>
+            <param name="httpContext"></param>
+            <param name="exception"></param>
+            <param name="cancellationToken"></param>
+            <returns>true if the exception was properly handled</returns>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Services.CurrentUser">
+            <summary>
+            Get information about the current authenticated user
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Services.CurrentUser.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Get information about the current authenticated user
+            </summary>
+            <param name="httpContextAccessor"></param>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.Id">
+            <summary>
+            Get the Id of the current authenticated user
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.Role">
+            <summary>
+            Get the role of the current authenticated user
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.Email">
+            <summary>
+            Get the email of the current authenticated user
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.IsGuest">
+            <summary>
+            returns true is the current authenticated user is a guest
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Api.Services.CurrentUser.IsAdmin">
+            <summary>
+            returns true is the current authenticated user is an admin
+            </summary>
+        </member>
+        <member name="T:HotelBookingSystem.Api.WebConfiguration">
+            <summary>
+            Register services in the DI container
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.WebConfiguration.AddWebComponents(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Register services
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
