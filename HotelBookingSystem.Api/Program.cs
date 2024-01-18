@@ -43,7 +43,7 @@ app.UseSerilogRequestLogging();
 
 //app.Migrate();
 
-app.UseCors();
+//app.UseCors();
 
 //app.UseStatusCodePages();
 
