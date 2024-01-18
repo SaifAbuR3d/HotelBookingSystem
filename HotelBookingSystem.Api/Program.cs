@@ -27,11 +27,11 @@ builder.Services.AddWebComponents();
 
 var app = builder.Build();
 
-if (isDevelopment)
-{
+//if (isDevelopment)
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 
