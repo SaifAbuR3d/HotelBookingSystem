@@ -1,17 +1,18 @@
-name: Deploy🚀🚀
+name: Publish 🚀
 
 on:
   push:
-    branches: [ main ]
+    branches:
+    - main
 
 env:
-  AZURE_WEBAPP_NAME: saif-hotels
+  AZURE_WEBAPP_NAME: saifhotels
   AZURE_WEBAPP_PACKAGE_PATH: "./publish"
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest 
-    needs: build-and-test 
+    runs-on: ubuntu-latest
+    needs: build-and-test
 
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +20,7 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
         
-      - name: Deployment
+      - name: Deploy
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
