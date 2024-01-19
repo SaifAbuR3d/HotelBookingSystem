@@ -866,7 +866,7 @@
             Register services in the DI container
             </summary>
         </member>
-        <member name="M:HotelBookingSystem.Api.WebConfiguration.AddWebComponents(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:HotelBookingSystem.Api.WebConfiguration.AddWebComponents(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Register services
             </summary>
