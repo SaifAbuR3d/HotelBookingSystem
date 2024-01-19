@@ -21,7 +21,7 @@ public static class WebConfiguration
     /// <param name="services"></param>
     /// <returns></returns>
     public static IServiceCollection AddWebComponents(
-               this IServiceCollection services)
+               this IServiceCollection services, IConfiguration configuration)
     {
         services.AddApiVersioning(setup =>
         {
@@ -59,6 +59,8 @@ public static class WebConfiguration
         services.AddHttpContextAccessor();
 
         services.AddScoped<ICurrentUser, CurrentUser>();
+
+       services.AddApplicationInsightsTelemetry(opt => opt.ConnectionString = configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
         return services; 
     }

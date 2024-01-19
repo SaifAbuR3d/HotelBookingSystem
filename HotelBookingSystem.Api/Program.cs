@@ -19,38 +19,33 @@ builder.Services.AddApplication();
 
 builder.Services.AddPersistenceInfrastructure(builder.Configuration, isDevelopment);
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
-builder.Services.AddPdfInfrastructure(); 
+builder.Services.AddPdfInfrastructure();
 builder.Services.AddEmailInfrastructure(builder.Configuration);
 
-builder.Services.AddWebComponents();
+builder.Services.AddWebComponents(builder.Configuration);
 
-
-builder.Services.AddApplicationInsightsTelemetry(opt => opt.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 
 var app = builder.Build();
 
-//if (isDevelopment)
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
 
-app.UseDeveloperExceptionPage();
+if (!isDevelopment)
+{
+    app.UseExceptionHandler(); // Adds my custom GlobalExceptionHandler to the pipeline
+}
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI(); // this should be only in development, but I use it as a user-friendly way to test the API in production
 
 app.UseSerilogRequestLogging();
+
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.Migrate();
 
 app.UseCors();
-
-app.UseStatusCodePages();
-
-app.UseExceptionHandler();
 
 app.UseAuthentication();
 
