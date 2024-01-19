@@ -3,6 +3,7 @@ using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.Identity.Command;
 using HotelBookingSystem.Application.DTOs.Identity.OutputModel;
 using HotelBookingSystem.Application.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBookingSystem.Api.Controllers;
@@ -64,7 +65,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     /// <response code="201"></response>
     /// <response code="400">if the request data is invalid</response>
     /// <returns>No Content</returns>
-    //    [Authorize(Policy = Policies.AdminOnly)]
+    [Authorize(Policy = Policies.AdminOnly)]
     [HttpPost("api/register-admin")]
     public async Task<ActionResult> RegisterAdmin([FromBody] RegisterUserModel request)
     {

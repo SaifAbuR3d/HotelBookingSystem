@@ -66,6 +66,11 @@ public class ReviewRepository(ApplicationDbContext context) : IReviewRepository
 
     public async Task<double> GetHotelAverageRatingAsync(Hotel hotel)
     {
+        var hasReviews = await _context.Reviews.AnyAsync(r => r.HotelId == hotel.Id);
+        if (!hasReviews)
+        {
+            return 0;
+        }
         return await _context.Reviews
             .Where(r => r.HotelId == hotel.Id)
             .AverageAsync(r => r.Rating);
