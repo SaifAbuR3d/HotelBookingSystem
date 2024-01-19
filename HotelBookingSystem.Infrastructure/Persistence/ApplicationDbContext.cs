@@ -2,8 +2,6 @@
 using HotelBookingSystem.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace HotelBookingSystem.Infrastructure.Persistence;
 
@@ -41,8 +39,39 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithOne()
             .HasForeignKey<ApplicationUser>("GuestId"); 
 
-
         SeedData(modelBuilder);
+
+        ConfigureDeleteBehavior(modelBuilder);
+    }
+
+    private void ConfigureDeleteBehavior(ModelBuilder modelBuilder)
+    {
+        // Set default delete behavior to Restrict
+        var cascadeDeleteFKs = modelBuilder.Model.GetEntityTypes()
+            .SelectMany(t => t.GetForeignKeys())
+            .Where(fk => !fk.IsOwnership && fk.DeleteBehavior != DeleteBehavior.Restrict);
+
+        foreach (var fk in cascadeDeleteFKs)
+            fk.DeleteBehavior = DeleteBehavior.Restrict;
+
+        // Set cascade delete specifically for image entities
+        modelBuilder.Entity<City>()
+            .HasMany(c => c.Images)
+            .WithOne()
+            .HasForeignKey(ci => ci.CityId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Hotel>()
+            .HasMany(h => h.Images)
+            .WithOne()
+            .HasForeignKey(hi => hi.HotelId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Room>()
+            .HasMany(r => r.Images)
+            .WithOne()
+            .HasForeignKey(ri => ri.RoomId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     private void SetPrecisionForFloatingPointTypes(ModelBuilder modelBuilder)
@@ -123,30 +152,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             new Room { Id = room1LeMeridienId, RoomNumber = 1, AdultsCapacity = 2, ChildrenCapacity = 2, Price = 250, HotelId = leMeridienId, RoomType = RoomType.Boutique, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
             new Room { Id = room1TokyoPalaceId, RoomNumber = 1, AdultsCapacity = 2, ChildrenCapacity = 1, Price = 350, HotelId = tokyoPalaceId, RoomType = RoomType.Standard, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
             new Room { Id = room1BerlinGrandId, RoomNumber = 1, AdultsCapacity = 2, ChildrenCapacity = 0, Price = 450, HotelId = berlinGrandId, RoomType = RoomType.Boutique, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
-        );
-
-        var johnDoeId = new Guid("2783b59c-f7f8-4b21-b1df-5149fb57984e");
-        var janeSmithId = new Guid("2883b59c-f7f8-4b21-b1df-5149fb57984e");
-        var aliceJonesId = new Guid("2983b59c-f7f8-4b21-b1df-5149fb57984e");
-        var bobSmithId = new Guid("3183b59c-f7f8-4b21-b1df-5149fb57984e");
-
-        modelBuilder.Entity<Guest>().HasData(
-            new Guest { Id = johnDoeId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "John", LastName = "Doe" },
-            new Guest { Id = janeSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "Jane", LastName = "Smith" },
-            new Guest { Id = aliceJonesId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "Alice", LastName = "Jones" },
-            new Guest { Id = bobSmithId, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14), FirstName = "Bob", LastName = "Smith" }
-        );
-
-        var review1Id = new Guid("3283b59c-f7f8-4b21-b1df-5149fb57984e");
-        var review2Id = new Guid("3383b59c-f7f8-4b21-b1df-5149fb57984e");
-        var review3Id = new Guid("3483b59c-f7f8-4b21-b1df-5149fb57984e");
-        var review4Id = new Guid("3583b59c-f7f8-4b21-b1df-5149fb57984e");
-
-        modelBuilder.Entity<Review>().HasData(
-            new Review { Id = review1Id, GuestId = janeSmithId, HotelId = grandHyattId, Title = "Excellent Stay", Description = "Wonderful experience at Grand Hyatt!", Rating = 5, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Review { Id = review2Id, GuestId = bobSmithId, HotelId = theRitzId, Title = "Amazing Service", Description = "The Ritz never disappoints.", Rating = 4, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Review { Id = review3Id, GuestId = aliceJonesId, HotelId = leMeridienId, Title = "Wonderful Experience", Description = "Great service and comfortable stay.", Rating = 5, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) },
-            new Review { Id = review4Id, GuestId = johnDoeId, HotelId = berlinGrandId, Title = "Good Stay", Description = "Enjoyed my time at Berlin Grand.", Rating = 4, CreationDate = new DateTime(2023, 12, 14), LastModified = new DateTime(2023, 12, 14) }
         );
     }
 

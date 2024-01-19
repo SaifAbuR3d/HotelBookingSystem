@@ -1,5 +1,7 @@
-﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.IdentityInterfaces;
+using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
+using HotelBookingSystem.Infrastructure.Identity;
 using HotelBookingSystem.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -13,38 +15,41 @@ public static class PersistenceConfiguration
     public static IServiceCollection AddPersistenceInfrastructure(
         this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         => services
-            .AddDatabase(GetConnectionString(configuration), isDevelopment)
+            .AddDatabase(GetConnectionString(configuration, isDevelopment), isDevelopment)
             .AddRepositories()
             .AddImageHandling();
-    private static string GetConnectionString(IConfiguration configuration)
+    private static string GetConnectionString(IConfiguration configuration, bool isDevelopment)
     {
-        var server = configuration["DBServer"] ?? "sql_server2022";
-        var database = configuration["Database"] ?? "HotelBookingSystem";
-        var user = configuration["DBUser"] ?? "sa";
-
-        var password = configuration["DBPassword"];  // this should be in Azure Key Vault
-                                                     // or provided by an environment variable (with docker compose)
-      
-
-       
-        if (string.IsNullOrWhiteSpace(password))
+        if (!isDevelopment)
         {
-            // if we are here, we are running locally and we need to use the connection string (from appsettings.json) for SQL Server
+            // In Production, the connection string is provided from Azure Application Settings
             return configuration.GetConnectionString("SqlServer");
         }
 
-        // if we are here, we are running in a container and we need to use the connection string for SQL Server
+        bool isRunningInContainer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
+        if (!isRunningInContainer)
+        {
+            // if we are here, we are running locally and we need to use the connection string
+            // (from appsettings.Development.json) for SQL Server
+            return configuration.GetConnectionString("SqlServer");
+        }
 
         Console.WriteLine("Running in a container");
         Console.WriteLine("Waiting for SQL Server to be ready...");
 
         // wait for the SQL Server container to be READY to accept connections,
         // this is needed on my machine, but it might not be on yours
-        // Note that it about READY, not STARTED, so the container might be started, but not ready to accept connections
+        // Note that it about 'READY', not 'STARTED', so the container might be started, but not ready to accept connections
 
         Task.Delay(60000).Wait();
 
+        var server = configuration["DBServer"] ?? "sql_server2022";
+        var database = configuration["Database"] ?? "HotelBookingSystem";
+        var user = configuration["DBUser"] ?? "sa";
 
+        var password = configuration["DBPassword"]; // provided by an environment variable (with docker compose)
+      
         return $"Server={server};Database={database};User ID={user};Password={password};MultipleActiveResultSets=True;TrustServerCertificate=True";
 
     }
@@ -76,7 +81,7 @@ public static class PersistenceConfiguration
 
 
     // check if there is any pending migration and apply it
-    public static IApplicationBuilder Migrate(this IApplicationBuilder app)
+    public static IApplicationBuilder Migrate(this IApplicationBuilder app, bool isDevelopment)
     {
         using var scope = app.ApplicationServices.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
