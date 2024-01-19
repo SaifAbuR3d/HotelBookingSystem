@@ -22,7 +22,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Run tests
-        run: dotnet test ./HotelBookingSystem.sln --no-build --verbosity diagnostic
+        run: dotnet test
 
       - name: Publish
         run: dotnet publish -c Release --no-build -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
