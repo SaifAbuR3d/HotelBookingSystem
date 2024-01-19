@@ -22,7 +22,10 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddPdfInfrastructure(); 
 builder.Services.AddEmailInfrastructure(builder.Configuration);
 
-builder.Services.AddWebComponents(); 
+builder.Services.AddWebComponents();
+
+
+builder.Services.AddApplicationInsightsTelemetry(opt => opt.ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 
 var app = builder.Build();
@@ -35,23 +38,23 @@ var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseSerilogRequestLogging();
 
-//app.UseStaticFiles();
+app.UseStaticFiles();
 
-//app.Migrate();
+app.Migrate();
 
-//app.UseCors();
+app.UseCors();
 
-//app.UseStatusCodePages();
+app.UseStatusCodePages();
 
-//app.UseExceptionHandler();
+app.UseExceptionHandler();
 
-//app.UseAuthentication();
+app.UseAuthentication();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 
