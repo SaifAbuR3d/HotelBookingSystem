@@ -81,7 +81,7 @@ public static class PersistenceConfiguration
 
 
     // check if there is any pending migration and apply it
-    public static IApplicationBuilder Migrate(this IApplicationBuilder app, bool isDevelopment)
+    public static IApplicationBuilder Migrate(this IApplicationBuilder app)
     {
         using var scope = app.ApplicationServices.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
