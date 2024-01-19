@@ -1,5 +1,4 @@
 name: Build, Test, and Deploy
-
 on:
   push:
     branches:
@@ -7,35 +6,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-          
+
       - name: Build
         run: dotnet build --configuration Release
 
-      - name: Run tests
-        run: dotnet test
+      - name: Run Tests
+        run: dotnet test --no-build --verbosity normal
 
       - name: Publish
-        run: dotnet publish -c Release --no-build -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build_and_test
+    needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -50,7 +49,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: 'saif-hotels'
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_89040E548CA2470FB6B89385E7B654E0 }}
