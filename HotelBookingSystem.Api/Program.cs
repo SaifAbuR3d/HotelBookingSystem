@@ -29,10 +29,12 @@ builder.Services.AddWebComponents(builder.Configuration);
 var app = builder.Build();
 
 
-if (!isDevelopment)
-{
+app.UseStatusCodePages();
+
+//if (!isDevelopment)
+//{
     app.UseExceptionHandler(); // Adds my custom GlobalExceptionHandler to the pipeline
-}
+//}
 
 app.UseSwagger();
 app.UseSwaggerUI(); // this should be only in development, but I use it as a user-friendly way to test the API in production
