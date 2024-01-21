@@ -108,7 +108,7 @@
                  {
                     "name": "Budapest",
                     "country": "Hungary",
-                    "postOffice": "1054"
+                    "postOffice": "10543"
                  }
             
              </remarks>
@@ -141,7 +141,7 @@
                  {
                     "name": "Budapest",
                     "country": "Hungary",
-                    "postOffice": "1117"
+                    "postOffice": "11176"
                  }
             
              </remarks>
@@ -421,33 +421,18 @@
              <response code="404">If the hotel is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
-             <summary>
-             Upload an image to a hotel
-             </summary>
-             <param name="id">The id of the hotel to upload image</param>
-             <param name="file">HotelImage data</param>
-             <param name="alternativeText">Alternative Text(Alt)</param>
-             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
-             <returns></returns>
-             <remarks> 
-             Sample request:
-            
-                 PUT /hotels/{hotelId}
-                 {
-                    "name": "Hotel Budapest",
-                    "owner": "Hungarian Hotels Ltd.",
-                    "street": "King lu, 19 st."
-                    "latitude": "15.9",
-                    "longitude": "20.5",
-                    "cityId": "{cityId}"
-                 }
-            
-             </remarks>
-             <response code="204">If the image is successfully uploaded</response>
-             <response code="400">If the request data is invalid</response>
-             <response code="401">If the user is not authenticated</response>
-             <response code="403">If the user is not authorized (not an admin)</response> 
-             <response code="404">If the hotel is not found</response>
+            <summary>
+            Upload an image to a hotel
+            </summary>
+            <param name="id">The id of the hotel to upload image</param>
+            <param name="file">HotelImage data</param>
+            <param name="alternativeText">Alternative Text(Alt)</param>
+            <param name="thumbnail">indicates if the image should be used as thumbnail</param>
+            <response code="204">If the image is successfully uploaded</response>
+            <response code="400">If the request data is invalid</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+            <response code="404">If the hotel is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.HotelsController.GetHotels(HotelBookingSystem.Application.DTOs.Hotel.Query.GetHotelsQueryParameters)">
             <summary>
@@ -481,7 +466,7 @@
              
              Sample request:
             
-                 GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Single
+                 GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Standard
                  
              </remarks>
              <param name="request">The query parameters for hotel search and filtering.</param>
@@ -629,6 +614,18 @@
             <param name="reviewId">The id of the review to update</param>
             <param name="request">The data for the updated review</param>
             <returns>No content</returns>
+            <remarks>
+            
+            Sample request:
+            
+                PUT /hotels/{hotelId}/reviews/{reviewId}
+                {
+                    "Title": "Good Experience",
+                    "Description": "The hotel provided good service and comfortable accommodations.",
+                    "Rating": 4
+                }
+                
+            </remarks>
             <response code="204">If the review is successfully updated</response>
             <response code="400">If the request data is invalid</response>
             <response code="401">User is not authenticated.</response>
@@ -713,15 +710,26 @@
              <response code="400">If the request data is invalid</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.DeleteRoom(System.Guid)">
+            <summary>
+            Delete a room
+            </summary>
+            <param name="id">The id of the room to delete</param>
+            <returns>No content</returns>
+            <response code="204">If the operation is successfully done</response>
+            <response code="401">If the user is not authenticated</response>
+            <response code="403">If the user is not authorized (not an admin)</response> 
+        </member>
+        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UpdateRoom(System.Guid,HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand)">
              <summary>
-             Delete a room
+             Update a room
              </summary>
-             <param name="id">The id of the room to delete</param>
-             <returns>The newly created room</returns>
+             <param name="id">The id of the room to update</param>
+             <param name="request">The new data for the room</param>
+             <returns>No content</returns>
              <remarks>
              Sample request:
             
-                 POST /rooms
+                 PUT /rooms/{roomId}
                  {
                     "roomNumber": "101",
                     "adultsCapacity": 2,
@@ -729,24 +737,12 @@
                     "price": 100
                  }
             
-             </remarks>
-             <returns>No content</returns>
-             <response code="204">If the operation is successfully done</response>
+             </remarks> 
+             <response code="204">If the room is successfully updated</response>
+             <response code="400">If the request data is invalid</response>
              <response code="401">If the user is not authenticated</response>
              <response code="403">If the user is not authorized (not an admin)</response> 
-        </member>
-        <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UpdateRoom(System.Guid,HotelBookingSystem.Application.DTOs.Room.Command.UpdateRoomCommand)">
-            <summary>
-            Update a room
-            </summary>
-            <param name="id">The id of the room to update</param>
-            <param name="request">The new data for the room</param>
-            <returns>No content</returns>
-            <response code="204">If the room is successfully updated</response>
-            <response code="400">If the request data is invalid</response>
-            <response code="401">If the user is not authenticated</response>
-            <response code="403">If the user is not authorized (not an admin)</response> 
-            <response code="404">If the room is not found</response>
+             <response code="404">If the room is not found</response>
         </member>
         <member name="M:HotelBookingSystem.Api.Controllers.RoomsController.UploadImage(System.Guid,Microsoft.AspNetCore.Http.IFormFile,System.String,System.Nullable{System.Boolean})">
             <summary>
@@ -756,7 +752,7 @@
             <param name="file">HotelImage data</param>
             <param name="alternativeText">Alternative Text(Alt)</param>
             <param name="thumbnail">indicates if the image should be used as thumbnail</param>
-            <returns></returns>
+            <returns>No content</returns>
             <response code="204">If the image is successfully uploaded</response>
             <response code="400">If the request data is invalid</response>
             <response code="401">If the user is not authenticated</response>
@@ -802,6 +798,30 @@
             <param name = "context" ></param >
             <param name="next"></param>
             <returns></returns>
+        </member>
+        <member name="T:HotelBookingSystem.Api.Helpers.PageLinker">
+            <summary>
+            static class for adding next and previous page links to pagination metadata
+            </summary>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Helpers.PageLinker.AddPageLinks(Microsoft.AspNetCore.Mvc.IUrlHelper,System.String,HotelBookingSystem.Application.DTOs.Common.PaginationMetadata,HotelBookingSystem.Application.DTOs.Common.ResourceQueryParameters)">
+            <summary>
+            Add next and previous page links to the passed pagination metadata (for general ResourceQueryParameter)
+            </summary>
+            <param name="url"></param>
+            <param name="routeName"></param>
+            <param name="paginationMetadata"></param>
+            <param name="parameters"></param>
+        </member>
+        <member name="M:HotelBookingSystem.Api.Helpers.PageLinker.AddPageLinks(Microsoft.AspNetCore.Mvc.IUrlHelper,System.String,HotelBookingSystem.Application.DTOs.Common.PaginationMetadata,HotelBookingSystem.Application.DTOs.Hotel.Query.HotelSearchAndFilterParameters)">
+            <summary>
+            Add next and previous page links to the passed pagination metadata (for specific HotelSearchAndFilterParameters)
+            used in SearchHotels
+            </summary>
+            <param name="url"></param>
+            <param name="routeName"></param>
+            <param name="paginationMetadata"></param>
+            <param name="parameters"></param>
         </member>
         <member name="T:HotelBookingSystem.Api.Middlewares.GlobalExceptionHandler">
             <summary>

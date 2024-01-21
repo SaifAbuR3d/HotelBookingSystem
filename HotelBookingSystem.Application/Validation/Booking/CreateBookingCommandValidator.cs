@@ -3,7 +3,7 @@ using HotelBookingSystem.Application.DTOs.Booking.Command;
 
 namespace HotelBookingSystem.Application.Validation.Booking;
 
-using static Domain.Models.Constants.Room;
+using static HotelBookingSystem.Domain.Constants.Room;
 
 public class CreateBookingCommandValidator : 
                 AbstractValidator<CreateBookingCommand>

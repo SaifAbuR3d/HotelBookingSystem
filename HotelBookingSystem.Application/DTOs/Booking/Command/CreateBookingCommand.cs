@@ -30,13 +30,11 @@ public class CreateBookingCommand
     /// <summary>
     /// Check-in date in UTC
     /// </summary>
-    [DataType(DataType.Date)]
     public DateTime CheckInDate { get; set; }
 
     /// <summary>
     /// Check-out date in UTC
     /// </summary>
-    [DataType(DataType.Date)]
     public DateTime CheckOutDate { get; set; }
 
     /// <summary>

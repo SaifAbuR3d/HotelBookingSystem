@@ -1,9 +1,9 @@
 ﻿using Asp.Versioning;
+using HotelBookingSystem.Api.Helpers;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
 using HotelBookingSystem.Application.DTOs.City.Command;
 using HotelBookingSystem.Application.DTOs.City.OutputModel;
 using HotelBookingSystem.Application.DTOs.City.Query;
-using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +55,7 @@ public class CitiesController(ICityService cityService,
     ///     {
     ///        "name": "Budapest",
     ///        "country": "Hungary",
-    ///        "postOffice": "1054"
+    ///        "postOffice": "10543"
     ///     }
     ///
     /// </remarks>
@@ -107,7 +107,7 @@ public class CitiesController(ICityService cityService,
     ///     {
     ///        "name": "Budapest",
     ///        "country": "Hungary",
-    ///        "postOffice": "1117"
+    ///        "postOffice": "11176"
     ///     }
     ///
     /// </remarks>
@@ -153,6 +153,7 @@ public class CitiesController(ICityService cityService,
     [HttpGet("trending-destinations")]
     public async Task<ActionResult<IEnumerable<CityAsTrendingDestinationOutputModel>>> MostVisitedCities(int count = 5)
     {
+        return Ok(new { som = environment.WebRootPath }); 
         logger.LogInformation("Retrieving top {Count} most visited cities has started", count); 
 
         var cities = await cityService.MostVisitedCitiesAsync(count);
@@ -212,7 +213,7 @@ public class CitiesController(ICityService cityService,
 
         var (cities, paginationMetadata) = await cityService.GetAllCitiesAsync(request);
 
-        AddPageLinks(paginationMetadata, request);
+        PageLinker.AddPageLinks(Url, nameof(GetCities), paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
@@ -220,40 +221,42 @@ public class CitiesController(ICityService cityService,
         return Ok(cities);
     }
 
-    private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
-    {
-        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+    //private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
+    //{
+    //    logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
 
-        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
-        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
+    //    paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ?
+    //    CreatePageLink(paginationMetadata, parameters, next: false) : null;
+    //    paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ?
+    //    CreatePageLink(paginationMetadata, parameters, next: true) : null;
 
-        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
+    //    logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
 
-    }
+    //}
 
-    private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
-    {
-        if (next)
-        {
-            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
-        else
-        {
-            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
+    //private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
+    //{
+    //    if (next)
+    //    {
+    //        logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+    //    }
+    //    else
+    //    {
+    //        logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
+    //    }
 
-        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        var link = 
-            Url.Link("GetCities", new
-            {
-                sortOrder = parameters.SortOrder,
-                sortColumn = parameters.SortColumn,
-                pageNumber = newPageNumber,
-                pageSize = paginationMetadata.PageSize,
-                searchQuery = parameters.SearchTerm,
-            });
+    //    var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
+    //    var link = 
+    //        Url.Link("GetCities", new
+    //        {
+    //            sortOrder = parameters.SortOrder,
+    //            sortColumn = parameters.SortColumn,
+    //            pageNumber = newPageNumber,
+    //            pageSize = paginationMetadata.PageSize,
+    //            searchQuery = parameters.SearchTerm,
+    //        });
 
-        return link; 
-    }
+    //    return link; 
+    //}
 
 }

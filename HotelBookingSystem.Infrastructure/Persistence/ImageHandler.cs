@@ -11,7 +11,7 @@ public class ImageHandler : IImageHandler
     {
         if (imageData.Length <= 0)
         {
-            throw new BadFileException("HotelImage is empty");
+            throw new BadFileException("Image is empty");
         }
 
         var imageExtension = Path.GetExtension(imageData.FileName);

@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
+using HotelBookingSystem.Api.Helpers;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Hotel.Command;
 using HotelBookingSystem.Application.DTOs.Hotel.OutputModel;
 using HotelBookingSystem.Application.DTOs.Hotel.Query;
@@ -145,21 +145,6 @@ public class HotelsController(IHotelService hotelService,
     /// <param name="file">HotelImage data</param>
     /// <param name="alternativeText">Alternative Text(Alt)</param>
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
-    /// <returns></returns>
-    /// <remarks> 
-    /// Sample request:
-    ///
-    ///     PUT /hotels/{hotelId}
-    ///     {
-    ///        "name": "Hotel Budapest",
-    ///        "owner": "Hungarian Hotels Ltd.",
-    ///        "street": "King lu, 19 st."
-    ///        "latitude": "15.9",
-    ///        "longitude": "20.5",
-    ///        "cityId": "{cityId}"
-    ///     }
-    ///
-    /// </remarks>
     /// <response code="204">If the image is successfully uploaded</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">If the user is not authenticated</response>
@@ -203,7 +188,7 @@ public class HotelsController(IHotelService hotelService,
 
         var (hotels, paginationMetadata) = await hotelService.GetAllHotelsAsync(request);
 
-        AddPageLinks(paginationMetadata, request);
+        PageLinker.AddPageLinks(Url, nameof(GetHotels), paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
@@ -223,7 +208,7 @@ public class HotelsController(IHotelService hotelService,
     /// 
     /// Sample request:
     ///
-    ///     GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Single
+    ///     GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Standard
     ///     
     /// </remarks>
     /// <param name="request">The query parameters for hotel search and filtering.</param>
@@ -233,105 +218,19 @@ public class HotelsController(IHotelService hotelService,
     /// <response code="200">Returns the list of hotels based on the search criteria.</response>
     /// <response code="400">If the request parameters are invalid or missing.</response>
     [AllowAnonymous]
-    [HttpGet("search", Name = "SearchHotels")]
+    [HttpGet("search", Name = "SearchAndFilterHotels")]
     public async Task<ActionResult<IEnumerable<HotelSearchResultOutputModel>>> SearchAndFilterHotels([FromQuery] HotelSearchAndFilterParameters request)
     {
         logger.LogInformation("SearchAndFilterHotels started for query: {@HotelSearchAndFilterParameters}", request);
 
         var (hotels, paginationMetadata) = await hotelService.SearchAndFilterHotelsAsync(request);
 
-        AddPageLinks(paginationMetadata, request);
+        PageLinker.AddPageLinks(Url, nameof(SearchAndFilterHotels), paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
         logger.LogInformation("SearchAndFilterHotels for query: {@HotelSearchAndFilterParameters} completed successfully", request);
         return Ok(hotels);
     }
-
-    
-    private void AddPageLinks(PaginationMetadata paginationMetadata, HotelSearchAndFilterParameters parameters)
-    {
-        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-
-        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
-        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
-
-        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
-
-    }
-
-    private string? CreatePageLink(PaginationMetadata paginationMetadata, HotelSearchAndFilterParameters parameters, bool next)
-    {
-        if (next)
-        {
-            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
-        else
-        {
-            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
-
-        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        var link =
-            Url.Link("SearchHotels", new
-            {
-                sortOrder = parameters.SortOrder,
-                sortColumn = parameters.SortColumn,
-                pageNumber = newPageNumber,
-                pageSize = paginationMetadata.PageSize,
-                searchQuery = parameters.SearchTerm,
-
-                checkInDate = parameters.CheckInDate,
-                checkOutDate = parameters.CheckOutDate,
-                adults = parameters.Adults,
-                children = parameters.Children,
-                rooms = parameters.Rooms,
-
-                minStarRating = parameters.MinStarRating,
-                maxPrice = parameters.MaxPrice,
-                minPrice = parameters.MinPrice,
-                amenities = parameters?.Amenities,
-                roomTypes = parameters?.RoomTypes
-            });
-
-        return link; 
-    }
-
-    private void AddPageLinks(PaginationMetadata paginationMetadata, GetHotelsQueryParameters parameters)
-    {
-        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-
-        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
-        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
-
-        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
-
-    }
-
-    private string? CreatePageLink(PaginationMetadata paginationMetadata, GetHotelsQueryParameters parameters, bool next)
-    {
-        if (next)
-        {
-            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
-        else
-        {
-            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
-
-        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        var link =
-            Url.Link("GetHotels", new
-            {
-                sortOrder = parameters.SortOrder,
-                sortColumn = parameters.SortColumn,
-                pageNumber = newPageNumber,
-                pageSize = paginationMetadata.PageSize,
-                searchQuery = parameters.SearchTerm,
-            });
-
-        return link; 
-    }
-
 
 }

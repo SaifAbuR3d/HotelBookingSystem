@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Security.Claims;
 using Asp.Versioning;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 namespace HotelBookingSystem.Api;
 
 /// <summary>
@@ -30,17 +31,27 @@ public static class WebConfiguration
             setup.ReportApiVersions = true;
         }).AddMvc();
 
-        services.AddControllers(option =>
-        {
-            option.Filters.Add<LogActivityFilter>();
-        });
+        services
+        .AddControllers(option =>
+            {
+                option.Filters.Add<LogActivityFilter>();
+            })
+        .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            })
+        .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            });
 
         services.AddEndpointsApiExplorer();
 
         services.AddProblemDetails()
                 .AddExceptionHandler<GlobalExceptionHandler>();
 
-        services.AddSwagger(); 
+        services.AddSwagger();
+        services.AddDateOnlyTimeOnlyStringConverters();
 
         services.AddAuthorization(options =>
         {
@@ -100,6 +111,8 @@ public static class WebConfiguration
                     Array.Empty<string>()
                 }
             });
+
+            setup.UseDateOnlyTimeOnlyStringConverters();
 
             #region include xml comments
             var actionMethodsXmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

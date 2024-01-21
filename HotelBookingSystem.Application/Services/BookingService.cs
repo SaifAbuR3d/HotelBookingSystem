@@ -82,11 +82,14 @@ public class BookingService(IHotelRepository hotelRepository,
         var invoice = _mapper.Map<Invoice>(booking);
 
         _logger.LogDebug("Converting Rooms to RoomsWithinInvoice");
-        var roomsWithinInvoice = await Task.WhenAll(
-            booking.Rooms.Select(r =>
-               ConvertRoomToRoomWithinInvoice(r, booking.CheckInDate, booking.CheckOutDate)));
+        var roomsWithinInvoice = new List<RoomWithinInvoice>();
+        foreach (var room in booking.Rooms)
+        {
+            var roomInvoice = await ConvertRoomToRoomWithinInvoice(room, booking.CheckInDate, booking.CheckOutDate);
+            roomsWithinInvoice.Add(roomInvoice);
+        }
 
-        invoice.Rooms = roomsWithinInvoice.ToList();
+        invoice.Rooms = roomsWithinInvoice;
         invoice.TotalPrice = roomsWithinInvoice.Sum(r => r.TotalRoomPrice);
         invoice.TotalPriceAfterDiscount = booking.Price;  // Same as roomsWithinInvoice.Sum(r => r.TotalRoomPriceAfterDiscount);
 
@@ -181,7 +184,9 @@ public class BookingService(IHotelRepository hotelRepository,
                 ?? throw new NotFoundException(nameof(Hotel), request.HotelId);
 
         var (guest, _) = await GetGuestFromCurrentUser();
-        var rooms = await FetchAndValidateRooms(request, hotel);
+
+        var rooms = await FetchRooms(request);
+        await ValidateRooms(request, rooms, hotel); 
 
         var checkInDate = DateOnly.FromDateTime(request.CheckInDate);
         var checkOutDate = DateOnly.FromDateTime(request.CheckOutDate);
@@ -200,18 +205,11 @@ public class BookingService(IHotelRepository hotelRepository,
         return booking;
     }
 
-    // null safe because we throw exception if rooms is null or any room is null
-    private async Task<List<Room>> FetchAndValidateRooms(CreateBookingCommand request, Hotel hotel)
+    private async Task ValidateRooms(CreateBookingCommand request, List<Room> rooms, Hotel hotel)
     {
-        var rooms = (await Task.WhenAll(request.RoomIds
-            .Select(_roomRepository.GetRoomAsync))
-            )
-            .ToList()
-            ?? throw new ServerErrorException("Rooms cannot be null");
-
         foreach (var room in rooms)
         {
-            if(room == null)
+            if (room == null)
             {
                 throw new NotFoundException(nameof(Room));
             }
@@ -220,6 +218,18 @@ public class BookingService(IHotelRepository hotelRepository,
         }
 
         ValidateRoomsCapacity(request, rooms.Sum(r => r.AdultsCapacity), rooms.Sum(r => r.ChildrenCapacity));
+    }
+
+    private async Task<List<Room>> FetchRooms(CreateBookingCommand request)
+    {
+        var rooms = new List<Room>();
+
+        foreach (var roomId in request.RoomIds)
+        {
+            var room = await _roomRepository.GetRoomAsync(roomId)
+                ?? throw new ServerErrorException("Rooms cannot be null");
+            rooms.Add(room);
+        }
 
         return rooms;
     }
@@ -263,17 +273,21 @@ public class BookingService(IHotelRepository hotelRepository,
     }
 
 
-    // null safe because we throw exception if any room doesn't have a price
     private async Task<decimal> CalculateTotalPrice(List<Room> rooms,
         DateOnly checkInDate, DateOnly checkOutDate)
     {
         var numberOfNights = checkOutDate.DayNumber - checkInDate.DayNumber;
-        // fetch rooms prices in parallel for better performance
-        var roomsPricePerNight = await Task.WhenAll(rooms
-                  .Select(r => _roomRepository.GetPrice(r.Id, checkInDate, checkOutDate))
-                  );
 
-        var totalRoomsPricePerNight = roomsPricePerNight.Sum(p => p ?? throw new NoPriceException());
+        var roomsPricePerNight = new List<decimal>();
+
+        foreach (var room in rooms)
+        {
+            var price = await _roomRepository.GetPrice(room.Id, checkInDate, checkOutDate)
+                ?? throw new NoPriceException(room.Id);
+            roomsPricePerNight.Add(price);
+        }
+
+        var totalRoomsPricePerNight = roomsPricePerNight.Sum();
 
         var totalPrice = totalRoomsPricePerNight * numberOfNights;
 

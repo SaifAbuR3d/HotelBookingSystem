@@ -72,6 +72,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithOne()
             .HasForeignKey(ri => ri.RoomId)
             .OnDelete(DeleteBehavior.Cascade);
+
+
+        modelBuilder.Entity<Booking>()
+            .HasMany(b => b.Rooms)
+            .WithMany(r => r.Bookings)
+            .UsingEntity<Dictionary<string, object>>(
+                "BookingRoom",
+                j => j.HasOne<Room>().WithMany().HasForeignKey("RoomsId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<Booking>().WithMany().HasForeignKey("BookingsId").OnDelete(DeleteBehavior.Cascade)
+            );
+
     }
 
     private void SetPrecisionForFloatingPointTypes(ModelBuilder modelBuilder)

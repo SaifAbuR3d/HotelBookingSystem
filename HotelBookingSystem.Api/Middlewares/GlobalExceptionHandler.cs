@@ -30,10 +30,6 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             detail: detail,
             extensions: new Dictionary<string, object?>
             {
-                //["errors"] = new Dictionary<string, string[]>
-                //{
-                //    [exception.GetType().Name] = [exception.Message]
-                //},
                 ["traceId"] = traceId
             }
 
@@ -42,7 +38,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         return true;
     }
 
-    private static (int statusCode, string title, string details/*, Type t (to simulate FluentValidation error response) */) MapException(Exception exception)
+    private static (int statusCode, string title, string details) MapException(Exception exception)
     {
         return exception switch
         {

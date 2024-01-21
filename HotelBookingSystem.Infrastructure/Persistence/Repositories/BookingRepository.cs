@@ -16,7 +16,7 @@ public class BookingRepository : IBookingRepository
     {
         return await _context.Bookings
             .Include(b => b.Guest)
-            .Include(b => b.Rooms).ThenInclude(r => r.Hotel)
+            .Include(b => b.Rooms).ThenInclude(r => r.Hotel).ThenInclude(h => h.City)
             .FirstOrDefaultAsync(b => b.Id == bookingId);
     }
 

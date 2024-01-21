@@ -127,7 +127,9 @@ public class HotelRepository(ApplicationDbContext context,
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
 
         _logger.LogDebug("Invoking the Database and Getting the result");
-        var result = await query.ToListAsync(); 
+        var result = await query
+            .AsNoTracking()
+            .ToListAsync(); 
 
         _logger.LogInformation("SearchAndFilterHotelsAsync for query: {@HotelSearchAndFilterParameters} completed successfully", request);
         return (result, paginationMetadata);
