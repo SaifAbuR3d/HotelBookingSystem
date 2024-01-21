@@ -50,7 +50,8 @@ public static class WebConfiguration
         services.AddProblemDetails()
                 .AddExceptionHandler<GlobalExceptionHandler>();
 
-        services.AddSwagger(); 
+        services.AddSwagger();
+        services.AddDateOnlyTimeOnlyStringConverters();
 
         services.AddAuthorization(options =>
         {
@@ -110,6 +111,8 @@ public static class WebConfiguration
                     Array.Empty<string>()
                 }
             });
+
+            setup.UseDateOnlyTimeOnlyStringConverters();
 
             #region include xml comments
             var actionMethodsXmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

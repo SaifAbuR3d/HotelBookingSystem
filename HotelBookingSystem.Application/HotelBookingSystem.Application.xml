@@ -191,6 +191,16 @@
             Longitude for the hotel
             </summary>
         </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.CheckInTime">
+            <summary>
+            Check in time for the hotel (default is 14:00)
+            </summary>
+        </member>
+        <member name="P:HotelBookingSystem.Application.DTOs.Hotel.Command.CreateHotelCommand.CheckOutTime">
+            <summary>
+            Check out time for the hotel (default is 11:00)
+            </summary>
+        </member>
         <member name="T:HotelBookingSystem.Application.DTOs.Hotel.Command.UpdateHotelCommand">
             <summary>
             DTO for creating a hotel

@@ -466,7 +466,7 @@
              
              Sample request:
             
-                 GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Single
+                 GET /hotels/search?searchTerm=Tokyo&amp;maxPrice=100&amp;minStarRating=4&amp;amenities=FreeWifi&amp;roomTypes=Standard
                  
              </remarks>
              <param name="request">The query parameters for hotel search and filtering.</param>

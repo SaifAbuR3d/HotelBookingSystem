@@ -39,4 +39,14 @@ public class CreateHotelCommand
     /// </summary>
     public double Longitude { get; set; }
 
+    /// <summary>
+    /// Check in time for the hotel (default is 14:00)
+    /// </summary>
+    public TimeOnly CheckInTime { get; set; } = new TimeOnly(14, 0);
+
+    /// <summary>
+    /// Check out time for the hotel (default is 11:00)
+    /// </summary>
+    public TimeOnly CheckOutTime { get; set; } = new TimeOnly(11, 0);
+
 }
