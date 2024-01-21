@@ -359,3 +359,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+#ignore localy(in development) image uploads
+/HotelBookingSystem.Api/wwwroot/images
