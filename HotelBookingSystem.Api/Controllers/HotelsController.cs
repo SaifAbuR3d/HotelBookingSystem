@@ -145,21 +145,6 @@ public class HotelsController(IHotelService hotelService,
     /// <param name="file">HotelImage data</param>
     /// <param name="alternativeText">Alternative Text(Alt)</param>
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
-    /// <returns></returns>
-    /// <remarks> 
-    /// Sample request:
-    ///
-    ///     PUT /hotels/{hotelId}
-    ///     {
-    ///        "name": "Hotel Budapest",
-    ///        "owner": "Hungarian Hotels Ltd.",
-    ///        "street": "King lu, 19 st."
-    ///        "latitude": "15.9",
-    ///        "longitude": "20.5",
-    ///        "cityId": "{cityId}"
-    ///     }
-    ///
-    /// </remarks>
     /// <response code="204">If the image is successfully uploaded</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">If the user is not authenticated</response>

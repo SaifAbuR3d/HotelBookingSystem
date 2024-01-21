@@ -107,6 +107,18 @@ public class ReviewsController(IReviewService reviewService,
     /// <param name="reviewId">The id of the review to update</param>
     /// <param name="request">The data for the updated review</param>
     /// <returns>No content</returns>
+    /// <remarks>
+    /// 
+    /// Sample request:
+    /// 
+    ///     PUT /hotels/{hotelId}/reviews/{reviewId}
+    ///     {
+    ///         "Title": "Good Experience",
+    ///         "Description": "The hotel provided good service and comfortable accommodations.",
+    ///         "Rating": 4
+    ///     }
+    ///     
+    /// </remarks>
     /// <response code="204">If the review is successfully updated</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">User is not authenticated.</response>

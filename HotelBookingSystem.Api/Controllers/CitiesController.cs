@@ -55,7 +55,7 @@ public class CitiesController(ICityService cityService,
     ///     {
     ///        "name": "Budapest",
     ///        "country": "Hungary",
-    ///        "postOffice": "1054"
+    ///        "postOffice": "10543"
     ///     }
     ///
     /// </remarks>
@@ -107,7 +107,7 @@ public class CitiesController(ICityService cityService,
     ///     {
     ///        "name": "Budapest",
     ///        "country": "Hungary",
-    ///        "postOffice": "1117"
+    ///        "postOffice": "11176"
     ///     }
     ///
     /// </remarks>

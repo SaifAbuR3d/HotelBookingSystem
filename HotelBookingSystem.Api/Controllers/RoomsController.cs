@@ -81,19 +81,6 @@ public class RoomsController(IRoomService roomService,
     /// Delete a room
     /// </summary>
     /// <param name="id">The id of the room to delete</param>
-    /// <returns>The newly created room</returns>
-    /// <remarks>
-    /// Sample request:
-    ///
-    ///     POST /rooms
-    ///     {
-    ///        "roomNumber": "101",
-    ///        "adultsCapacity": 2,
-    ///        "childrenCapacity": 1,
-    ///        "price": 100
-    ///     }
-    ///
-    /// </remarks>
     /// <returns>No content</returns>
     /// <response code="204">If the operation is successfully done</response>
     /// <response code="401">If the user is not authenticated</response>
@@ -115,6 +102,18 @@ public class RoomsController(IRoomService roomService,
     /// <param name="id">The id of the room to update</param>
     /// <param name="request">The new data for the room</param>
     /// <returns>No content</returns>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     PUT /rooms/{roomId}
+    ///     {
+    ///        "roomNumber": "101",
+    ///        "adultsCapacity": 2,
+    ///        "childrenCapacity": 1,
+    ///        "price": 100
+    ///     }
+    ///
+    /// </remarks> 
     /// <response code="204">If the room is successfully updated</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">If the user is not authenticated</response>
@@ -138,7 +137,7 @@ public class RoomsController(IRoomService roomService,
     /// <param name="file">HotelImage data</param>
     /// <param name="alternativeText">Alternative Text(Alt)</param>
     /// <param name="thumbnail">indicates if the image should be used as thumbnail</param>
-    /// <returns></returns>
+    /// <returns>No content</returns>
     /// <response code="204">If the image is successfully uploaded</response>
     /// <response code="400">If the request data is invalid</response>
     /// <response code="401">If the user is not authenticated</response>
