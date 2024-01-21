@@ -64,6 +64,7 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
         var cities = await _context.Cities
             .Where(c => cityIds.Contains(c.Id))
             .Include(c => c.Images)
+            .AsNoTracking()
             .ToListAsync();
 
         return cities;
@@ -89,7 +90,9 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
 
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
 
-        var result = await query.ToListAsync();
+        var result = await query
+            .AsNoTracking()
+            .ToListAsync();
 
         return (result, paginationMetadata);
     }

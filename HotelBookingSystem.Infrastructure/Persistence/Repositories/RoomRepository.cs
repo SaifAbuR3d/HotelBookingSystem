@@ -73,7 +73,9 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
 
         PaginationHelper.ApplyPagination(ref query, request.PageNumber, request.PageSize);
 
-        var result = await query.ToListAsync();
+        var result = await query
+            .AsNoTracking()
+            .ToListAsync();
 
         return (result, paginationMetadata);
     }
@@ -106,6 +108,7 @@ public class RoomRepository(ApplicationDbContext context) : IRoomRepository
          .OrderByDescending(r => r.Percentage)
          .Take(rooms)
          .Select(r => r.Room)
+         .AsNoTracking()
          .ToListAsync();
     }
 
