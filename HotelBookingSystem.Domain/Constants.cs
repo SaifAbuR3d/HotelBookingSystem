@@ -1,4 +1,4 @@
-﻿namespace HotelBookingSystem.Domain.Models;
+﻿namespace HotelBookingSystem.Domain;
 
 public class Constants
 {

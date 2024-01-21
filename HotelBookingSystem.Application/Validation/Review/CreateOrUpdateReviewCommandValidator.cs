@@ -3,7 +3,7 @@ using HotelBookingSystem.Application.DTOs.Review.Command;
 
 namespace HotelBookingSystem.Application.Validation.Review;
 
-using static Domain.Models.Constants.Review;
+using static HotelBookingSystem.Domain.Constants.Review;
 public class CreateOrUpdateReviewCommandValidator : AbstractValidator<CreateOrUpdateReviewCommand>
 {
     public CreateOrUpdateReviewCommandValidator()

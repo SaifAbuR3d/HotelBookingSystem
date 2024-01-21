@@ -4,9 +4,9 @@ using HotelBookingSystem.Application.Validation.Common;
 
 namespace HotelBookingSystem.Application.Validation.Hotel;
 
-using static Domain.Models.Constants.Common;
-using static Domain.Models.Constants.Hotel;
-using static Domain.Models.Constants.Location;
+using static HotelBookingSystem.Domain.Constants.Common;
+using static HotelBookingSystem.Domain.Constants.Hotel;
+using static HotelBookingSystem.Domain.Constants.Location;
 
 public class CreateHotelCommandValidator : AbstractValidator<CreateHotelCommand>
 {
