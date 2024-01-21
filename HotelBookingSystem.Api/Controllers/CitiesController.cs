@@ -153,6 +153,7 @@ public class CitiesController(ICityService cityService,
     [HttpGet("trending-destinations")]
     public async Task<ActionResult<IEnumerable<CityAsTrendingDestinationOutputModel>>> MostVisitedCities(int count = 5)
     {
+        return Ok(new { som = environment.WebRootPath }); 
         logger.LogInformation("Retrieving top {Count} most visited cities has started", count); 
 
         var cities = await cityService.MostVisitedCitiesAsync(count);
