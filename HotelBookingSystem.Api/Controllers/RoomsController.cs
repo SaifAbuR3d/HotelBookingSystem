@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
+using HotelBookingSystem.Api.Helpers;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Application.DTOs.Common;
 using HotelBookingSystem.Application.DTOs.Room.Command;
 using HotelBookingSystem.Application.DTOs.Room.OutputModel;
 using HotelBookingSystem.Application.DTOs.Room.Query;
@@ -180,47 +180,11 @@ public class RoomsController(IRoomService roomService,
 
         var (rooms, paginationMetadata) = await roomService.GetAllRoomsAsync(request);
 
-        AddPageLinks(paginationMetadata, request);
+        PageLinker.AddPageLinks(Url, nameof(GetRoom), paginationMetadata, request);
 
         Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetadata));
 
         logger.LogInformation("GetRooms for query: {@GetRoomsQuery} completed successfully", request);
         return Ok(rooms);
-    }
-
-    private void AddPageLinks(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters)
-    {
-        logger.LogDebug("AddPageLinks started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-
-        paginationMetadata.PreviousPageLink = paginationMetadata.HasPreviousPage ? CreatePageLink(paginationMetadata, parameters, next: false) : null;
-        paginationMetadata.NextPageLink = paginationMetadata.HasNextPage ? CreatePageLink(paginationMetadata, parameters, next: true) : null;
-
-        logger.LogDebug("AddPageLinks for query: {@parameters}, with pagination metadata: {@paginationMetadata} completed successfully", parameters, paginationMetadata);
-
-    }
-
-    private string? CreatePageLink(PaginationMetadata paginationMetadata, ResourceQueryParameters parameters, bool next)
-    {
-        if (next)
-        {
-            logger.LogDebug("CreatePageLinks for the next page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
-        else
-        {
-            logger.LogDebug("CreatePageLinks for the previous page started for query: {@parameters}, with pagination metadata: {@paginationMetadata}", parameters, paginationMetadata);
-        }
-
-        var newPageNumber = next ? paginationMetadata.PageNumber + 1 : paginationMetadata.PageNumber - 1;
-        var link =
-            Url.Link("GetRooms", new
-            {
-                sortOrder = parameters.SortOrder,
-                sortColumn = parameters.SortColumn,
-                pageNumber = newPageNumber,
-                pageSize = paginationMetadata.PageSize,
-                searchQuery = parameters.SearchTerm,
-            });
-
-        return link;
     }
 }

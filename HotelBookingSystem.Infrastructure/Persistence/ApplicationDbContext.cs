@@ -73,6 +73,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(ri => ri.RoomId)
             .OnDelete(DeleteBehavior.Cascade);
 
+
         modelBuilder.Entity<Booking>()
             .HasMany(b => b.Rooms)
             .WithMany(r => r.Bookings)
