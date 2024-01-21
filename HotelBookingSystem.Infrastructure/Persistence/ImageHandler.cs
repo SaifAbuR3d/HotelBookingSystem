@@ -43,6 +43,8 @@ public class ImageHandler : IImageHandler
         using var stream = new FileStream(imageFullPath, FileMode.Create);
         await imageData.CopyToAsync(stream);
 
-        return imageFullPath;
+        return imageFullPath
+               .Substring(imageFullPath.IndexOf("images"))
+               .Replace("\\", "/"); // Replace backslashes with forward slashes for URL compatibility
     }
 }
