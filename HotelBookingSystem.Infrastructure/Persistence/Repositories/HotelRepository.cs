@@ -141,8 +141,8 @@ public class HotelRepository(ApplicationDbContext context,
         if (!string.IsNullOrWhiteSpace(searchQuery))
         {
             hotels = hotels
-                .Where(h => h.Name.Contains(searchQuery)
-                            || (!string.IsNullOrWhiteSpace(h.Description) && h.Description.Contains(searchQuery)));
+                .Where(h => h.Name.StartsWith(searchQuery)
+                            || (!string.IsNullOrWhiteSpace(h.Description) && h.Description.StartsWith(searchQuery)));
         }
     }
 

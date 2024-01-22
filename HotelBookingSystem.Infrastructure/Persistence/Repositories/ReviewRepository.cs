@@ -59,8 +59,8 @@ public class ReviewRepository(ApplicationDbContext context) : IReviewRepository
     {
         if(!string.IsNullOrWhiteSpace(searchTerm))
         {
-            query = query.Where(r => !string.IsNullOrEmpty(r.Title) && r.Title.Contains(searchTerm) 
-                             || r.Description.Contains(searchTerm));
+            query = query.Where(r => !string.IsNullOrEmpty(r.Title) && r.Title.StartsWith(searchTerm) 
+                             || r.Description.StartsWith(searchTerm));
         }
     }
 
