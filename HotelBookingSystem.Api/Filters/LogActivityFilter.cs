@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using HotelBookingSystem.Api.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;
 
 namespace HotelBookingSystem.Api.Filters
@@ -18,6 +19,22 @@ namespace HotelBookingSystem.Api.Filters
         /// <returns></returns>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            // don't log arguments sent the identity controller
+            if (context.Controller.GetType() == typeof(IdentityController))
+            {
+                logger.LogInformation("Executing {$ActionMethodName} on Controller {$ControllerName}",
+                    context.ActionDescriptor.DisplayName,
+                    context.Controller);
+
+                await next();
+
+                logger.LogInformation("Action {$ActionMethodName} Finished Execution on Controller {$ControllerName}",
+                    context.ActionDescriptor.DisplayName,
+                    context.Controller);
+
+                return;
+            }
+
             logger.LogInformation("Executing {$ActionMethodName} on Controller {$ControllerName}, with Arguments {@ActionArguments}",
                 context.ActionDescriptor.DisplayName,
                 context.Controller,

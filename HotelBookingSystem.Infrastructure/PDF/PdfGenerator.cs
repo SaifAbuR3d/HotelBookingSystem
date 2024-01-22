@@ -2,6 +2,7 @@
 using HotelBookingSystem.Application.DTOs.Booking.OutputModel;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using System.Globalization;
 
 namespace HotelBookingSystem.Infrastructure.PDF;
 
@@ -10,6 +11,10 @@ public class PdfGenerator : IPdfGenerator
 
     public byte[] GeneratePdf(Invoice invoice)
     {
+        var cultureInfo = new CultureInfo("en-US");
+        Thread.CurrentThread.CurrentCulture = cultureInfo;
+        Thread.CurrentThread.CurrentUICulture = cultureInfo;
+
         var document = Document.Create(container =>
         {
             container.Page(page =>
