@@ -8,12 +8,12 @@ Developed during my internship at Foothill Technology Solutions, This project re
 For a complete overview of all available endpoints, enriched with usage examples and expected error responses. refer to:
 ### Swagger Documentation
 
-- **Job Finder API v1**
+- **Hotel Booking System API v1**
   - [OAS3 Documentation](https://app.swaggerhub.com/apis/SAEFRAED2/hotel-booking_system_api/v1)
 
 ### Bump.sh Documentation
 
-- **Job Finder API v1**
+- **Hotel Booking System API v1**
   - [Documentation](https://bump.sh/saifabur3d/doc/hotel-booking-system)
 
 
