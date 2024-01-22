@@ -4,6 +4,7 @@ using HotelBookingSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240121094552_CreateIndexes")]
+    partial class CreateIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,7 +273,7 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
@@ -285,7 +288,7 @@ namespace HotelBookingSystem.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Owner")
                         .IsRequired()
@@ -303,9 +306,6 @@ namespace HotelBookingSystem.Infrastructure.Migrations
 
                     b.HasIndex("StarRate")
                         .HasDatabaseName("IX_Hotels_StarRate");
-
-                    b.HasIndex("Name", "Description")
-                        .HasDatabaseName("IX_Hotels_Name_Description");
 
                     b.ToTable("Hotels");
 
@@ -427,7 +427,7 @@ namespace HotelBookingSystem.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("GuestId")
                         .HasColumnType("uniqueidentifier");
@@ -442,16 +442,13 @@ namespace HotelBookingSystem.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GuestId");
 
                     b.HasIndex("HotelId");
-
-                    b.HasIndex("Title", "Description")
-                        .HasDatabaseName("IX_Reviews_Title_Description");
 
                     b.ToTable("Reviews");
                 });

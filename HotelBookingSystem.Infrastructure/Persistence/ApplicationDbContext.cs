@@ -42,6 +42,49 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         SeedData(modelBuilder);
 
         ConfigureDeleteBehavior(modelBuilder);
+
+        AddIndexes(modelBuilder); 
+    }
+
+    private void AddIndexes(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Booking>()
+            .HasIndex(b => new { b.CheckInDate, b.CheckOutDate })
+            .HasDatabaseName("IX_Bookings_CheckInDate_CheckOutDate");
+
+        modelBuilder.Entity<Discount>()
+            .HasIndex(d => new { d.StartDate, d.EndDate })
+            .HasDatabaseName("IDX_Discounts_StartDate_EndDate");
+
+        modelBuilder.Entity<Room>()
+            .HasIndex(r => new { r.AdultsCapacity, r.ChildrenCapacity })
+            .HasDatabaseName("IX_Rooms_AdultsChildrenCapacity");
+
+        modelBuilder.Entity<Room>()
+            .HasIndex(r => r.RoomType)
+            .HasDatabaseName("IDX_Room_Type");
+
+        modelBuilder.Entity<Hotel>()
+            .HasIndex(h => h.StarRate)
+            .HasDatabaseName("IX_Hotels_StarRate");
+
+        // Text columns
+        // Assuming that the search is for exact matches or 'starts with (prefix)' searches, B-tree indexes is properly suited
+        // If the search is for 'contains', or more complex searches, a full text index may be a better choice
+
+        modelBuilder.Entity<City>()
+            .HasIndex(c => new { c.Name, c.Country })
+            .HasDatabaseName("IX_Cities_Name_Country");
+
+        modelBuilder.Entity<Hotel>()
+            .HasIndex(h => new { h.Name, h.Description })
+            .HasDatabaseName("IX_Hotels_Name_Description");
+
+        modelBuilder.Entity<Review>()
+            .HasIndex(r => new { r.Title, r.Description })
+            .HasDatabaseName("IX_Reviews_Title_Description");
+
+
     }
 
     private void ConfigureDeleteBehavior(ModelBuilder modelBuilder)

@@ -101,7 +101,7 @@ public class CityRepository(ApplicationDbContext context) : ICityRepository
     {
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
-            query = query.Where(c => c.Name.Contains(searchTerm) || c.Country.Contains(searchTerm));
+            query = query.Where(c => c.Name.StartsWith(searchTerm) || c.Country.StartsWith(searchTerm));
         }
     }
 }
