@@ -1,7 +1,10 @@
 # HotelBookingAPI 🏨🔑🌐
 
 This API offers a suite of endpoints for managing hotel-related activities. It allows for handling bookings, managing hotel and city information, and providing guest services.
-Developed during my internship at Foothill Technology Solutions, This project represents not only a technical endeavor but also a personal journey of professional growth and learning. By integrating modern software development practices and technologies, the HotelBookingAPI stands as a testament to the practical application of theoretical knowledge in a real-world setting.
+
+Developed during my internship at Foothill Technology Solutions, This project represents not only a technical endeavor but also a personal journey of professional growth and learning. By integrating modern software development practices and technologies, the HotelBookingAPI serves as proof of the practical application of theoretical knowledge in a real-world setting.
+
+The live version of the API is deployed at [https://saif-hotels.azurewebsites.net/](https://saif-hotels.azurewebsites.net/). Feel free to explore the endpoints and functionalities in a real-world environment.
 
 
 ## Documentation
@@ -9,12 +12,46 @@ For a complete overview of all available endpoints, enriched with usage examples
 ### Swagger Documentation
 
 - **Hotel Booking System API v1**
-  - [OAS3 Documentation](https://app.swaggerhub.com/apis/SAEFRAED2/hotel-booking_system_api/v1)
+  - [OAS3 Documentation](https://app.swaggerhub.com/apis-docs/SAEFRAED2/hotel-booking_system_api/v1)
 
 ### Bump.sh Documentation
 
 - **Hotel Booking System API v1**
   - [Documentation](https://bump.sh/saifabur3d/doc/hotel-booking-system)
+
+
+## Setup Guide
+
+Setting up the Hotel Booking System API is straightforward. You can choose between a Docker-based setup or a manual setup.
+
+### Docker-based Setup
+1. **Download the `docker-compose.yml` file**: This file(included in the repo) contains the configuration to set up both the API and the SQL Server database.
+2. **Run the Application**: Execute `docker-compose up` in the directory containing the `docker-compose.yml` file. Docker will pull the necessary images and set up the containers. The API will be accessible on `localhost:8080`.
+
+### Manual Setup
+1. **Clone the Repository**: Clone the GitHub repository to your local machine.
+2. **Run the Application**: Navigate to the project directory and run `dotnet run`. The application will automatically apply any required database migrations. Make sure your SQL Server instance is running and accessible as per your application's configuration.
+
+Choose the method that best suits your environment and preferences.
+
+### Continuous Integration, Delivery, and Deployment
+
+The Hotel Booking System API uses a streamlined CI/CD pipeline, leveraging GitHub Actions and Azure Web App for efficient and reliable software delivery.
+
+#### CI/CD Pipeline Overview
+
+- **GitHub Actions**: Automatically manages the build and test processes. The pipeline is triggered on every push to the `master` branch and via manual workflow dispatch.
+- **Build Process**: The application is compiled using .NET 8, ensuring the code integrates correctly.
+- **Automated Testing**: After building, the pipeline runs automated tests to verify the application's functionality and maintain code quality.
+- **Artifact Packaging**: Successfully built and tested code is packaged into an artifact, ready for deployment.
+
+#### Deployment Process
+
+- **Azure Web App Deployment**: The application is deployed to Azure Web App, a hosting service for web applications. The live version of the API, reflecting the most recent changes from the `master` branch, is automatically updated and can be accessed at [https://saif-hotels.azurewebsites.net/](https://saif-hotels.azurewebsites.net/).
+- **Publish Profile**: Uses Azure Publish Profile for secure deployments.
+- **Automated Deployment**: The latest build from the `master` branch is automatically deployed to the production environment, ensuring rapid delivery of updates.
+
+This CI/CD approach simplifies the development process, automates testing and deployment, and ensures that new changes are efficiently and reliably delivered.
 
 
 ## ⭐ Key Features
@@ -166,21 +203,20 @@ This section provides an overview of the key tools, technologies, and concepts u
 - **Entity Framework Core**: Object-relational mapping (ORM) framework for .NET.
 - **SQL Server**: Database management system used for storing all application data.
 
+The code-first approach enhances the project's flexibility, making it easier to evolve the database schema alongside the application development and maintain version control over database changes.
+
 ### API Documentation and Design
 - **Swagger/OpenAPI**: Used for API specification and documentation.
 - **Swagger UI**: Provides a web-based UI for interacting with the API's endpoints.
 
 ### Authentication and Authorization
 - **JWT (JSON Web Tokens)**: Method for securely transmitting information between parties as a JSON object.
+- **Microsoft.Identity**: For identity management, integrate Microsoft.Identity, a part of the Microsoft identity platform. This framework provides a comprehensive set of functionalities for handling user authentication and authorization in .NET applications. It simplifies managing user identities, securing passwords, and implementing token-based authentication.
+
 
 ### Testing
 - **xUnit**: Unit testing tool for the C# programming language.
-- **Postman**: Tool for API testing and exploring.
-
-### Continuous Integration, Delivery, and Deployment
-- **GitHub Actions**: Automating workflows including continuous integration.
-- **Azure DevOps**: Utilized for continuous delivery and deployment
-- **Docker**: For containerizing the application and ensuring consistent environments.
+- **Postman**: Tool for API testing and exploring. Here is a set of API tests [Access the Postman Collection](https://lively-astronaut-76528.postman.co/workspace/HotelBooking~12d17fd1-1aa8-4088-bc94-77943732170f/collection/31090301-da27e327-a3fd-472e-8683-22eeb7581ecd?action=share&creator=31090301&active-environment=31090301-fd88509e-4be4-4e59-bf1b-3fb013efca43)
 
 ### Monitoring and Logging
 - **Serilog**: Logging library for .NET applications.
@@ -202,5 +238,38 @@ This section provides an overview of the key tools, technologies, and concepts u
 - **HTTPS**: Ensuring secure communication over the network.
 - **Data Encryption**: Encrypting sensitive data in the database.
 
-By leveraging these tools and concepts, the Hotel Booking System API aims to provide a robust, scalable, and secure platform for hotel booking management.
+By leveraging these tools and concepts, the Hotel Booking System API provides a robust, scalable, and secure platform for hotel booking management.
+
+
+## API Versioning
+Using Asp.Versioning.Mvc
+The Hotel Booking System API employs a query parameter-based versioning approach. This strategy allows clients to seamlessly access different API versions without any changes to the base URL or path. Importantly, the version parameter is optional, offering flexibility and ease of use.
+
+### Versioning Strategy
+- **Query Parameter Versioning**: Versions are specified using the `api-version` query parameter in the request URL. This method is straightforward and simplifies the management of different API versions.
+
+### Usage
+Clients can specify the API version by appending the `api-version` query parameter to the URL. If no version is specified, the API defaults to the latest version. For example:
+- Specifying a version: `saif-hotels.azurewebsites.net/api/cities?api-version=1.0`
+- Without specifying a version: `saif-hotels.azurewebsites.net/api/cities`
+
+This versioning approach ensures that the Hotel Booking System API is user-friendly, adaptable, and scalable, catering to diverse client needs as it evolves.
+
+
+## Get Involved
+
+Your feedback and contributions are welcome! I value any insights, suggestions, or contributions you might have.
+
+### Ways to Contribute:
+- **Feedback**: Your opinions and ideas are welcome. Feel free to share your thoughts.
+- **Issue Reporting**: If you find any bugs or issues, please report them on [GitHub Issues page](https://github.com/SaifAbuR3d/HotelBookingSystem/issues).
+- **Code Contributions**: Contributions to the codebase are always appreciated.
+
+### Contact and Support:
+For any questions, suggestions, or discussions, please feel free to reach out at [saefraed2@gmail.com](saefraed2@gmail.com)
+
+For additional contact methods and to view my other projects, visit my GitHub profile at [SaifAbuR3d](https://github.com/SaifAbuR3d).
+
+Thank you for your interest. I look forward to hearing from you!
+
 
