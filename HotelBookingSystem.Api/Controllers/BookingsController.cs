@@ -13,7 +13,7 @@ namespace HotelBookingSystem.Api.Controllers;
 /// </summary>>
 
 [ApiVersion("1.0")]
-[Authorize]
+[Authorize(Policy = Policies.GuestOnly)]
 [Route("api/[controller]")]
 [ApiController]
 public class BookingsController(IBookingService bookingService, 
@@ -82,7 +82,6 @@ public class BookingsController(IBookingService bookingService,
     /// <response code="401">If the user is not authenticated</response>
     /// <response code="403">If the user is not authorized</response>
     /// <response code="404">If the hotel/room or guest is not found</response>
-    [Authorize(Policy = Policies.GuestOnly)]
     [HttpPost]
     public async Task<ActionResult<BookingOutputModel>> CreateBooking(CreateBookingCommand request)
     {
@@ -103,7 +102,6 @@ public class BookingsController(IBookingService bookingService,
     /// <response code="204">If the operation is successfully done</response>
     /// <response code="401">If the user is not authenticated</response>
     /// <response code="403">If the user is not authorized</response>
-    [Authorize(Policy = Policies.GuestOnly)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBooking(Guid id)
     {
@@ -119,7 +117,6 @@ public class BookingsController(IBookingService bookingService,
     /// Retrieve a booking invoice as a PDF file, to download or print
     /// </summary>
     /// <returns></returns>
-    [AllowAnonymous]
     [HttpGet("{id}/pdf")]
     public async Task<FileContentResult> GetInvoicePdf(Guid id)
     {
