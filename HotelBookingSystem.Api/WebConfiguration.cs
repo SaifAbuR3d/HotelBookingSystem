@@ -1,13 +1,13 @@
-﻿using HotelBookingSystem.Api.Filters;
+﻿using Asp.Versioning;
+using HotelBookingSystem.Api.Filters;
 using HotelBookingSystem.Api.Middlewares;
 using HotelBookingSystem.Api.Services;
 using HotelBookingSystem.Application;
 using HotelBookingSystem.Application.Abstractions;
 using HotelBookingSystem.Application.Identity;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Security.Claims;
-using Asp.Versioning;
-using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 namespace HotelBookingSystem.Api;
 
@@ -71,9 +71,9 @@ public static class WebConfiguration
 
         services.AddScoped<ICurrentUser, CurrentUser>();
 
-       services.AddApplicationInsightsTelemetry(opt => opt.ConnectionString = configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+        services.AddApplicationInsightsTelemetry(opt => opt.ConnectionString = configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
-        return services; 
+        return services;
     }
 
     private static IServiceCollection AddSwagger(

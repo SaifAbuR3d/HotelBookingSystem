@@ -1,7 +1,5 @@
-﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.IdentityInterfaces;
-using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
+﻿using HotelBookingSystem.Application.Abstractions.InfrastructureInterfaces.RepositoryInterfaces;
 using HotelBookingSystem.Application.Abstractions.ServiceInterfaces;
-using HotelBookingSystem.Infrastructure.Identity;
 using HotelBookingSystem.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
